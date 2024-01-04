@@ -3,8 +3,9 @@ import '/plugins.dart';
 import '/views/home/index.dart';
 import '/views/login.dart';
 import '/views/splash.dart';
-import '/views/setting.dart';
 import '/views/unknown.dart';
+import 'views/setting/index.dart';
+import 'views/setting/theme_page.dart';
 
 class SparkRoute {
   bool? noAuth;
@@ -20,6 +21,7 @@ class MYRouter {
   static String aboutPath = '/about';
   static String unknownPath = '/unknown';
   static String settingPath = '/setting';
+  static String themePagePath = '/theme_page';
 
   static String get initialRoute => homePath;
 
@@ -34,7 +36,11 @@ class MYRouter {
     //首页
     homePath: SparkRoute(builder: const Home()),
 
+    //设置
     settingPath: SparkRoute(builder: Setting()),
+
+    //主题
+    themePagePath: SparkRoute(builder: ThemePage()),
     // 未知
     unknownPath: SparkRoute(builder: const Unknown()),
   };
@@ -43,15 +49,16 @@ class MYRouter {
   static Route generateRoute<T extends Object>(RouteSettings settings) {
     MaterialPageRoute route = MaterialPageRoute(
       builder: (_) {
+        final profile = _.watch<Profile>();
         String? name = settings.name;
         SparkRoute? routeData = routeTables[name];
         Widget? builder = routeData?.builder;
 
-        Map<String, dynamic>? user =
-            PreferenceUtils.getMap<Map<String, dynamic>>('profile');
+        // Map<String, dynamic>? profile =
+        //     PreferenceUtils.getMap<Map<String, dynamic>>('profile');
 
         if (routeData?.noAuth != true) {
-          if (user?['user_token'] == null) {
+          if (profile.user?.userToken == null) {
             builder = const Login();
           }
         }

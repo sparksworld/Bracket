@@ -3,19 +3,19 @@ import 'package:flutter/foundation.dart';
 import '/plugins.dart';
 
 class Profile with ChangeNotifier, DiagnosticableTreeMixin {
-  User? _data;
-  User? get data => _data;
+  User? _user;
+  User? get user => _user;
 
   Profile() {
     Map<String, dynamic>? data = PreferenceUtils.getMap('profile');
 
-    if (data != null) {
+    if (data != null && data.isNotEmpty) {
       setData(data);
     }
   }
 
   void clearUser() {
-    _data = null;
+    _user = null;
     PreferenceUtils.remove('profile');
     MYRouter.navigatorKey.currentState
         ?.pushNamedAndRemoveUntil(MYRouter.loginPath, (route) => false);
@@ -23,7 +23,7 @@ class Profile with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void setData(Map<String, dynamic> data) async {
-    _data = User.fromJson(data);
+    _user = User.fromJson(data);
 
     await PreferenceUtils.setMap('profile', data);
     notifyListeners();

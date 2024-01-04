@@ -9,6 +9,7 @@ void main() async {
 
   /// 初始持久化数据
   await PreferenceUtils.getInstance();
+  // PreferenceUtils.clear();
 
   Future.delayed(const Duration(seconds: 3), () {
     FlutterNativeSplash.remove();
@@ -33,19 +34,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.watch<Global>().theme;
+    final global = context.watch<Global>();
+
+    // print(global.theme);
+
     SparkPxFit.initialize(context);
 
     final settings = ThemeSettings(
-      sourceColor: Colors.white,
-      themeMode: ThemeMode.dark,
+      sourceColor: Colors.red,
+      themeMode: ThemeMode.light,
     );
 
     return MaterialApp(
       title: 'Bracket',
-      theme: theme == ITheme.light.value
-          ? ThemeProvider(settings).light()
-          : ThemeProvider(settings).dark(),
+      theme: ThemeProvider(settings).theme(context),
       navigatorKey: MYRouter.navigatorKey,
       initialRoute: MYRouter.homePath,
       onGenerateRoute: MYRouter.generateRoute,

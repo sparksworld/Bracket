@@ -23,7 +23,7 @@ class Global with ChangeNotifier, DiagnosticableTreeMixin {
   Global() {
     String? data = PreferenceUtils.getString('theme');
 
-    if (data != null) {
+    if (data != null && data.isNotEmpty) {
       setTheme(data);
     }
   }

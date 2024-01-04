@@ -69,7 +69,7 @@ class _RecommendState extends State<Recommend> {
       ),
       body: Consumer2<Profile, Global>(
         builder: (_, profile, global, child) {
-          String? token = profile.data?.userToken;
+          String? token = profile.user?.userToken;
 
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

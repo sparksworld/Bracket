@@ -32,35 +32,43 @@ class _SettingState extends State<Setting> {
       ),
       body: ListView(
         children: <Widget>[
-          SwitchListTile(
-            secondary: const Icon(Icons.lightbulb_outline),
-            title: const Text('暗黑模式'),
-            value: global.theme == ITheme.dark.value,
-            onChanged: (bool? value) {
-              if (value == true) {
-                global.setTheme(ITheme.dark.value);
-              } else {
-                global.setTheme(ITheme.light.value);
-              }
+          ListTile(
+            title: Text('系统主题'),
+            leading: Icon(Icons.border_color),
+            trailing: Icon(Icons.keyboard_arrow_right_outlined),
+            onTap: () {
+              Navigator.pushNamed(context, MYRouter.themePagePath);
             },
           ),
-          const Divider(
+          // SwitchListTile(
+          //   secondary: const Icon(Icons.lightbulb_outline),
+          //   title: const Text('暗黑模式'),
+          //   value: global.theme == ITheme.dark.value,
+          //   onChanged: (bool? value) {
+          //     if (value == true) {
+          //       global.setTheme(ITheme.dark.value);
+          //     } else {
+          //       global.setTheme(ITheme.light.value);
+          //     }
+          //   },
+          // ),
+          Divider(
             height: 0,
           ),
-          const ListTile(
+          ListTile(
             title: Text('关于'),
             leading: Icon(Icons.sentiment_satisfied_alt),
             trailing: Icon(Icons.keyboard_arrow_right_outlined),
           ),
-          const Divider(
+          Divider(
             height: 0,
           ),
-          const ListTile(
+          ListTile(
             title: Text('意见反馈'),
             leading: Icon(Icons.send),
             trailing: Icon(Icons.keyboard_arrow_right_outlined),
           ),
-          const SizedBox(
+          SizedBox(
             height: 20,
           ),
         ],
