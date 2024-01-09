@@ -20,9 +20,9 @@ class _HomeState extends State<Home> {
     if (mounted) {
       _bottomAppBarIndex = 0;
       _pages = [
-        Recommend(),
-        Classify(),
-        UserCenter(),
+        const Recommend(),
+        const Classify(),
+        const UserCenter(),
       ];
       super.initState();
     }

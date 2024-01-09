@@ -86,7 +86,7 @@ class _LoginState extends State<Login> {
                           // );
 
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                              MYRouter.homePath, (route) => false);
+                              MYRouter.homePagePath, (route) => false);
                         }
 
                         // print(_formKey.currentState?.validate());

@@ -44,7 +44,7 @@ class _SplashPageState extends State<Splash> {
 
   void navigationPage() {
     Navigator.of(context)
-        .pushNamedAndRemoveUntil(MYRouter.homePath, (route) => false);
+        .pushNamedAndRemoveUntil(MYRouter.homePagePath, (route) => false);
     // Navigator.of(context).pushAndRemoveUntil(
     //   PageRouteBuilder(
     //     transitionDuration: const Duration(milliseconds: 200), //动画时间为500毫秒
@@ -78,7 +78,7 @@ class _SplashPageState extends State<Splash> {
           decoration: BoxDecoration(
               border: Border.all(color: const Color.fromRGBO(133, 0, 0, 1))),
           child: Column(children: [
-            Text(context.watch<Global>().theme),
+            // Text(context.watch<Global>().theme),
             // Text(context.watch<Setting>().user?.userName ?? ''),
             // Consumer<Setting>(builder: (context, value, child) {
             //   return Text("Child C number: ${value.theme}");

@@ -28,7 +28,7 @@ class _UserCenterState extends State<UserCenter> {
             onPressed: () {
               Navigator.pushNamed(context, '/setting');
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.settings,
             ),
           ),
@@ -103,11 +103,11 @@ class _UserCenterState extends State<UserCenter> {
                 child: ListView(
                   children: <Widget>[
                     ListTile(
-                      title: Text('设置'),
-                      leading: Icon(
+                      title: const Text('设置'),
+                      leading: const Icon(
                         Icons.settings,
                       ),
-                      trailing: Icon(Icons.keyboard_arrow_right_outlined),
+                      trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                       onTap: () {
                         Navigator.pushNamed(context, '/setting');
                       },

@@ -20,7 +20,7 @@ class _RecommendState extends State<Recommend> {
     {'title': '三农', 'typeKey': 8},
   ];
 
-  List _shuffling = [
+  final List _shuffling = [
     "一少女惨遭八名壮汉轮流让座",
     "一少女惨遭八名壮汉轮流让座",
     "一少女惨遭八名壮汉轮流让座",
@@ -74,17 +74,17 @@ class _RecommendState extends State<Recommend> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton(
-                // style: TextStyle(color: Color.red),
-                onPressed: () {
-                  if (global.theme == ITheme.dark.value) {
-                    global.setTheme(ITheme.light.value);
-                  } else {
-                    global.setTheme(ITheme.dark.value);
-                  }
-                },
-                child: const Text('ElevatedButton'),
-              ),
+              // ElevatedButton(
+              //   // style: TextStyle(color: Color.red),
+              //   onPressed: () {
+              //     if (global.theme == ITheme.dark.value) {
+              //       global.setTheme(ITheme.light.value);
+              //     } else {
+              //       global.setTheme(ITheme.dark.value);
+              //     }
+              //   },
+              //   child: const Text('ElevatedButton'),
+              // ),
               FloatingActionButton(
                 onPressed: () {
                   print('dawdawdwa');
@@ -142,7 +142,7 @@ class SearchBar extends SearchDelegate<String> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         // 点击把文本空的内容清空
         onPressed: () {
           query = "";
@@ -169,7 +169,7 @@ class SearchBar extends SearchDelegate<String> {
   // 点击搜索出现结果
   @override
   Widget buildResults(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 100,
       height: 100,
       child: Card(
@@ -194,13 +194,13 @@ class SearchBar extends SearchDelegate<String> {
               text: TextSpan(
                 // 获取搜索框内输入的字符串，设置它的颜色并让让加粗
                 text: suggestionList[index].substring(0, query.length),
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold),
                 children: [
                   TextSpan(
                       //获取剩下的字符串，并让它变成灰色
                       text: suggestionList[index].substring(query.length),
-                      style: TextStyle(color: Colors.grey))
+                      style: const TextStyle(color: Colors.grey))
                 ],
               ),
             ),

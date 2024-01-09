@@ -33,9 +33,9 @@ class _SettingState extends State<Setting> {
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Text('系统主题'),
-            leading: Icon(Icons.border_color),
-            trailing: Icon(Icons.keyboard_arrow_right_outlined),
+            title: const Text('系统主题'),
+            leading: const Icon(Icons.border_color),
+            trailing: const Icon(Icons.keyboard_arrow_right_outlined),
             onTap: () {
               Navigator.pushNamed(context, MYRouter.themePagePath);
             },
@@ -52,23 +52,23 @@ class _SettingState extends State<Setting> {
           //     }
           //   },
           // ),
-          Divider(
+          const Divider(
             height: 0,
           ),
-          ListTile(
+          const ListTile(
             title: Text('关于'),
             leading: Icon(Icons.sentiment_satisfied_alt),
             trailing: Icon(Icons.keyboard_arrow_right_outlined),
           ),
-          Divider(
+          const Divider(
             height: 0,
           ),
-          ListTile(
+          const ListTile(
             title: Text('意见反馈'),
             leading: Icon(Icons.send),
             trailing: Icon(Icons.keyboard_arrow_right_outlined),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ],

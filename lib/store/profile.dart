@@ -7,7 +7,7 @@ class Profile with ChangeNotifier, DiagnosticableTreeMixin {
   User? get user => _user;
 
   Profile() {
-    Map<String, dynamic>? data = PreferenceUtils.getMap('profile');
+    Map<String, dynamic>? data = PreferenceUtil.getMap('profile');
 
     if (data != null && data.isNotEmpty) {
       setData(data);
@@ -16,16 +16,16 @@ class Profile with ChangeNotifier, DiagnosticableTreeMixin {
 
   void clearUser() {
     _user = null;
-    PreferenceUtils.remove('profile');
+    PreferenceUtil.remove('profile');
     MYRouter.navigatorKey.currentState
-        ?.pushNamedAndRemoveUntil(MYRouter.loginPath, (route) => false);
+        ?.pushNamedAndRemoveUntil(MYRouter.loginPagePath, (route) => false);
     notifyListeners();
   }
 
   void setData(Map<String, dynamic> data) async {
     _user = User.fromJson(data);
 
-    await PreferenceUtils.setMap('profile', data);
+    await PreferenceUtil.setMap('profile', data);
     notifyListeners();
   }
 

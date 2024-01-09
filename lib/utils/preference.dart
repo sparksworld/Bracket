@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PreferenceUtils {
-  PreferenceUtils._internal();
-  factory PreferenceUtils() => _instance;
+class PreferenceUtil {
+  PreferenceUtil._internal();
+  factory PreferenceUtil() => _instance;
 
-  static final PreferenceUtils _instance = PreferenceUtils._internal();
+  static final PreferenceUtil _instance = PreferenceUtil._internal();
   static late SharedPreferences _preferences;
 
-  static Future<PreferenceUtils> getInstance() async {
+  static Future<PreferenceUtil> getInstance() async {
     _preferences = await SharedPreferences.getInstance();
     return _instance;
   }

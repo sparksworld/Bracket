@@ -15,34 +15,34 @@ class SparkRoute {
 }
 
 class MYRouter {
-  static String homePath = '/';
-  static String splashPath = '/splash';
-  static String loginPath = '/login';
-  static String aboutPath = '/about';
-  static String unknownPath = '/unknown';
-  static String settingPath = '/setting';
+  static String homePagePath = '/';
+  static String splashPagePath = '/splash';
+  static String loginPagePath = '/login';
+  static String aboutPagePath = '/about';
+  static String unknownPagePath = '/unknown';
+  static String settingPagePath = '/setting';
   static String themePagePath = '/theme_page';
 
-  static String get initialRoute => homePath;
+  static String get initialRoute => homePagePath;
 
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
 
   static Map<String, SparkRoute> routeTables = {
     //启动页
-    splashPath: SparkRoute(noAuth: true, builder: const Splash()),
+    splashPagePath: SparkRoute(noAuth: true, builder: const Splash()),
     //登录
-    loginPath: SparkRoute(noAuth: false, builder: const Login()),
+    loginPagePath: SparkRoute(noAuth: false, builder: const Login()),
     //首页
-    homePath: SparkRoute(builder: const Home()),
+    homePagePath: SparkRoute(builder: const Home()),
 
     //设置
-    settingPath: SparkRoute(builder: Setting()),
+    settingPagePath: SparkRoute(builder: Setting()),
 
     //主题
     themePagePath: SparkRoute(builder: ThemePage()),
     // 未知
-    unknownPath: SparkRoute(builder: const Unknown()),
+    unknownPagePath: SparkRoute(builder: const Unknown()),
   };
 
   ///路由拦截

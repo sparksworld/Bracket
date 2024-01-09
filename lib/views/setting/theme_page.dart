@@ -33,7 +33,7 @@ class _ThemePageState extends State<ThemePage> {
       body: ListView(
         children: <Widget>[
           RadioListTile<String>(
-            title: Text('aaaa'),
+            title: const Text('aaaa'),
             // 必须要的属性
             value: '1',
             //是否选中发生变化时的回调， 回调的 bool 值 就是是否选中 , true 是 选中
@@ -45,7 +45,7 @@ class _ThemePageState extends State<ThemePage> {
             //        selected 如果是 true ：
             //         如果 不设置 text 的 color 的话， text的颜色 跟随 activeColor
             // 副标题（在 title 下面）， 具有代表性的就是 Text ， 如果 不设置 text 的 color 的话， text的颜色 跟随 activeColor
-            subtitle: Text("副标题"),
+            subtitle: const Text("副标题"),
             // 是否是三行文本
             //        如果是 true ： 副标题 不能为 null
             //        如果是 false：
@@ -72,23 +72,23 @@ class _ThemePageState extends State<ThemePage> {
           //     }
           //   },
           // ),
-          Divider(
+          const Divider(
             height: 0,
           ),
-          ListTile(
+          const ListTile(
             title: Text('暗黑模式'),
             leading: Icon(Icons.sentiment_satisfied_alt),
             trailing: Icon(Icons.keyboard_arrow_right_outlined),
           ),
-          Divider(
+          const Divider(
             height: 0,
           ),
-          ListTile(
+          const ListTile(
             title: Text('日光模式'),
             leading: Icon(Icons.send),
             trailing: Icon(Icons.keyboard_arrow_right_outlined),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ],

@@ -8,7 +8,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   /// 初始持久化数据
-  await PreferenceUtils.getInstance();
+  await PreferenceUtil.getInstance();
   // PreferenceUtils.clear();
 
   Future.delayed(const Duration(seconds: 3), () {
@@ -17,7 +17,7 @@ void main() async {
       MultiProvider(
         providers: [
           ChangeNotifierProvider<Global>(
-            create: (_) => Global(),
+            create: (_) => Global(_),
           ),
           ChangeNotifierProvider<Profile>(
             create: (_) => Profile(),
@@ -32,24 +32,28 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  ThemeData? themeData(BuildContext context, theme) {
+    switch (theme) {
+      case ITheme.dark:
+        return ThemeProvider(context).dark();
+      case ITheme.light:
+        return ThemeProvider(context).light();
+      default:
+        return ThemeProvider(context).theme();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final global = context.watch<Global>();
 
-    // print(global.theme);
-
     SparkPxFit.initialize(context);
-
-    final settings = ThemeSettings(
-      sourceColor: Colors.red,
-      themeMode: ThemeMode.light,
-    );
 
     return MaterialApp(
       title: 'Bracket',
-      theme: ThemeProvider(settings).theme(context),
+      theme: themeData(context, global.theme),
       navigatorKey: MYRouter.navigatorKey,
-      initialRoute: MYRouter.homePath,
+      initialRoute: MYRouter.homePagePath,
       onGenerateRoute: MYRouter.generateRoute,
       onUnknownRoute: MYRouter.unknownRoute,
     );

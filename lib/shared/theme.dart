@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 class ThemeProvider {
-  ThemeProvider(this.settings);
+  BuildContext context;
+  late ThemeSettings settings;
 
-  final ThemeSettings settings;
+  ThemeProvider(this.context) {
+    settings = ThemeSettings(
+      sourceColor: Colors.green,
+      themeMode: ThemeMode.light,
+    );
+  }
 
   final pageTransitionsTheme = const PageTransitionsTheme(
     builders: <TargetPlatform, PageTransitionsBuilder>{
@@ -15,7 +21,11 @@ class ThemeProvider {
 
   Color blend(Color targetColor) {
     return Color(
-        Blend.harmonize(targetColor.value, settings.sourceColor.value));
+      Blend.harmonize(
+        targetColor.value,
+        settings.sourceColor.value,
+      ),
+    );
   }
 
   Color source(Color? target) {
@@ -137,7 +147,7 @@ class ThemeProvider {
     );
   }
 
-  ThemeData theme(BuildContext context, [Color? targetColor]) {
+  ThemeData theme([Color? targetColor]) {
     final brightness = MediaQuery.of(context).platformBrightness;
     return brightness == Brightness.light
         ? light(targetColor)
