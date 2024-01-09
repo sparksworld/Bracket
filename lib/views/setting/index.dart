@@ -40,18 +40,6 @@ class _SettingState extends State<Setting> {
               Navigator.pushNamed(context, MYRouter.themePagePath);
             },
           ),
-          // SwitchListTile(
-          //   secondary: const Icon(Icons.lightbulb_outline),
-          //   title: const Text('暗黑模式'),
-          //   value: global.theme == ITheme.dark.value,
-          //   onChanged: (bool? value) {
-          //     if (value == true) {
-          //       global.setTheme(ITheme.dark.value);
-          //     } else {
-          //       global.setTheme(ITheme.light.value);
-          //     }
-          //   },
-          // ),
           const Divider(
             height: 0,
           ),

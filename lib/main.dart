@@ -33,14 +33,18 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   ThemeData? themeData(BuildContext context, theme) {
-    switch (theme) {
-      case ITheme.dark:
-        return ThemeProvider(context).dark();
-      case ITheme.light:
-        return ThemeProvider(context).light();
-      default:
-        return ThemeProvider(context).theme();
+    if (theme == ITheme.auto.value) {
+      return ThemeProvider(context).theme();
     }
+
+    if (theme == ITheme.dark.value) {
+      return ThemeProvider(context).dark();
+    }
+
+    if (theme == ITheme.light.value) {
+      return ThemeProvider(context).light();
+    }
+    return null;
   }
 
   @override
@@ -48,6 +52,8 @@ class MyApp extends StatelessWidget {
     final global = context.watch<Global>();
 
     SparkPxFit.initialize(context);
+
+    print(global.theme);
 
     return MaterialApp(
       title: 'Bracket',

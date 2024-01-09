@@ -1,26 +1,7 @@
 import '/plugins.dart';
 
-class ThemePage extends StatefulWidget {
-  ThemePage({
-    super.key,
-  });
-
-  final List<ListItem> items = List<ListItem>.generate(
-    1000,
-    (i) => i % 6 == 0
-        ? HeadingItem('Heading $i')
-        : MessageItem('Sender $i', 'Message body $i'),
-  );
-
-  @override
-  State<ThemePage> createState() => _ThemePageState();
-}
-
-class _ThemePageState extends State<ThemePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class ThemePage extends StatelessWidget {
+  const ThemePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,64 +14,29 @@ class _ThemePageState extends State<ThemePage> {
       body: ListView(
         children: <Widget>[
           RadioListTile<String>(
-            title: const Text('aaaa'),
-            // 必须要的属性
-            value: '1',
-            //是否选中发生变化时的回调， 回调的 bool 值 就是是否选中 , true 是 选中
-            groupValue: 'groupValue',
-            onChanged: (value) {},
-            // 选中时 填充的颜色
-            activeColor: Colors.red,
-            // 标题， 具有代表性的就是 Text ，
-            //        selected 如果是 true ：
-            //         如果 不设置 text 的 color 的话， text的颜色 跟随 activeColor
-            // 副标题（在 title 下面）， 具有代表性的就是 Text ， 如果 不设置 text 的 color 的话， text的颜色 跟随 activeColor
-            subtitle: const Text("副标题"),
-            // 是否是三行文本
-            //        如果是 true ： 副标题 不能为 null
-            //        如果是 false：
-            //                      如果没有副标题 ，就只有一行， 如果有副标题 ，就只有两行
-            isThreeLine: false,
-            // 是否密集垂直
-            dense: false,
-            // 左边的一个控件
-//              secondary: Text("secondary"),
-            // text 和 icon 的 color 是否 是 activeColor 的颜色
-            selected: true,
-            controlAffinity: ListTileControlAffinity.leading,
+            title: const Text('跟随系统'),
+            value: ITheme.auto.value,
+            groupValue: global.theme,
+            onChanged: (String? value) {
+              global.setTheme(ITheme.auto.value);
+            },
           ),
-
-          // SwitchListTile(
-          //   secondary: const Icon(Icons.lightbulb_outline),
-          //   title: const Text('暗黑模式'),
-          //   value: global.theme == ITheme.dark.value,
-          //   onChanged: (bool? value) {
-          //     if (value == true) {
-          //       global.setTheme(ITheme.dark.value);
-          //     } else {
-          //       global.setTheme(ITheme.light.value);
-          //     }
-          //   },
-          // ),
-          const Divider(
-            height: 0,
+          RadioListTile<String>(
+            title: const Text('暗黑模式'),
+            value: ITheme.dark.value,
+            groupValue: global.theme,
+            onChanged: (String? value) {
+              global.setTheme(ITheme.dark.value);
+            },
           ),
-          const ListTile(
-            title: Text('暗黑模式'),
-            leading: Icon(Icons.sentiment_satisfied_alt),
-            trailing: Icon(Icons.keyboard_arrow_right_outlined),
-          ),
-          const Divider(
-            height: 0,
-          ),
-          const ListTile(
-            title: Text('日光模式'),
-            leading: Icon(Icons.send),
-            trailing: Icon(Icons.keyboard_arrow_right_outlined),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
+          RadioListTile<String>(
+            title: const Text('明亮模式'),
+            value: ITheme.light.value,
+            groupValue: global.theme,
+            onChanged: (String? value) {
+              global.setTheme(ITheme.light.value);
+            },
+          )
         ],
       ),
     );

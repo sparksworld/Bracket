@@ -3,17 +3,17 @@ import 'package:bracket/shared/theme.dart';
 // import 'package:bracket/utils/preference.dart';
 import 'package:flutter/foundation.dart';
 
-enum ITheme { unknow, dark, light }
+enum ITheme { auto, dark, light }
 
 extension IThemeExtension on ITheme {
-  String? get value {
+  String get value {
     switch (this) {
       case ITheme.dark:
         return "dark";
       case ITheme.light:
         return "light";
       default:
-        return null;
+        return "auto";
     }
   }
 }
@@ -24,9 +24,9 @@ final settings = ThemeSettings(
 );
 
 class Global with ChangeNotifier, DiagnosticableTreeMixin {
-  late BuildContext context;
-  String? _theme = ITheme.light.value;
-  String? get theme => _theme;
+  final BuildContext context;
+  String _theme = ITheme.auto.value;
+  String get theme => _theme;
 
   Global(this.context) {
     String? data = PreferenceUtil.getString('theme');
