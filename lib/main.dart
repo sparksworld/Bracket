@@ -32,17 +32,18 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  ThemeData? themeData(BuildContext context, theme) {
+  ThemeData? myThemeData(BuildContext context, theme) {
+    ThemeProvider provider = ThemeProvider(context, Colors.red);
     if (theme == ITheme.auto.value) {
-      return ThemeProvider(context).theme();
+      return provider.theme();
     }
 
     if (theme == ITheme.dark.value) {
-      return ThemeProvider(context).dark();
+      return provider.dark();
     }
 
     if (theme == ITheme.light.value) {
-      return ThemeProvider(context).light();
+      return provider.light();
     }
     return null;
   }
@@ -53,11 +54,9 @@ class MyApp extends StatelessWidget {
 
     SparkPxFit.initialize(context);
 
-    print(global.theme);
-
     return MaterialApp(
       title: 'Bracket',
-      theme: themeData(context, global.theme),
+      theme: myThemeData(context, global.theme),
       navigatorKey: MYRouter.navigatorKey,
       initialRoute: MYRouter.homePagePath,
       onGenerateRoute: MYRouter.generateRoute,

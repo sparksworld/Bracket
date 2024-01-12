@@ -3,14 +3,9 @@ import 'package:material_color_utilities/material_color_utilities.dart';
 
 class ThemeProvider {
   BuildContext context;
-  late ThemeSettings settings;
+  Color sourceColor;
 
-  ThemeProvider(this.context) {
-    settings = ThemeSettings(
-      sourceColor: Colors.green,
-      themeMode: ThemeMode.light,
-    );
-  }
+  ThemeProvider(this.context, this.sourceColor);
 
   final pageTransitionsTheme = const PageTransitionsTheme(
     builders: <TargetPlatform, PageTransitionsBuilder>{
@@ -23,23 +18,24 @@ class ThemeProvider {
     return Color(
       Blend.harmonize(
         targetColor.value,
-        settings.sourceColor.value,
+        sourceColor.value,
       ),
     );
   }
 
   Color source(Color? target) {
-    Color source = settings.sourceColor;
+    Color source = sourceColor;
     if (target != null) {
       source = blend(target);
     }
     return source;
   }
 
-  ColorScheme colors(Brightness brightness, Color? targetColor) {
+  ColorScheme colors(Brightness brightness) {
     return ColorScheme.fromSeed(
-      seedColor: source(targetColor),
+      seedColor: sourceColor,
       brightness: brightness,
+      // background: ,
     );
   }
 
@@ -113,9 +109,10 @@ class ThemeProvider {
     );
   }
 
-  ThemeData light([Color? targetColor]) {
-    final selfColor = colors(Brightness.light, targetColor);
+  ThemeData light() {
+    final selfColor = colors(Brightness.light);
     return ThemeData.light().copyWith(
+      primaryColor: sourceColor,
       pageTransitionsTheme: pageTransitionsTheme,
       colorScheme: selfColor,
       appBarTheme: appBarTheme(selfColor),
@@ -130,9 +127,10 @@ class ThemeProvider {
     );
   }
 
-  ThemeData dark([Color? targetColor]) {
-    final selfColor = colors(Brightness.dark, targetColor);
+  ThemeData dark() {
+    final selfColor = colors(Brightness.dark);
     return ThemeData.dark().copyWith(
+      primaryColor: sourceColor,
       pageTransitionsTheme: pageTransitionsTheme,
       colorScheme: selfColor,
       appBarTheme: appBarTheme(selfColor),
@@ -147,11 +145,9 @@ class ThemeProvider {
     );
   }
 
-  ThemeData theme([Color? targetColor]) {
+  ThemeData theme() {
     final brightness = MediaQuery.of(context).platformBrightness;
-    return brightness == Brightness.light
-        ? light(targetColor)
-        : dark(targetColor);
+    return brightness == Brightness.light ? light() : dark();
   }
 }
 
