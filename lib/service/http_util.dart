@@ -3,29 +3,21 @@ import 'package:dio/dio.dart';
 class HttpUtil {
   static final HttpUtil _instance = HttpUtil._internal();
   factory HttpUtil() => _instance;
+  static HttpUtil get instance => _instance;
 
-  late Dio dio;
+  late Dio _dio;
 
   HttpUtil._internal() {
-    BaseOptions options = BaseOptions(
-      baseUrl: 'https://jsonplaceholder.typicode.com/',
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
-      headers: {},
-      contentType: 'application/json; charset=utf-8',
-      responseType: ResponseType.json,
-    );
+    BaseOptions options = BaseOptions();
+    options.baseUrl = "http://film.fe-spark.cn/api/";
+    options.connectTimeout = const Duration(seconds: 5);
+    options.receiveTimeout = const Duration(seconds: 5);
+    options.contentType = 'application/json; charset=utf-8';
+    options.responseType = ResponseType.json;
 
-    dio = Dio(options);
+    _dio = Dio(options);
 
-    // (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
-    //     (HttpClient client) {
-    //   client.badCertificateCallback =
-    //       (X509Certificate cert, String host, int port) => true;
-    //   return client;
-    // };
-
-    dio.interceptors.add(InterceptorsWrapper(
+    _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         // Do something before request is sent
         return handler.next(options); //continue
@@ -41,17 +33,34 @@ class HttpUtil {
       // },
     ));
   }
-  Future get(
-    String path, {
+  // 请求(默认post)
+  Future _request(String url,
+      {String method = "post", Map<String, dynamic>? params}) async {
+    Options options = Options(method: method);
+    try {
+      final result =
+          await _dio.request(url, queryParameters: params, options: options);
+      return result;
+    } on DioException catch (error) {
+      print(error);
+    }
+  }
+
+  Future<T> get<T>(
+    String url, {
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    Options? requestOptions,
   }) async {
-    Options requestOptions = options ?? Options();
-    var response = await dio.get(
-      path,
-      queryParameters: queryParameters,
-      options: requestOptions,
-    );
+    var response = await _request(url, method: "get", params: queryParameters);
+    return response.data;
+  }
+
+  Future post(
+    String url, {
+    Map<String, dynamic>? queryParameters,
+    Options? requestOptions,
+  }) async {
+    var response = await _request(url, method: "post", params: queryParameters);
     return response.data;
   }
 }
