@@ -1,5 +1,4 @@
 import 'package:bracket/plugins.dart';
-import 'package:bracket/shared/theme.dart';
 // import 'package:bracket/utils/preference.dart';
 import 'package:flutter/foundation.dart';
 
@@ -17,11 +16,6 @@ extension IThemeExtension on ITheme {
     }
   }
 }
-
-final settings = ThemeSettings(
-  sourceColor: Colors.black,
-  themeMode: ThemeMode.light,
-);
 
 class Global with ChangeNotifier, DiagnosticableTreeMixin {
   final BuildContext context;

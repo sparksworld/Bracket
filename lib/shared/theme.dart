@@ -35,7 +35,6 @@ class ThemeProvider {
     return ColorScheme.fromSeed(
       seedColor: sourceColor,
       brightness: brightness,
-      // background: ,
     );
   }
 
@@ -43,9 +42,13 @@ class ThemeProvider {
         borderRadius: BorderRadius.circular(8),
       );
 
-  CardTheme cardTheme() {
+  TextTheme textTheme(ColorScheme colors) {
+    return const TextTheme();
+  }
+
+  CardTheme cardTheme(ColorScheme colors) {
     return CardTheme(
-      // elevation: 0,
+      color: colors.surface,
       shape: shapeMedium,
       clipBehavior: Clip.antiAlias,
     );
@@ -112,11 +115,13 @@ class ThemeProvider {
   ThemeData light() {
     final selfColor = colors(Brightness.light);
     return ThemeData.light().copyWith(
-      primaryColor: sourceColor,
+      // primaryColor: sourceColor,
+      // canvasColor: selfColor.surface,
       pageTransitionsTheme: pageTransitionsTheme,
       colorScheme: selfColor,
+      // textTheme: textTheme(selfColor),
       appBarTheme: appBarTheme(selfColor),
-      cardTheme: cardTheme(),
+      cardTheme: cardTheme(selfColor),
       listTileTheme: listTileTheme(selfColor),
       bottomAppBarTheme: bottomAppBarTheme(selfColor),
       bottomNavigationBarTheme: bottomNavigationBarTheme(selfColor),
@@ -130,11 +135,13 @@ class ThemeProvider {
   ThemeData dark() {
     final selfColor = colors(Brightness.dark);
     return ThemeData.dark().copyWith(
-      primaryColor: sourceColor,
+      // primaryColor: sourceColor,
+      // canvasColor: selfColor.surface,
       pageTransitionsTheme: pageTransitionsTheme,
       colorScheme: selfColor,
+      // textTheme: textTheme(selfColor),
       appBarTheme: appBarTheme(selfColor),
-      cardTheme: cardTheme(),
+      cardTheme: cardTheme(selfColor),
       listTileTheme: listTileTheme(selfColor),
       bottomAppBarTheme: bottomAppBarTheme(selfColor),
       bottomNavigationBarTheme: bottomNavigationBarTheme(selfColor),
@@ -149,14 +156,4 @@ class ThemeProvider {
     final brightness = MediaQuery.of(context).platformBrightness;
     return brightness == Brightness.light ? light() : dark();
   }
-}
-
-class ThemeSettings {
-  ThemeSettings({
-    required this.sourceColor,
-    required this.themeMode,
-  });
-
-  final Color sourceColor;
-  final ThemeMode themeMode;
 }

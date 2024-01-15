@@ -9,3 +9,4 @@ export 'env.dart' show Env;
 export 'store/index.dart';
 export 'model/index.dart';
 export 'utils/index.dart';
+export 'service/http_util.dart';

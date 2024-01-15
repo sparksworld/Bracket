@@ -89,16 +89,16 @@ class _HomeState extends State<Home> {
                       Icon(
                         icon,
                         color: _bottomAppBarIndex == index
-                            ? Colors.red
-                            : Colors.grey,
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).disabledColor,
                       ),
                       Text(
                         text,
                         style: TextStyle(
                           fontSize: 12.0,
                           color: _bottomAppBarIndex == index
-                              ? Colors.red
-                              : Colors.grey,
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).disabledColor,
                         ),
                       ),
                     ],

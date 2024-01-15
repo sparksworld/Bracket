@@ -15,7 +15,9 @@ class _UserCenterState extends State<UserCenter> {
   @override
   Widget build(BuildContext context) {
     Global global = context.watch<Global>();
-    // final profile = context.watch<Profile>();
+    final profile = context.read<Profile>();
+
+    String? token = profile.user?.userToken;
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
@@ -23,9 +25,9 @@ class _UserCenterState extends State<UserCenter> {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              border: const Border(
+              border: Border(
                 bottom: BorderSide(
-                  color: Colors.red,
+                  color: Theme.of(context).focusColor,
                 ),
               ),
               color: Theme.of(context).primaryColor,
@@ -61,17 +63,11 @@ class _UserCenterState extends State<UserCenter> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Spark',
-                            style: TextStyle(
-                                color: Theme.of(context).cardTheme.color),
+                            token ?? 'Spark',
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          Text(
-                            '签名写在这里',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                          ),
+                          Text('签名写在这里',
+                              style: Theme.of(context).textTheme.bodySmall),
                         ],
                       ),
                     ),
@@ -81,67 +77,77 @@ class _UserCenterState extends State<UserCenter> {
             ),
           ),
           const SizedBox(
-            height: 30,
+            height: 12,
           ),
           Padding(
-            padding: EdgeInsets.all(10),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Theme.of(context).indicatorColor,
-                  ),
-                ),
-                color: Theme.of(context).colorScheme.secondary,
-              ),
+            padding: const EdgeInsets.all(8),
+            child: Card(
+              // color: Theme.of(context).navigationDrawerTheme.backgroundColor,
+              // decoration: BoxDecoration(
+              //   border: Border(
+              //       // bottom: BorderSide(
+              //       //   color: Theme.of(context).indicatorColor,
+              //       // ),
+              //       ),
+              //   color: Theme.of(context).navigationDrawerTheme.backgroundColor,
+              // ),
               child: Column(
                 children: [
+                  // ListTile(
+                  //   title: const Text('设置'),
+                  //   leading: const Icon(
+                  //     Icons.settings,
+                  //   ),
+                  //   trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                  //   onTap: () {
+                  //     Navigator.pushNamed(context, MYRouter.settingPagePath);
+                  //   },
+                  // ),
                   ListTile(
-                    title: const Text('设置'),
-                    leading: const Icon(
-                      Icons.settings,
-                    ),
+                    title: const Text('系统主题'),
+                    leading: const Icon(Icons.border_color),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {
-                      Navigator.pushNamed(context, MYRouter.settingPagePath);
+                      Navigator.pushNamed(context, MYRouter.themePagePath);
                     },
                   ),
-                  Divider(),
-                  ListTile(
-                    title: const Text('设置'),
-                    leading: const Icon(
-                      Icons.settings,
-                    ),
-                    trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-                    onTap: () {
-                      Navigator.pushNamed(context, MYRouter.settingPagePath);
-                    },
+                  const ListTile(
+                    title: Text('意见反馈'),
+                    leading: Icon(Icons.send),
+                    trailing: Icon(Icons.keyboard_arrow_right_outlined),
+                  ),
+                  const ListTile(
+                    title: Text('关于'),
+                    leading: Icon(Icons.sentiment_satisfied_alt),
+                    trailing: Icon(Icons.keyboard_arrow_right_outlined),
                   ),
                 ],
               ),
             ),
           ),
-
-          // ),
-          TextButton(
-            onPressed: () {
-              print(11);
-            },
-            child: Text('退出登录'),
+          const SizedBox(
+            height: 12,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Card(
+              child: ListTile(
+                title: const Text('退出登录'),
+                leading: const Icon(Icons.exit_to_app),
+                trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                onTap: () {
+                  profile.clearUser();
+                  // Navigator.pushNamed(context, MYRouter.settingPagePath);
+                },
+              ),
+            ),
           )
-          // ListTile(
-          //   title: const Text('退出登录'),
-          //   leading: Center(
-          //     child: Checkbox(
-          //       value: true,
-          //       onChanged: (bool? value) {},
-          //     ),
-          //   ),
-          //   // trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-          //   onTap: () {
-          //     Navigator.pushNamed(context, MYRouter.settingPagePath);
+          // TextButton(
+          //   onPressed: () {
+          //     print(11);
           //   },
-          // ),
+          //   child: Text('退出登录'),
+          // )
         ],
       ),
     );

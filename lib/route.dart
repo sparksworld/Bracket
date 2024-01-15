@@ -40,7 +40,7 @@ class MYRouter {
     settingPagePath: SparkRoute(builder: Setting()),
 
     //主题
-    themePagePath: SparkRoute(builder: ThemePage()),
+    themePagePath: SparkRoute(builder: const ThemePage()),
     // 未知
     unknownPagePath: SparkRoute(builder: const Unknown()),
   };

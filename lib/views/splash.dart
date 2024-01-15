@@ -77,7 +77,7 @@ class _SplashPageState extends State<Splash> {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
               border: Border.all(color: const Color.fromRGBO(133, 0, 0, 1))),
-          child: Column(children: [
+          child: const Column(children: [
             // Text(context.watch<Global>().theme),
             // Text(context.watch<Setting>().user?.userName ?? ''),
             // Consumer<Setting>(builder: (context, value, child) {

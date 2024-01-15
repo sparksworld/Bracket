@@ -9,9 +9,11 @@ void main() async {
 
   /// 初始持久化数据
   await PreferenceUtil.getInstance();
-  // PreferenceUtils.clear();
 
-  Future.delayed(const Duration(seconds: 3), () {
+  // final a = await HttpUtil().dio.get('albums');
+  // print(a);
+
+  Future.delayed(const Duration(seconds: 0), () {
     FlutterNativeSplash.remove();
     runApp(
       MultiProvider(
@@ -29,24 +31,40 @@ void main() async {
   });
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyTheme {
+  ThemeProvider? _provider;
+  final BuildContext _context;
+  final String _theme;
 
-  ThemeData? myThemeData(BuildContext context, theme) {
-    ThemeProvider provider = ThemeProvider(context, Colors.red);
-    if (theme == ITheme.auto.value) {
-      return provider.theme();
+  ThemeData? get theme {
+    if (_theme == ITheme.auto.value) {
+      return _provider!.theme();
     }
 
-    if (theme == ITheme.dark.value) {
-      return provider.dark();
+    if (_theme == ITheme.dark.value) {
+      return _provider!.dark();
     }
 
-    if (theme == ITheme.light.value) {
-      return provider.light();
+    if (_theme == ITheme.light.value) {
+      return _provider!.light();
     }
+
     return null;
   }
+
+  MyTheme(
+    this._context,
+    this._theme,
+  ) {
+    _provider = ThemeProvider(
+      _context,
+      Theme.of(_context).primaryColor,
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +74,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Bracket',
-      theme: myThemeData(context, global.theme),
+      theme: MyTheme(context, global.theme).theme,
       navigatorKey: MYRouter.navigatorKey,
       initialRoute: MYRouter.homePagePath,
       onGenerateRoute: MYRouter.generateRoute,
