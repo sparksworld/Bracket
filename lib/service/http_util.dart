@@ -1,3 +1,4 @@
+import 'package:bracket/plugins.dart';
 import 'package:dio/dio.dart';
 
 class HttpUtil {
@@ -40,6 +41,7 @@ class HttpUtil {
     try {
       final result =
           await _dio.request(url, queryParameters: params, options: options);
+
       return result;
     } on DioException catch (error) {
       print(error);
@@ -55,7 +57,7 @@ class HttpUtil {
     return response.data;
   }
 
-  Future post(
+  Future<T> post<T>(
     String url, {
     Map<String, dynamic>? queryParameters,
     Options? requestOptions,

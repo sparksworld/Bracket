@@ -1,4 +1,4 @@
-import 'package:bracket/service/api.dart';
+// import 'package:bracket/service/api.dart';
 import 'package:bracket/shared/theme.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/plugins.dart';
@@ -10,8 +10,6 @@ void main() async {
 
   /// 初始持久化数据
   await PreferenceUtil.getInstance();
-  final a = await Api.index(queryParameters: {"a": 1});
-  print(a);
 
   Future.delayed(const Duration(seconds: 0), () {
     FlutterNativeSplash.remove();

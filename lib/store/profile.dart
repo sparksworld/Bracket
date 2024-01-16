@@ -17,8 +17,8 @@ class Profile with ChangeNotifier, DiagnosticableTreeMixin {
   void clearUser() {
     _user = null;
     PreferenceUtil.remove('profile');
-    MYRouter.navigatorKey.currentState
-        ?.pushNamedAndRemoveUntil(MYRouter.loginPagePath, (route) => false);
+    // MYRouter.navigatorKey.currentState
+    //     ?.pushNamedAndRemoveUntil(MYRouter.loginPagePath, (route) => false);
     notifyListeners();
   }
 

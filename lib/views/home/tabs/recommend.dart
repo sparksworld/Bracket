@@ -1,46 +1,43 @@
+import 'package:bracket/store/recommend/content.dart';
+import 'package:bracket/store/recommend/data.dart';
+import 'package:bracket/store/recommend/movie.dart';
+// import 'package:bracket/store/recommend/movie.dart';
 import '/plugins.dart';
 
-class Recommend extends StatefulWidget {
-  const Recommend({super.key});
+class RecommendTab extends StatefulWidget {
+  const RecommendTab({super.key});
 
   @override
-  State createState() => _RecommendState();
+  State<RecommendTab> createState() => _RecommendState();
 }
 
-class _RecommendState extends State<Recommend> {
-  List tabbars = [
-    {'title': '推荐', 'typeKey': 0},
-    {'title': '资讯', 'typeKey': 1},
-    {'title': '搞笑', 'typeKey': 2},
-    {'title': '段子', 'typeKey': 3},
-    {'title': '科技', 'typeKey': 4},
-    {'title': '汽车', 'typeKey': 5},
-    {'title': '医疗', 'typeKey': 6},
-    {'title': '便民', 'typeKey': 7},
-    {'title': '三农', 'typeKey': 8},
-  ];
-
-  final List _shuffling = [
-    "一少女惨遭八名壮汉轮流让座",
-    "一少女惨遭八名壮汉轮流让座",
-    "一少女惨遭八名壮汉轮流让座",
-    "一少女惨遭八名壮汉轮流让座",
-    "一少女惨遭八名壮汉轮流让座"
-  ];
+class _RecommendState extends State<RecommendTab> {
   late PageController _pageController;
+  // late Recommend _fetchData;
+  late Iterable<List<Movie>?> _movies = [];
 
   @override
   void initState() {
     _pageController = PageController(viewportFraction: 0.9);
     super.initState();
-
-    // timer();
+    fetchData();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  Future<void> fetchData() async {
+    var res = await Api.index();
+    Recommend jsonData = Recommend.fromJson(res);
+    Data data = jsonData.data ?? const Data();
+    List<Content> content = data.content ?? [];
+
+    setState(() {
+      _movies = content.map((e) => e.movies);
+    });
   }
 
   void timer() {
@@ -50,6 +47,21 @@ class _RecommendState extends State<Recommend> {
         curve: Curves.easeIn,
       );
     });
+  }
+
+  List<Widget> getMovieGrid(Iterable<List<Movie>?> movies) {
+    return movies
+        .map<Widget>(
+          (List<Movie>? e) => Column(
+            children: [
+              Text('dawdawdwa'),
+              ...e!.map<Widget>((it) {
+                return Text(it.name ?? '');
+              })
+            ],
+          ),
+        )
+        .toList();
   }
 
   @override
@@ -71,64 +83,10 @@ class _RecommendState extends State<Recommend> {
         builder: (_, profile, global, child) {
           String? token = profile.user?.userToken;
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // ElevatedButton(
-              //   // style: TextStyle(color: Color.red),
-              //   onPressed: () {
-              //     if (global.theme == ITheme.dark.value) {
-              //       global.setTheme(ITheme.light.value);
-              //     } else {
-              //       global.setTheme(ITheme.dark.value);
-              //     }
-              //   },
-              //   child: const Text('ElevatedButton'),
-              // ),
-              FloatingActionButton(
-                onPressed: () {
-                  print('dawdawdwa');
-                },
-                child: const Text('FloatingActionButton'),
-              ),
-              MaterialButton(
-                onPressed: () {
-                  print('dawdawdwa');
-                },
-                child: const Text('MaterialButton'),
-              ),
-              TextButton(
-                onPressed: () {
-                  print(232323232);
-                },
-                child: const Text('TextButton'),
-              ),
-              // ButtonBar(
-              //   overflowButtonSpacing: 12,
-              //   children: [
-              //     OutlinedButton(
-              //       onPressed: () {
-              //         Navigator.pushNamed(context, MYRouter.settingPath);
-              //       },
-              //       style: OutlinedButton.styleFrom(
-              //           minimumSize: const Size(200, 50)),
-              //       child: const Text('设置'),
-              //     ),
-              //     OutlinedButton(
-              //       onPressed: () {
-              //         // profile.clearUser();
-              //       },
-              //       style: OutlinedButton.styleFrom(
-              //           minimumSize: const Size(200, 50)),
-              //       child: const Text('测试'),
-              //     ),
-              //   ],
-              // ),
-              SizedBox(
-                width: 100.px,
-                child: Text(token ?? ''),
-              )
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              children: getMovieGrid(_movies),
+            ),
           );
         },
       ),

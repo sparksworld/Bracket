@@ -59,6 +59,8 @@ class MYRouter {
 
         if (routeData?.noAuth != true) {
           if (profile.user?.userToken == null) {
+            // MYRouter.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+            //     MYRouter.loginPagePath, (route) => false);
             builder = const Login();
           }
         }

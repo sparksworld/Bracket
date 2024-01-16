@@ -1,7 +1,7 @@
 import '/plugins.dart';
-import './tabs/recommend.dart' show Recommend;
-import './tabs/user_center.dart' show UserCenter;
-import './tabs/classify.dart' show Classify;
+import './tabs/recommend.dart' show RecommendTab;
+import './tabs/user_center.dart' show UserCenterTab;
+import './tabs/classify.dart' show ClassifyTab;
 
 class Home extends StatefulWidget {
   final String? arguments;
@@ -20,9 +20,9 @@ class _HomeState extends State<Home> {
     if (mounted) {
       _bottomAppBarIndex = 0;
       _pages = [
-        const Recommend(),
-        const Classify(),
-        const UserCenter(),
+        const RecommendTab(),
+        const ClassifyTab(),
+        const UserCenterTab(),
       ];
       super.initState();
     }
