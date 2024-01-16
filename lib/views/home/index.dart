@@ -1,3 +1,6 @@
+import 'package:bracket/widgets/index.dart';
+import 'package:flutter/services.dart';
+
 import '/plugins.dart';
 import './tabs/recommend.dart' show RecommendTab;
 import './tabs/user_center.dart' show UserCenterTab;
@@ -34,34 +37,52 @@ class _HomeState extends State<Home> {
     // print(PreferenceUtils.getMap('user'));
     // print(profile?.userId);
 
-    return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        child: Container(
-          color: Colors.transparent,
-          // padding: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              bottomIcon(text: '推荐', icon: Icons.home, index: 0),
-              bottomIcon(text: '分类', icon: Icons.movie_filter, index: 1),
-              bottomIcon(text: '我的', icon: Icons.person, index: 2),
-            ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool willpop) {
+        if (willpop) return;
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return MyDialog(
+              title: '提示',
+              content: '是否退出应用？',
+              onConfirm: () async {
+                SystemNavigator.pop();
+              },
+            );
+          },
+        );
+      },
+      child: Scaffold(
+        bottomNavigationBar: BottomAppBar(
+          shape: const CircularNotchedRectangle(),
+          child: Container(
+            color: Colors.transparent,
+            // padding: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                bottomIcon(text: '推荐', icon: Icons.home, index: 0),
+                bottomIcon(text: '分类', icon: Icons.movie_filter, index: 1),
+                bottomIcon(text: '我的', icon: Icons.person, index: 2),
+              ],
+            ),
           ),
         ),
-      ),
-      body: Builder(
-        builder: (context) {
-          return OrientationBuilder(
-            builder: (context, orientation) {
-              return IndexedStack(
-                index: _bottomAppBarIndex,
-                children: _pages,
-              );
-            },
-          );
-        },
+        body: Builder(
+          builder: (context) {
+            return OrientationBuilder(
+              builder: (context, orientation) {
+                return IndexedStack(
+                  index: _bottomAppBarIndex,
+                  children: _pages,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

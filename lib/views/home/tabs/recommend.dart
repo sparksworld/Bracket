@@ -14,7 +14,9 @@ class RecommendTab extends StatefulWidget {
 class _RecommendState extends State<RecommendTab> {
   late PageController _pageController;
   // late Recommend _fetchData;
-  late Iterable<List<Movie>?> _movies = [];
+
+  List<Content> _listContent = [];
+  // late Iterable<List<Movie>?> _movies = [];
 
   @override
   void initState() {
@@ -31,13 +33,15 @@ class _RecommendState extends State<RecommendTab> {
 
   Future<void> fetchData() async {
     var res = await Api.index();
-    Recommend jsonData = Recommend.fromJson(res);
-    Data data = jsonData.data ?? const Data();
-    List<Content> content = data.content ?? [];
 
-    setState(() {
-      _movies = content.map((e) => e.movies);
-    });
+    if (res != null) {
+      Recommend jsonData = Recommend.fromJson(res);
+      Data data = jsonData.data ?? const Data();
+
+      setState(() {
+        _listContent = data.content ?? [];
+      });
+    }
   }
 
   void timer() {
@@ -49,19 +53,47 @@ class _RecommendState extends State<RecommendTab> {
     });
   }
 
-  List<Widget> getMovieGrid(Iterable<List<Movie>?> movies) {
-    return movies
-        .map<Widget>(
-          (List<Movie>? e) => Column(
-            children: [
-              Text('dawdawdwa'),
-              ...e!.map<Widget>((it) {
-                return Text(it.name ?? '');
-              })
-            ],
-          ),
-        )
-        .toList();
+  List<Widget> getMovieGrid(List<Content> list) {
+    if (list.isNotEmpty) {
+      return list
+          .map<Widget>(
+            (Content? content) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(content?.nav?.name ?? ''),
+
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(10.0),
+                  itemCount: content?.movies?.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                    childAspectRatio: .8,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    // print(content?.movies?.length);
+                    var movie = content?.movies?[index];
+                    return Image.network(
+                      movie?.picture ?? '',
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+                // ...?content?.movies?.map<Widget>((e) => Text('data')).toList(),
+              ],
+            ),
+          )
+          .toList();
+    }
+    return [
+      const Center(
+        child: Text('正在加载'),
+      ),
+    ];
   }
 
   @override
@@ -84,8 +116,10 @@ class _RecommendState extends State<RecommendTab> {
           String? token = profile.user?.userToken;
 
           return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
-              children: getMovieGrid(_movies),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: getMovieGrid(_listContent),
             ),
           );
         },
