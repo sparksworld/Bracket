@@ -1,20 +1,17 @@
-import 'package:bracket/widgets/index.dart';
-import 'package:flutter/services.dart';
-
 import '/plugins.dart';
-import './tabs/recommend.dart' show RecommendTab;
+import './tabs/recommend/index.dart' show RecommendTab;
 import './tabs/user_center.dart' show UserCenterTab;
 import './tabs/classify.dart' show ClassifyTab;
 
-class Home extends StatefulWidget {
+class HomePage extends StatefulWidget {
   final String? arguments;
-  const Home({super.key, this.arguments});
+  const HomePage({super.key, this.arguments});
 
   @override
-  State<StatefulWidget> createState() => _HomeState();
+  State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home> {
+class _HomePageState extends State<HomePage> {
   int _bottomAppBarIndex = 0;
   List<Widget> _pages = [];
 

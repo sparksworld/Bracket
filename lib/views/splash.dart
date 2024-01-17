@@ -1,14 +1,14 @@
 import '/plugins.dart';
 
-class Splash extends StatefulWidget {
+class SplashPage extends StatefulWidget {
   final String? title;
-  const Splash({super.key, this.title});
+  const SplashPage({super.key, this.title});
 
   @override
-  State<Splash> createState() => _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<Splash> {
+class _SplashPageState extends State<SplashPage> {
   Timer? _timer;
   // void test(BuildContext context) {
   //   context.read<Setting>().setTheme(ITheme.green.value);

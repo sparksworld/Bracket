@@ -1,22 +1,24 @@
 import '../plugins.dart';
 
-class About extends StatelessWidget {
+class AboutPage extends StatelessWidget {
   final String? arguments;
-  static const String routeName = "about";
-  const About({super.key, this.arguments});
+  const AboutPage({super.key, this.arguments});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('about'),
+        title: const Text('关于'),
       ),
       body: SafeArea(
           child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-            border: Border.all(color: const Color.fromRGBO(0, 0, 0, 1))),
+          border: Border.all(
+            color: const Color.fromRGBO(0, 0, 0, 1),
+          ),
+        ),
       )),
     );
   }

@@ -1,9 +1,9 @@
 import '/plugins.dart';
 
-class Unknown extends StatelessWidget {
+class UnknownPage extends StatelessWidget {
   final String? arguments;
-  static const String routeName = "unknown";
-  const Unknown({super.key, this.arguments});
+  static const String routeName = "404";
+  const UnknownPage({super.key, this.arguments});
 
   @override
   Widget build(BuildContext context) {

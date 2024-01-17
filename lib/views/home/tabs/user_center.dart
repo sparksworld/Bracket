@@ -1,14 +1,13 @@
-import '/widgets/index.dart';
 import '/plugins.dart';
 
 class UserCenterTab extends StatefulWidget {
   const UserCenterTab({super.key});
 
   @override
-  State<StatefulWidget> createState() => _UserCenterState();
+  State<StatefulWidget> createState() => _UserCenterTabState();
 }
 
-class _UserCenterState extends State<UserCenterTab> {
+class _UserCenterTabState extends State<UserCenterTab> {
   void onChangeEvent() {
     // eventBus.fire(SwitchTab(0));
   }

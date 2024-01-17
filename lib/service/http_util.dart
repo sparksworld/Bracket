@@ -54,7 +54,8 @@ class HttpUtil {
     Options? requestOptions,
   }) async {
     var response = await _request(url, method: "get", params: queryParameters);
-    return response.data;
+    print(response);
+    return response?.data;
   }
 
   Future<T> post<T>(
@@ -63,6 +64,7 @@ class HttpUtil {
     Options? requestOptions,
   }) async {
     var response = await _request(url, method: "post", params: queryParameters);
-    return response.data;
+    print(response);
+    return response?.data;
   }
 }
