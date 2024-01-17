@@ -54,7 +54,7 @@ class HttpUtil {
     Options? requestOptions,
   }) async {
     var response = await _request(url, method: "get", params: queryParameters);
-    print(response);
+    // print(response);
     return response?.data;
   }
 
@@ -64,7 +64,7 @@ class HttpUtil {
     Options? requestOptions,
   }) async {
     var response = await _request(url, method: "post", params: queryParameters);
-    print(response);
+    // print(response);
     return response?.data;
   }
 }

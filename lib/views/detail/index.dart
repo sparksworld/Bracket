@@ -3,7 +3,8 @@ import "package:chewie/chewie.dart";
 import "package:video_player/video_player.dart";
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({Key? key}) : super(key: key);
+  final Map? arguments;
+  const DetailPage({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -19,11 +20,11 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
+    print(widget.arguments);
     a();
   }
 
   Future a() async {
-    await videoPlayerController.initialize();
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
       aspectRatio: 3 / 2,
@@ -45,11 +46,20 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Sample App"),
-      ),
-      body: Container(
-        child: init ? Chewie(controller: chewieController) : Text('data'),
+      body: SafeArea(
+        child: Container(
+          // alignment: Alignment.topLeft,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.black,
+          child: AspectRatio(
+            aspectRatio: 1.6,
+            child: init
+                ? Chewie(
+                    controller: chewieController,
+                  )
+                : const Text('data'),
+          ),
+        ),
       ),
     );
   }

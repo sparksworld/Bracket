@@ -13,7 +13,7 @@ class RecommendTab extends StatefulWidget {
 }
 
 class _RecommendTabState extends State<RecommendTab> {
-  final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
+  GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   final PageController _pageController = PageController();
   List<Content> _listContent = [];
 
@@ -41,6 +41,7 @@ class _RecommendTabState extends State<RecommendTab> {
       Data data = jsonData.data ?? const Data();
 
       setState(() {
+        _refreshKey = GlobalKey();
         _listContent = data.content ?? [];
       });
     }
@@ -84,7 +85,10 @@ class _RecommendTabState extends State<RecommendTab> {
             icon: const Icon(Icons.search),
             tooltip: 'Comment Icon',
             onPressed: () {
-              showSearch(context: context, delegate: MySearchBar());
+              showSearch(
+                context: context,
+                delegate: MySearchBar(),
+              );
             },
           ), //IconButton
         ],

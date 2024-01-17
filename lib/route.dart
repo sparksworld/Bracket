@@ -1,4 +1,5 @@
 // import 'package:provider/provider.dart';
+
 import '/plugins.dart';
 import '/views/home/index.dart';
 import '/views/login.dart';
@@ -9,7 +10,7 @@ import 'views/detail/index.dart';
 
 class SparkRoute {
   bool? noAuth;
-  Widget builder;
+  Widget Function(BuildContext, {Map? arguments}) builder;
 
   SparkRoute({required this.builder, this.noAuth});
 }
@@ -18,7 +19,7 @@ class MYRouter {
   static String homePagePath = '/';
   static String splashPagePath = '/splash_page';
   static String detailPagePath = '/detail_page';
-  // static String loginPagePath = '/login';
+  static String loginPagePath = '/login_page';
   static String aboutPagePath = '/about_page';
   static String unknownPagePath = '/unknown_page';
   static String settingPagePath = '/setting_page';
@@ -31,20 +32,25 @@ class MYRouter {
 
   static Map<String, SparkRoute> routeTables = {
     //启动页
-    splashPagePath: SparkRoute(noAuth: true, builder: const SplashPage()),
+    splashPagePath: SparkRoute(
+        noAuth: true, builder: (_, {arguments}) => const SplashPage()),
     //登录
-    // loginPagePath: SparkRoute(noAuth: false, builder: const Login()),
+    loginPagePath: SparkRoute(
+        noAuth: false, builder: (_, {arguments}) => const LoginPage()),
     //首页
-    homePagePath: SparkRoute(builder: const HomePage()),
-    detailPagePath: SparkRoute(builder: const DetailPage()),
+    homePagePath: SparkRoute(builder: (_, {arguments}) => const HomePage()),
+    detailPagePath: SparkRoute(
+      builder: (_, {arguments}) => DetailPage(arguments: arguments),
+    ),
 
     //设置
     // settingPagePath: SparkRoute(builder: Setting()),
 
     //主题
-    themePagePath: SparkRoute(builder: const ThemePage()),
+    themePagePath: SparkRoute(builder: (_, {arguments}) => const ThemePage()),
     // 未知
-    unknownPagePath: SparkRoute(builder: const UnknownPage()),
+    unknownPagePath:
+        SparkRoute(builder: (_, {arguments}) => const UnknownPage()),
   };
 
   ///路由拦截
@@ -52,10 +58,12 @@ class MYRouter {
       RouteSettings settings) {
     MaterialPageRoute route = MaterialPageRoute(
       builder: (_) {
+        Map? arguments = settings.arguments as Map?;
         final profile = _.watch<Profile>();
         String? name = settings.name;
         SparkRoute? routeData = routeTables[name];
-        Widget? builder = routeData?.builder;
+        Widget Function(BuildContext, {Map? arguments})? builder =
+            routeData?.builder;
 
         // Map<String, dynamic>? profile =
         //     PreferenceUtils.getMap<Map<String, dynamic>>('profile');
@@ -64,13 +72,13 @@ class MYRouter {
           if (profile.user?.userToken == null) {
             // MYRouter.navigatorKey.currentState?.pushNamedAndRemoveUntil(
             //     MYRouter.loginPagePath, (route) => false);
-            builder = const LoginPage();
+            builder = routeTables[loginPagePath]?.builder;
           }
         }
 
-        builder ??= const UnknownPage();
+        builder ??= routeTables[unknownPagePath]?.builder;
 
-        return builder;
+        return builder!(_, arguments: arguments);
       },
       settings: settings,
     );
@@ -79,9 +87,9 @@ class MYRouter {
   }
 
   static RouteFactory get unknownRoute => (settings) {
-        print('dwadawdawdw=> ${settings.name}');
         return MaterialPageRoute(
-          builder: (_) => const UnknownPage(),
+          builder: (BuildContext _) => routeTables[unknownPagePath]!
+              .builder(_, arguments: settings.arguments as Map?),
         );
       };
 }

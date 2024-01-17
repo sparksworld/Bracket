@@ -2,6 +2,10 @@ import "package:bracket/plugins.dart";
 import 'package:bracket/store/recommend/content.dart';
 import 'package:bracket/store/recommend/movie.dart';
 
+class A {
+  final a = 1;
+}
+
 class MovieGrid extends StatelessWidget {
   final Content? content;
   const MovieGrid({super.key, required this.content});
@@ -29,7 +33,10 @@ class MovieGrid extends StatelessWidget {
             var movie = content?.movies?[index];
             return GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, MYRouter.detailPagePath);
+                Navigator.pushNamed(context, MYRouter.detailPagePath,
+                    arguments: {
+                      'id': movie?.id,
+                    });
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +64,11 @@ Widget getMovieGridHeader(BuildContext context, Content? content) {
       children: [
         Text(
           content?.nav?.name ?? '',
-          style: Theme.of(context).textTheme.titleLarge,
+          // style: Theme.of(context).textTheme.titleLarge,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+          ),
         ),
         Row(
           children: [

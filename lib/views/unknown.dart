@@ -1,7 +1,7 @@
 import '/plugins.dart';
 
 class UnknownPage extends StatelessWidget {
-  final String? arguments;
+  final Map? arguments;
   static const String routeName = "404";
   const UnknownPage({super.key, this.arguments});
 
@@ -9,15 +9,13 @@ class UnknownPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Unknown'),
+        title: const Text('404'),
       ),
-      body: SafeArea(
-          child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-            border: Border.all(color: const Color.fromRGBO(0, 0, 0, 1))),
-      )),
+      body: const SafeArea(
+        child: Center(
+          child: Text('页面未找到～'),
+        ),
+      ),
     );
   }
 }
