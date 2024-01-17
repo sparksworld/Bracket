@@ -27,7 +27,7 @@ class _DetailPageState extends State<DetailPage> {
   Future a() async {
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
-      aspectRatio: 3 / 2,
+      aspectRatio: 1.6,
       autoPlay: true,
       looping: true,
     );
