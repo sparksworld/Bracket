@@ -1,6 +1,6 @@
 import "package:bracket/plugins.dart";
-import 'package:bracket/store/recommend/content.dart';
-import 'package:bracket/store/recommend/movie.dart';
+import 'package:bracket/model/index/content.dart';
+import 'package:bracket/model/index/movie.dart';
 
 class A {
   final a = 1;

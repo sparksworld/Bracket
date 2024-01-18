@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'data.dart';
 
-part 'recommend.g.dart';
+part 'index.g.dart';
 
 @JsonSerializable()
 class Recommend {

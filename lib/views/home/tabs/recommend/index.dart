@@ -1,5 +1,6 @@
-import 'package:bracket/store/recommend/content.dart';
-import 'package:bracket/store/recommend/data.dart';
+import 'package:bracket/model/index/data.dart';
+import 'package:bracket/model/index/content.dart';
+
 import '/plugins.dart';
 import './search.dart';
 import './movies.dart';

@@ -1,3 +1,3 @@
 export 'global.dart';
 export 'profile.dart';
-export 'recommend/recommend.dart';
+// export 'detail/detail.dart';

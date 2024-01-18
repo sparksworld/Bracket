@@ -21,10 +21,21 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     super.initState();
     print(widget.arguments);
-    a();
+    _fetchData(widget.arguments?['id']);
+    _initChewieController();
   }
 
-  Future a() async {
+  Future _fetchData(id) async {
+    var res = await Api.filmDetail(queryParameters: {
+      'id': id,
+    });
+
+    if (res != null) {
+      // Detail jsonData = Detail.fromJson(res);
+    }
+  }
+
+  Future _initChewieController() async {
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
       aspectRatio: 1.6,
