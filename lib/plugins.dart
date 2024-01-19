@@ -1,3 +1,5 @@
+export "package:collection/collection.dart";
+
 export "package:common_utils/common_utils.dart";
 export 'package:flutter/material.dart';
 export 'package:provider/provider.dart';

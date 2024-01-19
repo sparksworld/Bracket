@@ -28,11 +28,11 @@ class _RecommendTabState extends State<RecommendTab> {
     });
   }
 
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _pageController.dispose();
+  //   super.dispose();
+  // }
 
   Future<bool> _fetchData() async {
     var res = await Api.index();

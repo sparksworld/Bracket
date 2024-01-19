@@ -1,3 +1,5 @@
+import 'package:flutter/rendering.dart';
+
 import '/plugins.dart';
 import './tabs/recommend/index.dart' show RecommendTab;
 import './tabs/user_center.dart' show UserCenterTab;
@@ -11,7 +13,8 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   int _bottomAppBarIndex = 0;
   List<Widget> _pages = [];
 
@@ -30,9 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final User? profile = context.watch<Profile>().user;
-    // print(PreferenceUtils.getMap('user'));
-    // print(profile?.userId);
+    super.build(context);
 
     return PopScope(
       canPop: false,
@@ -129,4 +130,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

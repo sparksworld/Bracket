@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 
 class MyDialog extends StatefulWidget {
-  final String title;
-  final String content;
-  final String? cancelText;
-  final String? confirmText;
-  final Future Function()? onConfirm;
-  final Future Function()? onCancel;
-
   const MyDialog({
     super.key,
     required this.title,
@@ -17,6 +10,13 @@ class MyDialog extends StatefulWidget {
     this.onConfirm,
     this.onCancel,
   });
+
+  final String title;
+  final String content;
+  final String? cancelText;
+  final String? confirmText;
+  final Future Function()? onConfirm;
+  final Future Function()? onCancel;
 
   @override
   State<MyDialog> createState() => _MyDialogState();
