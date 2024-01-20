@@ -53,10 +53,11 @@ class _UserCenterTabState extends State<UserCenterTab> {
                               ),
                               width: 60,
                               height: 60,
-                              child: const Center(
+                              child: Center(
                                 child: Icon(
                                   Icons.sentiment_satisfied_alt,
                                   size: 60,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             ),

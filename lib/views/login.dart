@@ -14,6 +14,11 @@ class _LoginPageState extends State<LoginPage> {
   // final FocusNode _focusNode = FocusNode();
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -105,21 +110,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-// class Login extends StatelessWidget {
-//   Login({Key? key}) : super(key: key);
-
-//   // final FocusNode _focusNode = FocusNode();
-
-// }
-
-// text: '登陆',
-//                   onTap: () => {
-//                     //  登陆接入
-//                     if ((_formKey.currentState as FormState).validate())
-//                       {
-//                         //  验证通过提交数据(登录)
-//                         print(_uNameController.text),
-//                         print(_pwdController.text)
-//                       }
-//                   },

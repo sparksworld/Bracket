@@ -1,5 +1,3 @@
-import 'package:flutter/rendering.dart';
-
 import '/plugins.dart';
 import './tabs/recommend/index.dart' show RecommendTab;
 import './tabs/user_center.dart' show UserCenterTab;
@@ -27,8 +25,8 @@ class _HomePageState extends State<HomePage>
         const ClassifyTab(),
         const UserCenterTab(),
       ];
-      super.initState();
     }
+    super.initState();
   }
 
   @override
@@ -108,16 +106,16 @@ class _HomePageState extends State<HomePage>
                       Icon(
                         icon,
                         color: _bottomAppBarIndex == index
-                            ? Theme.of(context).primaryColor
-                            : Theme.of(context).disabledColor,
+                            ? Theme.of(context).colorScheme.primary
+                            : null,
                       ),
                       Text(
                         text,
                         style: TextStyle(
                           fontSize: 12.0,
                           color: _bottomAppBarIndex == index
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).disabledColor,
+                              ? Theme.of(context).colorScheme.primary
+                              : null,
                         ),
                       ),
                     ],

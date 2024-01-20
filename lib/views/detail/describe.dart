@@ -17,16 +17,19 @@ class _DescribeState extends State<Describe> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Text(
-              (_detail?.descriptor?.blurb ?? '').trim(),
-            ),
-          ],
+    return LoadingView(
+      loading: widget.data == null,
+      builder: (_) => SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Text(
+                (_detail?.descriptor?.blurb ?? '').trim(),
+              ),
+            ],
+          ),
         ),
       ),
     );

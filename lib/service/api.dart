@@ -9,4 +9,8 @@ class Api {
   static Future filmDetail({Map<String, dynamic>? queryParameters}) {
     return HttpUtil().get('filmDetail', queryParameters: queryParameters);
   }
+
+  static Future searchFilm({Map<String, dynamic>? queryParameters}) {
+    return HttpUtil().get('searchFilm', queryParameters: queryParameters);
+  }
 }

@@ -8,8 +8,12 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   /// 初始持久化数据
   await PreferenceUtil.getInstance();
+  // PreferenceUtil.clear();
 
   Future.delayed(const Duration(seconds: 0), () {
     FlutterNativeSplash.remove();
@@ -72,7 +76,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Bracket',
-      theme: MyTheme(context, global.theme).theme,
+      theme: MyTheme(context, global.theme!).theme,
       navigatorKey: MYRouter.navigatorKey,
       initialRoute: MYRouter.homePagePath,
       onGenerateRoute: MYRouter.generateRoute,

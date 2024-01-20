@@ -33,10 +33,13 @@ class MovieGrid extends StatelessWidget {
             var movie = content?.movies?[index];
             return GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, MYRouter.detailPagePath,
-                    arguments: {
-                      'id': movie?.id,
-                    });
+                Navigator.pushNamed(
+                  context,
+                  MYRouter.detailPagePath,
+                  arguments: {
+                    'id': movie?.id,
+                  },
+                );
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +97,11 @@ Widget getMovieGridContent(BuildContext context, Movie? movie) => Expanded(
           Container(
             width: double.infinity,
             height: double.infinity,
-            color: Colors.grey,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.grey,
+            ),
             child: Image(
               fit: BoxFit.cover,
               loadingBuilder:

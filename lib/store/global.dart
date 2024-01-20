@@ -19,16 +19,13 @@ extension IThemeExtension on ITheme {
 
 class Global with ChangeNotifier, DiagnosticableTreeMixin {
   final BuildContext context;
-  String _theme = ITheme.auto.value;
-  String get theme => _theme;
 
-  Global(this.context) {
-    String? data = PreferenceUtil.getString('theme');
+  String? get theme =>
+      PreferenceUtil.getString('theme', defaultValue: ITheme.auto.value);
+  List<String> get searchRecord =>
+      PreferenceUtil.getStringList('searchRecord', defaultValue: []);
 
-    if (data != null && data.isNotEmpty) {
-      setTheme(data);
-    }
-  }
+  Global(this.context) : super();
 
   // GlobalKey<NavigatorState> navigatorKey = MYRouter.navigatorKey;
   // BuildContext context = navigatorKey.currentState!.context;
@@ -36,8 +33,23 @@ class Global with ChangeNotifier, DiagnosticableTreeMixin {
   // ThemeData get theme => _theme;
 
   void setTheme(String theme) async {
-    _theme = theme;
+    // _theme = theme;
     await PreferenceUtil.setString('theme', theme);
+    notifyListeners();
+  }
+
+  void setSearchRecord(String str) async {
+    // List<String> list = PreferenceUtil.getStringList('searchRecord');
+
+    List<String> newList = [
+      ...{
+        ...{str, ...searchRecord}
+      }
+    ];
+    List<String> cutList =
+        newList.sublist(0, newList.length >= 30 ? 30 : newList.length);
+
+    await PreferenceUtil.setStringList('searchRecord', cutList);
     notifyListeners();
   }
 

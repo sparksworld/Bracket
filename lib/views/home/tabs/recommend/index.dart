@@ -2,9 +2,10 @@ import 'package:bracket/model/index/data.dart';
 import 'package:bracket/model/index/content.dart';
 
 import '/plugins.dart';
-import './search.dart';
+// import './search.dart';
 import './movies.dart';
 import './swiper.dart';
+import './search.dart';
 
 class RecommendTab extends StatefulWidget {
   const RecommendTab({super.key});
@@ -15,107 +16,92 @@ class RecommendTab extends StatefulWidget {
 
 class _RecommendTabState extends State<RecommendTab> {
   GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
-  final PageController _pageController = PageController();
-  List<Content> _listContent = [];
+  Data? _data;
+  bool _loading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    // _fetchData();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      //关键代码，直接触发下拉刷新
-      _refreshKey.currentState?.show();
-    });
+  List<Content> get _content {
+    return _data?.content ?? [];
   }
 
-  // @override
-  // void dispose() {
-  //   _pageController.dispose();
-  //   super.dispose();
-  // }
-
   Future<bool> _fetchData() async {
+    setState(() {
+      _loading = true;
+    });
     var res = await Api.index();
 
     if (res != null) {
       Recommend jsonData = Recommend.fromJson(res);
-      Data data = jsonData.data ?? const Data();
-
       setState(() {
+        _loading = false;
+        _data = jsonData.data;
         _refreshKey = GlobalKey();
-        _listContent = data.content ?? [];
       });
     }
 
-    return Future.value(true);
+    return true;
   }
 
-  void timer() {
-    Timer.periodic(const Duration(milliseconds: 3000), (timer) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeIn,
-      );
-    });
-  }
-
-  List<Widget> getHomeGrid(List<Content> list) {
+  Widget getHomeGrid(List<Content> list) {
     if (list.isNotEmpty) {
-      return list
-          .map<Widget>(
-            (Content content) => MovieGrid(
-              content: content,
-            ),
-          )
-          .toList();
+      return Column(
+        children: list
+            .map(
+              (Content content) => MovieGrid(
+                content: content,
+              ),
+            )
+            .toList(),
+      );
     }
-    return [
-      const Center(
-        child: Text('正在加载'),
-      ),
-    ];
+    return const Center(
+      child: Text('暂无数据'),
+    );
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //关键代码，直接触发下拉刷新
+      _refreshKey.currentState?.show();
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('推荐'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: 'Comment Icon',
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: MySearchBar(),
-              );
-            },
-          ), //IconButton
-        ],
+        title: const MySearchBar(),
       ),
       body: Consumer2<Profile, Global>(
         builder: (_, profile, global, child) {
-          String? token = profile.user?.userToken;
+          // String? token = profile.user?.userToken;
 
           return RefreshIndicator(
             key: _refreshKey,
             onRefresh: _fetchData,
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 300,
-                    child: const MySwiper(),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  ...getHomeGrid(_listContent)
-                ],
+            child: LoadingView(
+              loading: _loading,
+              builder: (_) => SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 12,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 300,
+                      child: const MySwiper(),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    getHomeGrid(_content)
+                  ],
+                ),
               ),
             ),
           );
