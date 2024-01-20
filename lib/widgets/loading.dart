@@ -10,7 +10,7 @@ class LoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return Container(
+      return SizedBox(
         width: double.maxFinite,
         height: double.maxFinite,
         child: Center(

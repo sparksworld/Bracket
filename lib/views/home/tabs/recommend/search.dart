@@ -176,7 +176,9 @@ class _SearchState extends State<MyList> {
     var res = await Api.searchFilm(
         queryParameters: {'keyword': widget.query, 'current': _current});
 
-    global.setSearchRecord(widget.query);
+    if (widget.query.isNotEmpty) {
+      global.setSearchRecord(widget.query);
+    }
     if (res != null) {
       SearchFilm jsonData = SearchFilm.fromJson(res);
       setState(() {

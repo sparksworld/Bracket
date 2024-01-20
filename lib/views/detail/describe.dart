@@ -22,7 +22,7 @@ class _DescribeState extends State<Describe> {
       builder: (_) => SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           child: Column(
             children: [
               Text(
