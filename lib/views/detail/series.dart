@@ -53,7 +53,7 @@ class _SeriesState extends State<Series> {
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Align(
                 alignment: Alignment.topLeft,
@@ -74,7 +74,7 @@ class _SeriesState extends State<Series> {
               const SizedBox(
                 height: 12,
               ),
-              Divider(),
+              const Divider(),
               const SizedBox(
                 height: 12,
               ),
@@ -89,6 +89,7 @@ class _SeriesState extends State<Series> {
                 onSelectionChanged: (value) {
                   setState(() {
                     _originIndex = value.first;
+                    _teleplayIndex = 0;
                     widget.callback(_originIndex, _teleplayIndex);
                   });
                 },
@@ -117,8 +118,9 @@ class _SeriesState extends State<Series> {
                       children: [
                         _playListItem(_originIndex).isNotEmpty
                             ? Wrap(
-                                spacing: 10,
-                                runSpacing: 10,
+                                // alignment: WrapAlignment.center,
+                                spacing: 6,
+                                runSpacing: 6,
                                 children: _playListItem(_originIndex)
                                     .mapIndexed(
                                       (i, e) => OutlinedButton(
