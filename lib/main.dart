@@ -80,6 +80,14 @@ class MyApp extends StatelessWidget {
       initialRoute: MYRouter.homePagePath,
       onGenerateRoute: MYRouter.generateRoute,
       onUnknownRoute: MYRouter.unknownRoute,
+      builder: (context, widget) {
+        return MediaQuery(
+          //设置全局的文字的textScaleFactor为1.0，文字不再随系统设置改变
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
+          child: widget!,
+        );
+      },
     );
   }
 }

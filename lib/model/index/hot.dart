@@ -25,7 +25,7 @@ class Hot {
   final String? language;
   final int? year;
   final String? initial;
-  final int? score;
+  // final int? score;
   final int? updateStamp;
   final int? hits;
   final String? state;
@@ -48,7 +48,7 @@ class Hot {
     this.language,
     this.year,
     this.initial,
-    this.score,
+    // this.score,
     this.updateStamp,
     this.hits,
     this.state,
@@ -58,7 +58,7 @@ class Hot {
 
   @override
   String toString() {
-    return 'Hot(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, mid: $mid, cid: $cid, pid: $pid, name: $name, subTitle: $subTitle, cName: $cName, classTag: $classTag, area: $area, language: $language, year: $year, initial: $initial, score: $score, updateStamp: $updateStamp, hits: $hits, state: $state, remarks: $remarks, releaseStamp: $releaseStamp)';
+    return 'Hot(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, mid: $mid, cid: $cid, pid: $pid, name: $name, subTitle: $subTitle, cName: $cName, classTag: $classTag, area: $area, language: $language, year: $year, initial: $initial, updateStamp: $updateStamp, hits: $hits, state: $state, remarks: $remarks, releaseStamp: $releaseStamp)';
   }
 
   factory Hot.fromJson(Map<String, dynamic> json) => _$HotFromJson(json);
@@ -104,7 +104,7 @@ class Hot {
       language: language ?? this.language,
       year: year ?? this.year,
       initial: initial ?? this.initial,
-      score: score ?? this.score,
+      // score: score ?? this.score,
       updateStamp: updateStamp ?? this.updateStamp,
       hits: hits ?? this.hits,
       state: state ?? this.state,
@@ -138,7 +138,6 @@ class Hot {
       language.hashCode ^
       year.hashCode ^
       initial.hashCode ^
-      score.hashCode ^
       updateStamp.hashCode ^
       hits.hashCode ^
       state.hashCode ^

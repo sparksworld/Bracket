@@ -12,26 +12,27 @@ class MySearchBar extends StatefulWidget {
 class _SearchBarState extends State<MySearchBar> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showSearch(
-          context: context,
-          delegate: Search(),
-        );
-      },
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 1,
+    return SizedBox(
+      height: 50,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 1,
+            child: GestureDetector(
+              onTap: () {
+                showSearch(
+                  context: context,
+                  delegate: Search(context),
+                );
+              },
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
                 child: Container(
                   // height: double.infinity,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).highlightColor,
                     ),
                     borderRadius: const BorderRadius.all(
                       Radius.circular(10),
@@ -41,50 +42,71 @@ class _SearchBarState extends State<MySearchBar> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '搜索视频',
-                          style: TextStyle(
-                            color: Theme.of(context).disabledColor,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.fontSize,
-                          ),
-                        ),
-                      ),
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: Theme.of(context).highlightColor,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                '搜索视频',
+                                style: TextStyle(
+                                  color: Theme.of(context).highlightColor,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.fontSize,
+                                ),
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                 ),
               ),
             ),
-            Expanded(
-              flex: 0,
-              child: IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: Theme.of(context).textTheme.headlineMedium?.fontSize,
-                ),
-                // tooltip: 'Comment Icon',
-                onPressed: () {
-                  showSearch(
-                    context: context,
-                    delegate: Search(),
-                  );
-                },
-              ), //Ic
-            )
-          ],
-        ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            flex: 0,
+            child: GestureDetector(
+              child: Icon(
+                Icons.history,
+                size: Theme.of(context).textTheme.headlineLarge?.fontSize,
+                color: Theme.of(context).primaryColorLight,
+              ),
+              onTap: () {
+                // showSearch(
+                //   context: context,
+                //   delegate: Search(),
+                // );
+              },
+            ),
+          )
+        ],
       ),
     );
   }
 }
 
 class Search extends SearchDelegate<String> {
+  BuildContext context;
+  Search(this.context) : super();
+
   @override
   String get searchFieldLabel => '请输入视频名';
+
+  @override
+  TextStyle? get searchFieldStyle =>
+      TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.primary);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -213,6 +235,13 @@ class _SearchState extends State<MyList> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
@@ -240,14 +269,23 @@ class _SearchState extends State<MyList> {
       heightFactor: 2,
       alignment: Alignment.center,
       child: _loading
-          ? const CircularProgressIndicator()
+          ? SizedBox(
+              height: 22,
+              width: 22,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            )
           : list.length == _total
               ? const Text('暂无更多数据')
               : const Text('上拉加载'),
     );
   }
 
-  Widget searchItemView(item) {
+  Widget searchItemView(VideoList item) {
     return Container(
       margin: const EdgeInsets.only(bottom: 6),
       child: GestureDetector(
@@ -264,13 +302,14 @@ class _SearchState extends State<MyList> {
             padding: const EdgeInsets.all(12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  width: 100,
+                  width: 120,
                   height: 150,
                   child: Image(
                     fit: BoxFit.cover,
@@ -307,19 +346,30 @@ class _SearchState extends State<MyList> {
                 Expanded(
                   flex: 1,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         item.name ?? '',
                         softWrap: true,
                         style: Theme.of(context).textTheme.titleMedium,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 12,
                       ),
                       Text(
-                        item.blurb ?? '',
+                        (item.blurb?.trim().isEmpty ?? true)
+                            ? '暂无介绍'
+                            : item.blurb?.trim() ?? '暂无介绍',
+                        style: TextStyle(
+                          color: Theme.of(context).disabledColor,
+                          fontSize: 14,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                         softWrap: true,
+                        maxLines: 4,
                       ),
                     ],
                   ),

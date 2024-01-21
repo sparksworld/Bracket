@@ -13,6 +13,13 @@ class _UserCenterTabState extends State<UserCenterTab> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Global global = context.watch<Global>();
     final Profile profile = context.read<Profile>();
@@ -121,6 +128,14 @@ class _UserCenterTabState extends State<UserCenterTab> {
                     title: Text('关于'),
                     leading: Icon(Icons.sentiment_satisfied_alt),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
+                  ),
+                  ListTile(
+                    title: const Text('缓存清理'),
+                    leading: const Icon(Icons.clear_all),
+                    trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                    onTap: () {
+                      PreferenceUtil.clear();
+                    },
                   ),
                 ],
               ),

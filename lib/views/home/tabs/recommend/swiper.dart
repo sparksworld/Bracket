@@ -8,8 +8,8 @@ class MySwiper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Swiper(
       itemBuilder: (BuildContext context, int index) {
-        return Image.network(
-          "https://via.placeholder.com/350x150",
+        return Image.asset(
+          "assets/images/logo.png",
           fit: BoxFit.cover,
         );
       },

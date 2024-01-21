@@ -10,6 +10,8 @@ export 'dart:async';
 export 'dart:math';
 export 'dart:convert';
 export 'route.dart';
+export 'dart:io';
+
 export 'env.dart' show Env;
 export 'store/index.dart';
 export 'model/index.dart';

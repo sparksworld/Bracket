@@ -35,10 +35,13 @@ class _PlayerState extends State<Player> {
       ..addListener(_listener)
       ..initialize().then(
         (value) {
+          var aspectRatio = _videoPlayerController?.value.aspectRatio;
           _chewieController = ChewieController(
             videoPlayerController: _videoPlayerController!,
             autoPlay: true,
             looping: true,
+            aspectRatio: aspectRatio,
+            deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
           );
           setState(() {
             _loading = false;
@@ -50,6 +53,10 @@ class _PlayerState extends State<Player> {
 
   @override
   void dispose() {
+    // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values); //恢复
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     WakelockPlus.disable();
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
@@ -62,17 +69,34 @@ class _PlayerState extends State<Player> {
       width: MediaQuery.of(context).size.width,
       // height: double.maxFinite,
       color: Colors.black,
-      child: AspectRatio(
-        aspectRatio: 1.6,
-        child: LoadingView(
-          loading: _loading,
-          builder: (ctx) {
-            return Chewie(
-              key: widget.key,
-              controller: _chewieController!,
-            );
-          },
-        ),
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: 1.6,
+            child: LoadingView(
+              loading: _loading,
+              builder: (ctx) {
+                return Chewie(
+                  key: widget.key,
+                  controller: _chewieController!,
+                );
+              },
+            ),
+          ),
+          Positioned(
+            left: 12.0,
+            top: 12.0,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
