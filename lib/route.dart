@@ -7,6 +7,7 @@ import '/views/splash.dart';
 import '/views/unknown.dart';
 import 'views/theme/index.dart';
 import 'views/detail/index.dart';
+import 'views/history/index.dart';
 
 class SparkRoute {
   bool? noAuth;
@@ -24,6 +25,7 @@ class MYRouter {
   static String unknownPagePath = '/unknown_page';
   static String settingPagePath = '/setting_page';
   static String themePagePath = '/theme_page';
+  static String historyPagePath = '/history_page';
 
   static String get initialRoute => homePagePath;
 
@@ -48,6 +50,8 @@ class MYRouter {
 
     //主题
     themePagePath: SparkRoute(builder: (_, {arguments}) => const ThemePage()),
+    historyPagePath:
+        SparkRoute(builder: (_, {arguments}) => const HistoryPage()),
     // 未知
     unknownPagePath:
         SparkRoute(builder: (_, {arguments}) => const UnknownPage()),

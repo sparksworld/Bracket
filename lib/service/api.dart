@@ -13,4 +13,9 @@ class Api {
   static Future searchFilm({Map<String, dynamic>? queryParameters}) {
     return HttpUtil().get('searchFilm', queryParameters: queryParameters);
   }
+
+  static Future filmClassifySearch({Map<String, dynamic>? queryParameters}) {
+    return HttpUtil()
+        .get('filmClassifySearch', queryParameters: queryParameters);
+  }
 }

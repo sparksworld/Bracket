@@ -84,10 +84,7 @@ class _SearchBarState extends State<MySearchBar> {
                 color: Theme.of(context).primaryColorLight,
               ),
               onTap: () {
-                // showSearch(
-                //   context: context,
-                //   delegate: Search(),
-                // );
+                Navigator.of(context).pushNamed(MYRouter.historyPagePath);
               },
             ),
           )
