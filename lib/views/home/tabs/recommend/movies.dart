@@ -233,7 +233,7 @@ Widget getMovieGridFooter(BuildContext context, Movie? movie) => Padding(
             ),
             overflow: TextOverflow.ellipsis,
             softWrap: true,
-            maxLines: 2,
+            maxLines: 1,
             textAlign: TextAlign.left,
           ),
         ],

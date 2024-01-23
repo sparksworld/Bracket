@@ -23,16 +23,17 @@ class FilterPage extends StatefulWidget {
 
 class _FilterPageState extends State<FilterPage>
     with SingleTickerProviderStateMixin {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   Data? _data;
   bool _loading = false;
+  bool _error = false;
 
   List<dynamic> _list = [];
   int _current = 1;
   int _total = 0;
+  bool _finish = false;
   Map? _request = {};
-  // Search? _search;
-  // Params? _params;
 
   Search? get _search {
     return _data?.search;
@@ -43,7 +44,7 @@ class _FilterPageState extends State<FilterPage>
   }
 
   Map<String, dynamic> get _params {
-    var params = _data?.params?.toJson();
+    var params = _request;
     Map<String, dynamic> map = {};
     _sortList?.forEach(
       (e) {
@@ -63,16 +64,26 @@ class _FilterPageState extends State<FilterPage>
     return map;
   }
 
-  Future _fetchData() async {
+  Future _fetchData(bool init) async {
     int pid = widget.arguments?['pid'];
+    int? category = widget.arguments?['category'];
+    if (init) {
+      setState(() {
+        _list = [];
+        _finish = false;
+        _current = 1;
+      });
+    }
 
-    if (_loading) return;
+    if (_loading || _finish) return;
+
     setState(() {
       _loading = true;
     });
 
     var res = await Api.filmClassifySearch(queryParameters: {
       'Pid': pid,
+      'Category': category,
       'current': _current,
       ...?_request,
     });
@@ -81,6 +92,7 @@ class _FilterPageState extends State<FilterPage>
       setState(() {
         _loading = false;
         _data = jsonData.data;
+        _request = _data?.params?.toJson();
 
         _current = jsonData.page?.current ?? 1;
         _total = jsonData.page?.total ?? 0;
@@ -92,19 +104,29 @@ class _FilterPageState extends State<FilterPage>
           _list.addAll(_data?.list ?? []);
         }
 
-        print(_list.length);
-        if (_list.length < _total) _current = _current + 1;
+        if (_list.length >= _total) {
+          _finish = true;
+        }
+
+        _current = _current + 1;
+      });
+    } else {
+      Future.delayed(const Duration(seconds: 2)).then((value) {
+        setState(() {
+          _loading = false;
+        });
+        _fetchData(false);
       });
     }
   }
 
   @override
   void initState() {
-    _fetchData();
+    _fetchData(true);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels + 30 >=
           _scrollController.position.maxScrollExtent) {
-        _fetchData();
+        _fetchData(false);
       }
     });
     super.initState();
@@ -128,6 +150,7 @@ class _FilterPageState extends State<FilterPage>
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
+          key: _refreshKey,
           child: CustomScrollView(
             controller: _scrollController,
             physics: const BouncingScrollPhysics(),
@@ -135,42 +158,33 @@ class _FilterPageState extends State<FilterPage>
               DynamicSliverAppBar(
                 maxHeight: MediaQuery.of(context).size.height / 2,
                 bottom: AppBar(
+                  centerTitle: false,
                   title: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Wrap(
                       spacing: 10,
-                      children: [
-                        ..._tags!.keys.map(
-                          (e) => ChoiceChip(
-                            label: Text(_tags?[e].name ?? "全部"),
-                            selected: false,
-                            onSelected: (_) {},
-                          ),
-                        ),
-                      ],
+                      children: _tags!.keys
+                          .map(
+                            (e) => ChoiceChip(
+                              disabledColor: Theme.of(context).hoverColor,
+                              label: Text(_tags?[e].name),
+                              selected: false,
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                 ),
                 child: FilterBar(
+                  loading: _loading,
                   activeMap: _tags,
                   search: _search,
                   onSearch: (Map? params) {
-                    setState(() {
-                      _current = 1;
-                      _request = params;
-                    });
-                    _fetchData();
+                    _request = params;
+                    _fetchData(true);
                   },
                 ),
               ),
-              // CupertinoSliverRefreshControl(
-              //   onRefresh: () async {
-              //     setState(() {
-              //       _current = 1;
-              //     });
-              //     await _fetchData();
-              //   },
-              // ),
               SliverPadding(
                 padding: const EdgeInsets.all(12),
                 sliver: SliverGrid(
@@ -217,10 +231,7 @@ class _FilterPageState extends State<FilterPage>
             ],
           ),
           onRefresh: () async {
-            setState(() {
-              _current = 1;
-            });
-            await _fetchData();
+            await _fetchData(true);
           },
         ),
       ),
@@ -427,7 +438,7 @@ Widget getMovieGridFooter(BuildContext context, movie) => Padding(
             ),
             overflow: TextOverflow.ellipsis,
             softWrap: true,
-            maxLines: 2,
+            maxLines: 1,
             textAlign: TextAlign.left,
           ),
         ],

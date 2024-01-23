@@ -5,11 +5,14 @@ class FilterBar extends StatelessWidget {
   final Map<String, dynamic>? activeMap;
   final Search? search;
   final Function onSearch;
+  final bool loading;
+
   const FilterBar({
     Key? key,
     required this.search,
     required this.onSearch,
     required this.activeMap,
+    required this.loading,
   }) : super(key: key);
 
   List<String>? get _sortList {
@@ -60,22 +63,15 @@ class FilterBar extends StatelessWidget {
                         (e?.name ?? ''),
                       ),
                       selected: activeMap?[key]?.value == e?.value,
-                      onSelected: (newValue) {
-                        // print(e?.value);
-                        // print(e);
-                        Map params = {};
-                        activeMap?.forEach((k, v) {
-                          if (k == key) {
-                            params[k] = e?.value;
-                          } else {
-                            params[k] = v?.value;
-                          }
-                        });
-
-                        print(params);
-                        // activeMap?[key].value = e?.value;
-                        onSearch(params);
-                      },
+                      onSelected: !loading
+                          ? (newValue) {
+                              Map params = {};
+                              activeMap?.forEach((k, v) {
+                                params[k] = k == key ? e?.value : v?.value;
+                              });
+                              onSearch(params);
+                            }
+                          : null,
                     );
                   }).toList(),
                 ),

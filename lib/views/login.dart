@@ -113,6 +113,9 @@ class _LoginPageState extends State<LoginPage> {
                             const snackBar = SnackBar(
                               content: Text("账号密码错误🙅"),
                             );
+                            ScaffoldMessenger.of(context).removeCurrentSnackBar(
+                              reason: SnackBarClosedReason.remove,
+                            );
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);
                           }

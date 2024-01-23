@@ -44,7 +44,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       // snap: true,
       pinned: true,
       // stretchTriggerOffset: (isHeightCalculated ? height : widget.maxHeight),
-      // floating: true,
+      floating: true,
       centerTitle: false,
       // primary: false,
       toolbarHeight: toolbarHeight,

@@ -1,31 +1,50 @@
-import 'package:bracket/model/film_classify_search/film_classify_search.dart';
-import 'package:bracket/model/film_classify_search/data.dart';
-import 'package:bracket/views/home/tabs/classify/filter.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:bracket/model/index/content.dart';
+import 'package:bracket/model/index/data.dart';
 
 import '/plugins.dart';
-import 'dynamicSliverAppBar.dart';
 
 class ClassifyTab extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _AppBarDemoState();
+    return _ClassifyTabState();
   }
 }
 
-class _AppBarDemoState extends State<ClassifyTab>
+class _ClassifyTabState extends State<ClassifyTab>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollViewController;
   Data? _data;
+  bool _loading = false;
+  bool _error = false;
 
-  Future _fetchData() async {
-    var res = await Api.filmClassifySearch(queryParameters: {'Pid': 1});
+  List<Content> get _content {
+    return _data?.content ?? [];
+  }
+
+  Future<bool> _fetchData() async {
+    setState(() {
+      _loading = true;
+      _error = false;
+    });
+    var res = await Api.index();
+
     if (res != null) {
-      FilmClassifySearch jsonData = FilmClassifySearch.fromJson(res);
+      Recommend jsonData = Recommend.fromJson(res);
       setState(() {
+        _loading = false;
         _data = jsonData.data;
       });
+    } else {
+      setState(() {
+        _error = true;
+        _loading = false;
+        _data = null;
+      });
     }
+
+    return true;
   }
 
   @override
@@ -53,28 +72,93 @@ class _AppBarDemoState extends State<ClassifyTab>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            DynamicSliverAppBar(
-              maxHeight: MediaQuery.of(context).size.height / 2,
-              child: LoadingView(
-                builder: (_) {
-                  return Filter(data: _data);
-                },
-                loading: _data == null,
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            const SliverAppBar(
+              title: Text('分类'),
+              centerTitle: true,
+              floating: true,
+              pinned: true,
+            ),
+          ];
+        },
+        body: RefreshIndicator(
+          child: MediaQuery.removePadding(
+            removeTop: true,
+            context: context,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: ListView(
+                children: [
+                  Column(
+                    children: [
+                      ...?_data?.category?.children!.map(
+                        (e) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                e.name ?? '',
+                                // style: Theme.of(context).textTheme.titleLarge,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.fontSize,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: SingleChildScrollView(
+                                    child: Wrap(
+                                      spacing: 8,
+                                      runSpacing: 4,
+                                      alignment: WrapAlignment.start,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.start,
+                                      children: e.children!
+                                          .map(
+                                            (item) => ChoiceChip(
+                                              label: Text(item.name ?? ''),
+                                              selected: false,
+                                              onSelected: (newValue) {
+                                                Navigator.of(context).pushNamed(
+                                                    MYRouter.filterPagePath,
+                                                    arguments: {
+                                                      "pid": e.id,
+                                                      "category": item.id
+                                                    });
+                                              },
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
-            new SliverFixedExtentList(
-              itemExtent: 50.0,
-              delegate: new SliverChildBuilderDelegate(
-                (context, index) => new ListTile(
-                  title: new Text("Item $index"),
-                ),
-                childCount: 30,
-              ),
-            ),
-          ],
+          ),
+          onRefresh: () async {
+            await _fetchData();
+          },
         ),
       ),
     );

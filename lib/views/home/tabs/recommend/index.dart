@@ -42,9 +42,11 @@ class _RecommendTabState extends State<RecommendTab> {
       });
     } else {
       setState(() {
-        _error = true;
         _loading = false;
-        _data = null;
+        _refreshKey = GlobalKey();
+      });
+      Future.delayed(const Duration(seconds: 2)).then((value) {
+        _fetchData();
       });
     }
 

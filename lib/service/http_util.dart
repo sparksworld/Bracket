@@ -50,6 +50,9 @@ class HttpUtil {
         const snackBar = SnackBar(
           content: Text("网络错误🙅"),
         );
+        ScaffoldMessenger.of(context).removeCurrentSnackBar(
+          reason: SnackBarClosedReason.remove,
+        );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
