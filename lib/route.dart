@@ -8,6 +8,7 @@ import '/views/unknown.dart';
 import 'views/theme/index.dart';
 import 'views/detail/index.dart';
 import 'views/history/index.dart';
+import 'views/filter/index.dart';
 
 class SparkRoute {
   bool? noAuth;
@@ -26,6 +27,7 @@ class MYRouter {
   static String settingPagePath = '/setting_page';
   static String themePagePath = '/theme_page';
   static String historyPagePath = '/history_page';
+  static String filterPagePath = '/filter_page';
 
   static String get initialRoute => homePagePath;
 
@@ -44,9 +46,10 @@ class MYRouter {
     detailPagePath: SparkRoute(
       builder: (_, {arguments}) => DetailPage(arguments: arguments),
     ),
-
-    //设置
-    // settingPagePath: SparkRoute(builder: Setting()),
+    // 筛选
+    filterPagePath: SparkRoute(
+      builder: (_, {arguments}) => FilterPage(arguments: arguments),
+    ),
 
     //主题
     themePagePath: SparkRoute(builder: (_, {arguments}) => const ThemePage()),

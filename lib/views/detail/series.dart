@@ -123,40 +123,16 @@ class _SeriesState extends State<Series> {
                                 runSpacing: 6,
                                 children: _playListItem(_originIndex)
                                     .mapIndexed(
-                                      (i, e) => OutlinedButton(
-                                        style: ButtonStyle(
-                                          side: MaterialStateProperty.all(
-                                            BorderSide(
-                                              color: i == _teleplayIndex
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                  : Theme.of(context)
-                                                      .disabledColor,
-                                              width: 2,
-                                            ),
-                                          ),
-                                          foregroundColor: i == _teleplayIndex
-                                              ? MaterialStateProperty.all<
-                                                  Color>(
-                                                  Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                )
-                                              : MaterialStateProperty.all<
-                                                  Color>(
-                                                  Theme.of(context)
-                                                      .disabledColor,
-                                                ),
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _teleplayIndex = i;
-                                            widget.callback(
-                                                _originIndex, _teleplayIndex);
-                                          });
+                                      (i, e) => ChoiceChip(
+                                        label: Text(e?.episode ?? ''),
+                                        selected: i == _teleplayIndex,
+                                        onSelected: (value) {
+                                          _teleplayIndex = i;
+                                          widget.callback(
+                                            _originIndex,
+                                            _teleplayIndex,
+                                          );
                                         },
-                                        child: Text(e?.episode ?? ''),
                                       ),
                                     )
                                     .toList(),

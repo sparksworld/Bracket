@@ -1,7 +1,7 @@
 import '/plugins.dart';
 import './tabs/recommend/index.dart' show RecommendTab;
 import './tabs/user_center.dart' show UserCenterTab;
-import './tabs/classify.dart' show ClassifyTab;
+import './tabs/classify/index.dart' show ClassifyTab;
 
 class HomePage extends StatefulWidget {
   final String? arguments;
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage>
       _bottomAppBarIndex = 0;
       _pages = [
         const RecommendTab(),
-        const ClassifyTab(),
+        ClassifyTab(),
         const UserCenterTab(),
       ];
     }

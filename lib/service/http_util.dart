@@ -44,7 +44,14 @@ class HttpUtil {
 
       return result;
     } on DioException catch (error) {
-      print(error);
+      BuildContext? context = MYRouter.navigatorKey.currentState?.context;
+
+      if (context != null) {
+        const snackBar = SnackBar(
+          content: Text("网络错误🙅"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
   }
 

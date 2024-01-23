@@ -129,14 +129,14 @@ class _UserCenterTabState extends State<UserCenterTab> {
                     leading: Icon(Icons.sentiment_satisfied_alt),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                   ),
-                  ListTile(
-                    title: const Text('缓存清理'),
-                    leading: const Icon(Icons.clear_all),
-                    trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-                    onTap: () {
-                      PreferenceUtil.clear();
-                    },
-                  ),
+                  // ListTile(
+                  //   title: const Text('缓存清理'),
+                  //   leading: const Icon(Icons.clear_all),
+                  //   trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                  //   onTap: () {
+                  //     PreferenceUtil.clear();
+                  //   },
+                  // ),
                 ],
               ),
             ),

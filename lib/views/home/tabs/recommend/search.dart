@@ -134,7 +134,7 @@ class Search extends SearchDelegate<String> {
   // 点击搜索出现结果
   @override
   Widget buildResults(BuildContext context) {
-    return MyList(query: query.trim());
+    return SearchList(query: query.trim());
   }
 
   @override
@@ -171,15 +171,15 @@ class Search extends SearchDelegate<String> {
   }
 }
 
-class MyList extends StatefulWidget {
+class SearchList extends StatefulWidget {
   final String query;
-  const MyList({Key? key, required this.query}) : super(key: key);
+  const SearchList({Key? key, required this.query}) : super(key: key);
 
   @override
-  State<MyList> createState() => _SearchState();
+  State<SearchList> createState() => _SearchListState();
 }
 
-class _SearchState extends State<MyList> {
+class _SearchListState extends State<SearchList> {
   bool _loading = false;
   final ScrollController _scrollController = ScrollController();
   List<VideoList> _list = [];

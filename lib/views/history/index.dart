@@ -17,12 +17,29 @@ class _HistoryPageState extends State<HistoryPage> {
     return _data?.search;
   }
 
-  Map? get _titles {
-    return _search?.titles?.toJson();
+  List<String>? get _sortList {
+    return _search?.sortList;
   }
 
-  Iterable<String> get _tags {
-    return _search?.tags?.toJson().keys ?? [];
+  Map<String, dynamic> get _titles {
+    Map<String, dynamic> map = {};
+    var titles = _search?.titles?.toJson();
+    _sortList?.forEach(
+      (e) {
+        map[e] = titles?[e];
+        // e: titles?[e],
+      },
+    );
+    return map;
+  }
+
+  Map<String, dynamic> get _tags {
+    Map<String, dynamic> map = {};
+    var jsonTags = _search?.tags?.toJson();
+    _sortList?.forEach((e) {
+      map[e] = jsonTags?[e];
+    });
+    return map;
   }
 
   Future _fetchData() async {
@@ -50,21 +67,18 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    var jsonTags = _search?.tags?.toJson();
-
     return Scaffold(
       appBar: AppBar(),
       body: LoadingView(
         loading: _data == null,
         builder: (ctx) {
           return Column(children: [
-            AppBar(),
-            ..._tags.map((e) {
+            ..._tags.keys.map((e) {
               return Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Text(_titles?[e]),
+                    child: Text(_titles[e]),
                   ),
                   const SizedBox(
                     width: 10,
@@ -74,7 +88,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       scrollDirection: Axis.horizontal,
                       child: Wrap(
                         spacing: 10,
-                        children: jsonTags?[e]?.map<Chip>((a) {
+                        children: _tags[e]?.map<Chip>((a) {
                           return Chip(label: Text((a?.name ?? '')));
                         }).toList(),
                       ),

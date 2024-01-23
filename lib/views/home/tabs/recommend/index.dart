@@ -85,15 +85,15 @@ class _RecommendTabState extends State<RecommendTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
+        preferredSize: const Size.fromHeight(55),
         child: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           // leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
           title: const MySearchBar(),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30),
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
             ),
           ),
         ),
