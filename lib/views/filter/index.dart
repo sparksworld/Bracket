@@ -1,5 +1,7 @@
 // import 'package:bracket/model/film_classify_search/params.dart';
 
+// import 'package:flutter/cupertino.dart';
+
 import '/plugins.dart';
 import 'package:bracket/model/film_classify_search/film_classify_search.dart';
 import 'package:bracket/model/film_classify_search/search.dart';
@@ -125,85 +127,101 @@ class _FilterPageState extends State<FilterPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            DynamicSliverAppBar(
-              maxHeight: MediaQuery.of(context).size.height / 2,
-              bottom: AppBar(
-                title: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Wrap(
-                    spacing: 10,
-                    children: [
-                      ..._tags!.keys.map(
-                        (e) => ChoiceChip(
-                          label: Text(_tags?[e].name ?? "全部"),
-                          selected: false,
-                          onSelected: (_) {},
+        child: RefreshIndicator(
+          child: CustomScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              DynamicSliverAppBar(
+                maxHeight: MediaQuery.of(context).size.height / 2,
+                bottom: AppBar(
+                  title: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Wrap(
+                      spacing: 10,
+                      children: [
+                        ..._tags!.keys.map(
+                          (e) => ChoiceChip(
+                            label: Text(_tags?[e].name ?? "全部"),
+                            selected: false,
+                            onSelected: (_) {},
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
+                ),
+                child: FilterBar(
+                  activeMap: _tags,
+                  search: _search,
+                  onSearch: (Map? params) {
+                    setState(() {
+                      _current = 1;
+                      _request = params;
+                    });
+                    _fetchData();
+                  },
+                ),
+              ),
+              // CupertinoSliverRefreshControl(
+              //   onRefresh: () async {
+              //     setState(() {
+              //       _current = 1;
+              //     });
+              //     await _fetchData();
+              //   },
+              // ),
+              SliverPadding(
+                padding: const EdgeInsets.all(12),
+                sliver: SliverGrid(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      var movie = _list[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            MYRouter.detailPagePath,
+                            arguments: {
+                              'id': movie?.id,
+                            },
+                          );
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            getMovieGridContent(context, movie),
+                            getMovieGridFooter(context, movie)
+                          ],
+                        ),
+                      );
+                    },
+                    childCount: _list.length,
+                  ),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    childAspectRatio: .65,
                   ),
                 ),
               ),
-              child: FilterBar(
-                activeMap: _tags,
-                search: _search,
-                onSearch: (Map? params) {
-                  setState(() {
-                    _current = 1;
-                    _request = params;
-                  });
-                  _fetchData();
-                },
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.all(12),
-              sliver: SliverGrid(
+              SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    var movie = _list[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          MYRouter.detailPagePath,
-                          arguments: {
-                            'id': movie?.id,
-                          },
-                        );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          getMovieGridContent(context, movie),
-                          getMovieGridFooter(context, movie)
-                        ],
-                      ),
-                    );
+                    return _loadMoreWidget();
                   },
-                  childCount: _list.length,
+                  childCount: 1,
                 ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: .65,
-                ),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return _loadMoreWidget();
-                },
-                childCount: 1,
-              ),
-            )
-          ],
+              )
+            ],
+          ),
+          onRefresh: () async {
+            setState(() {
+              _current = 1;
+            });
+            await _fetchData();
+          },
         ),
       ),
     );
