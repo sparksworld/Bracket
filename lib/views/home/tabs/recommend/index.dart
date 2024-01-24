@@ -1,11 +1,13 @@
+import 'package:bracket/model/index/child.dart';
 import 'package:bracket/model/index/data.dart';
 import 'package:bracket/model/index/content.dart';
+import 'search/sliver_search_app_bar.dart';
 
 import '/plugins.dart';
 // import './search.dart';
 import './movies.dart';
 import './swiper.dart';
-import './search.dart';
+// import 'search_test.dart';
 
 class RecommendTab extends StatefulWidget {
   const RecommendTab({super.key});
@@ -14,7 +16,8 @@ class RecommendTab extends StatefulWidget {
   State<RecommendTab> createState() => _RecommendTabState();
 }
 
-class _RecommendTabState extends State<RecommendTab> {
+class _RecommendTabState extends State<RecommendTab>
+    with AutomaticKeepAliveClientMixin {
   GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   Data? _data;
   bool _loading = false;
@@ -22,6 +25,11 @@ class _RecommendTabState extends State<RecommendTab> {
 
   List<Content> get _content {
     return _data?.content ?? [];
+  }
+
+  List<Child>? get _tags {
+    List<Child>? children = _data?.category?.children;
+    return children;
   }
 
   Future<bool> _fetchData() async {
@@ -41,14 +49,13 @@ class _RecommendTabState extends State<RecommendTab> {
         _data = jsonData.data;
       });
     } else {
-      Future.delayed(const Duration(seconds: 2)).then((value) {
-        setState(() {
-          _error = true;
-          _loading = false;
-          _refreshKey = GlobalKey();
-        });
-        _fetchData();
+      await Future.delayed(const Duration(seconds: 2));
+      setState(() {
+        _error = true;
+        _loading = false;
+        _refreshKey = GlobalKey();
       });
+      await _fetchData();
     }
 
     return true;
@@ -86,100 +93,96 @@ class _RecommendTabState extends State<RecommendTab> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          // leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-          title: const MySearchBar(),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
+      body: RefreshIndicator(
+        key: _refreshKey,
+        edgeOffset: MediaQuery.of(context).padding.top,
+        onRefresh: _fetchData,
+        child: CustomScrollView(
+          slivers: [
+            // SliverAppBar(
+            //   primary: false,
+            // ),
+            SliverPersistentHeader(
+              delegate: SliverSearchAppBar(tags: _tags),
+              pinned: true,
             ),
-          ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (ctx, index) {
+                  return Consumer2<Profile, Global>(
+                    builder: (_, profile, global, child) {
+                      // String? token = profile.user?.userToken;
+                      if (_error) {
+                        return Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '网络出错了～，请刷新重试',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              SizedBox(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    _fetchData();
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                                    child: Text('刷新'),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      if (_loading) {
+                        return Align(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 300,
+                            child: const MySwiper(),
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          getHomeGrid(_content)
+                        ],
+                      );
+                    },
+                  );
+                },
+                childCount: 1,
+              ),
+            )
+          ],
         ),
-      ),
-
-      // extendBodyBehindAppBar: true, // <--- こ
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(50),
-      //   child: AppBar(
-      //     // toolbarHeight: 100,
-      //     flexibleSpace: Image.network(
-      //       // <-- ここで指定します。
-      //       'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80',
-      //       fit: BoxFit.cover,
-      //     ),
-      //     title: const MySearchBar(),
-      //   ),
-      // ),
-      body: Consumer2<Profile, Global>(
-        builder: (_, profile, global, child) {
-          // String? token = profile.user?.userToken;
-          if (_error) {
-            return Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '网络出错了～，请刷新重试',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  SizedBox(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _fetchData();
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                        child: Text('刷新'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return RefreshIndicator(
-            key: _refreshKey,
-            onRefresh: _fetchData,
-            child: LoadingView(
-              loading: _loading,
-              builder: (_) => SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 12,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 300,
-                      child: const MySwiper(),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    getHomeGrid(_content)
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

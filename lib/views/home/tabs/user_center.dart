@@ -7,7 +7,10 @@ class UserCenterTab extends StatefulWidget {
   State<StatefulWidget> createState() => _UserCenterTabState();
 }
 
-class _UserCenterTabState extends State<UserCenterTab> {
+class _UserCenterTabState extends State<UserCenterTab>
+    with AutomaticKeepAliveClientMixin {
+  late AppLifecycleListener _listener;
+
   void onChangeEvent() {
     // eventBus.fire(SwitchTab(0));
   }
@@ -20,7 +23,32 @@ class _UserCenterTabState extends State<UserCenterTab> {
   }
 
   @override
+  void initState() {
+    // _state = SchedulerBinding.instance.lifecycleState;
+    _listener = AppLifecycleListener(
+      // onHide: () => _handleTransition('hide'),
+      // onInactive: () => _handleTransition('inactive'),
+      // onPause: () => _handleTransition('pause'),
+      // onDetach: () => _handleTransition('detach'),
+      // onRestart: () => _handleTransition('restart'),
+      // This fires for each state change. Callbacks above fire only for
+      // specific state transitions.
+      onStateChange: (_) {
+        print(_);
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _listener.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     // Global global = context.watch<Global>();
     final Profile profile = context.read<Profile>();
     final String? token = profile.user?.userToken;
@@ -37,7 +65,13 @@ class _UserCenterTabState extends State<UserCenterTab> {
                   color: Theme.of(context).focusColor,
                 ),
               ),
-              color: Theme.of(context).primaryColor,
+              // color: Theme.of(context).primaryColor,
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.inversePrimary,
+                  Theme.of(context).colorScheme.primaryContainer
+                ],
+              ),
             ),
             child: SafeArea(
               child: Padding(
@@ -112,6 +146,14 @@ class _UserCenterTabState extends State<UserCenterTab> {
               child: Column(
                 children: [
                   ListTile(
+                    title: const Text('观看历史'),
+                    leading: const Icon(Icons.clear_all),
+                    trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(MYRouter.historyPagePath);
+                    },
+                  ),
+                  ListTile(
                     title: const Text('系统主题'),
                     leading: const Icon(Icons.border_color),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
@@ -129,14 +171,6 @@ class _UserCenterTabState extends State<UserCenterTab> {
                     leading: Icon(Icons.sentiment_satisfied_alt),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                   ),
-                  // ListTile(
-                  //   title: const Text('缓存清理'),
-                  //   leading: const Icon(Icons.clear_all),
-                  //   trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-                  //   onTap: () {
-                  //     PreferenceUtil.clear();
-                  //   },
-                  // ),
                 ],
               ),
             ),
@@ -172,4 +206,7 @@ class _UserCenterTabState extends State<UserCenterTab> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

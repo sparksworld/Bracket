@@ -1,102 +1,13 @@
+// import 'sliver_search_app_bar.dart';
+// import 'package:flutter/material.dart';
+
 import 'package:bracket/model/search_film/list.dart';
 import 'package:bracket/model/search_film/search_film.dart';
 import 'package:bracket/plugins.dart';
 
-class MySearchBar extends StatefulWidget {
-  const MySearchBar({Key? key}) : super(key: key);
-
-  @override
-  State<MySearchBar> createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<MySearchBar> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            flex: 1,
-            child: GestureDetector(
-              onTap: () {
-                showSearch(
-                  context: context,
-                  delegate: Search(context),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                child: Container(
-                  // height: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).highlightColor,
-                    ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.search,
-                                color: Theme.of(context).highlightColor,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                '搜索视频',
-                                style: TextStyle(
-                                  color: Theme.of(context).highlightColor,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.fontSize,
-                                ),
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            flex: 0,
-            child: GestureDetector(
-              child: Icon(
-                Icons.history,
-                size: Theme.of(context).textTheme.headlineLarge?.fontSize,
-                color: Theme.of(context).primaryColorLight,
-              ),
-              onTap: () {
-                Navigator.of(context).pushNamed(MYRouter.historyPagePath);
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class Search extends SearchDelegate<String> {
+class SearchPage extends SearchDelegate<String> {
   BuildContext context;
-  Search(this.context) : super();
+  SearchPage(this.context) : super();
 
   @override
   String get searchFieldLabel => '请输入视频名';
@@ -146,8 +57,8 @@ class Search extends SearchDelegate<String> {
       return Padding(
         padding: const EdgeInsets.all(12),
         child: Wrap(
-          spacing: 12,
-          runSpacing: 6,
+          spacing: 8,
+          // runSpacing: 6,
           children: suggestionList
               .map(
                 (e) => OutlinedButton(
@@ -212,7 +123,11 @@ class _SearchListState extends State<SearchList> {
         if (_list.length < _total) _current = _current + 1;
       });
     } else {
-      _loading = false;
+      await Future.delayed(const Duration(seconds: 2));
+      setState(() {
+        _loading = false;
+      });
+      await _fetchData();
     }
   }
 
@@ -332,7 +247,8 @@ class _SearchListState extends State<SearchList> {
                     errorBuilder: (BuildContext context, Object error,
                         StackTrace? stackTrace) {
                       return Image.asset(
-                        'assets/images/placeholder.png',
+                        fit: BoxFit.cover,
+                        'assets/images/logo.png',
                       );
                     },
                   ),

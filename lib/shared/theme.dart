@@ -63,7 +63,7 @@ class ThemeProvider {
 
   AppBarTheme appBarTheme(ColorScheme colors) {
     return AppBarTheme(
-      // elevation: 0,
+      elevation: 0,
       backgroundColor: colors.surface,
       foregroundColor: colors.onSurface,
     );
@@ -87,7 +87,7 @@ class ThemeProvider {
   BottomAppBarTheme bottomAppBarTheme(ColorScheme colors) {
     return BottomAppBarTheme(
       color: colors.surface,
-      // elevation: 0,
+      elevation: 0,
     );
   }
 
@@ -97,7 +97,7 @@ class ThemeProvider {
       backgroundColor: colors.surfaceVariant,
       selectedItemColor: colors.onSurface,
       unselectedItemColor: colors.onSurfaceVariant,
-      // elevation: 0,
+      elevation: 0,
       landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
     );
   }

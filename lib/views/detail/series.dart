@@ -118,9 +118,7 @@ class _SeriesState extends State<Series> {
                       children: [
                         _playListItem(_originIndex).isNotEmpty
                             ? Wrap(
-                                // alignment: WrapAlignment.center,
                                 spacing: 6,
-                                runSpacing: 6,
                                 children: _playListItem(_originIndex)
                                     .mapIndexed(
                                       (i, e) => ChoiceChip(

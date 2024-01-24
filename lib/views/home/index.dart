@@ -11,15 +11,25 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin {
-  int _bottomAppBarIndex = 0;
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
   List<Widget> _pages = [];
+  var _pageController = PageController();
+
+  void _pageChanged(int index) {
+    setState(() {
+      if (_currentIndex != index) _currentIndex = index;
+    });
+  }
+
+  void onTabTapped(int index) {
+    _pageController.jumpToPage(index);
+  }
 
   @override
   void initState() {
     if (mounted) {
-      _bottomAppBarIndex = 0;
+      _currentIndex = 0;
       _pages = [
         const RecommendTab(),
         ClassifyTab(),
@@ -31,7 +41,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
 
     return PopScope(
       canPop: false,
@@ -51,84 +61,36 @@ class _HomePageState extends State<HomePage>
         );
       },
       child: Scaffold(
-        bottomNavigationBar: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
-          child: Container(
-            color: Colors.transparent,
-            // padding: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                bottomIcon(text: '推荐', icon: Icons.home, index: 0),
-                bottomIcon(text: '分类', icon: Icons.movie_filter, index: 1),
-                bottomIcon(text: '我的', icon: Icons.person, index: 2),
-              ],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex, //New
+          onTap: onTabTapped,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: '推荐',
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.movie_filter),
+              label: '分类',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: '我的',
+            )
+          ],
+        ),
+        body: PageView.builder(
+          controller: _pageController,
+          // physics: NeverScrollableScrollPhysics(),
+          onPageChanged: _pageChanged,
+          itemCount: _pages.length,
+          itemBuilder: (context, index) => OrientationBuilder(
+            builder: (context, orientation) {
+              return _pages[index];
+            },
           ),
         ),
-        body: Builder(
-          builder: (context) {
-            return OrientationBuilder(
-              builder: (context, orientation) {
-                return IndexedStack(
-                  index: _bottomAppBarIndex,
-                  children: _pages,
-                );
-              },
-            );
-          },
-        ),
       ),
     );
   }
-
-  Widget bottomIcon(
-      {required IconData icon, required int index, required String text}) {
-    return Expanded(
-      flex: 1,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTapDown: (TapDownDetails details) {
-          setState(() {
-            _bottomAppBarIndex = index;
-          });
-        },
-        child: SizedBox(
-          height: 54.0,
-          width: double.infinity,
-          child: text.isNotEmpty
-              ? Container(
-                  color: Colors.transparent,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        icon,
-                        color: _bottomAppBarIndex == index
-                            ? Theme.of(context).colorScheme.primary
-                            : null,
-                      ),
-                      Text(
-                        text,
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: _bottomAppBarIndex == index
-                              ? Theme.of(context).colorScheme.primary
-                              : null,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(
-                  color: Colors.transparent,
-                ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  bool get wantKeepAlive => true;
 }

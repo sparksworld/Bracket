@@ -27,7 +27,8 @@ class _FilterPageState extends State<FilterPage>
   final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   Data? _data;
   bool _loading = false;
-  bool _error = false;
+  bool _showUpIcon = false;
+  // bool _error = false;
 
   List<dynamic> _list = [];
   int _current = 1;
@@ -62,6 +63,17 @@ class _FilterPageState extends State<FilterPage>
       map[e] = jsonTags?[e].firstWhere((e) => e?.value == value);
     });
     return map;
+  }
+
+  List _getTags() {
+    List? arr = [];
+    _tags?.keys.forEach((e) {
+      print(_tags?[e].value);
+      if (_tags?[e].value != null && _tags?[e].value != '') {
+        arr.add(_tags?[e]);
+      }
+    });
+    return arr;
   }
 
   Future _fetchData(bool init) async {
@@ -111,12 +123,11 @@ class _FilterPageState extends State<FilterPage>
         _current = _current + 1;
       });
     } else {
-      Future.delayed(const Duration(seconds: 2)).then((value) {
-        setState(() {
-          _loading = false;
-        });
-        _fetchData(false);
+      await Future.delayed(const Duration(seconds: 2));
+      setState(() {
+        _loading = false;
       });
+      await _fetchData(false);
     }
   }
 
@@ -124,8 +135,13 @@ class _FilterPageState extends State<FilterPage>
   void initState() {
     _fetchData(true);
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels + 30 >=
-          _scrollController.position.maxScrollExtent) {
+      double pixels = _scrollController.position.pixels;
+
+      setState(() {
+        _showUpIcon = pixels > MediaQuery.of(context).size.height;
+      });
+
+      if (pixels + 30 >= _scrollController.position.maxScrollExtent) {
         _fetchData(false);
       }
     });
@@ -148,6 +164,17 @@ class _FilterPageState extends State<FilterPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: _showUpIcon
+          ? ElevatedButton(
+              onPressed: () {
+                if (_scrollController.hasClients) _scrollController.jumpTo(0);
+              },
+              child: const Icon(
+                Icons.arrow_upward,
+                size: 24,
+              ),
+            )
+          : null,
       body: SafeArea(
         child: RefreshIndicator(
           key: _refreshKey,
@@ -163,12 +190,13 @@ class _FilterPageState extends State<FilterPage>
                     scrollDirection: Axis.horizontal,
                     child: Wrap(
                       spacing: 10,
-                      children: _tags!.keys
-                          .map(
-                            (e) => ChoiceChip(
-                              disabledColor: Theme.of(context).hoverColor,
-                              label: Text(_tags?[e].name),
-                              selected: false,
+                      children: _getTags()
+                          .map<ActionChip>(
+                            (e) => ActionChip(
+                              // disabledColor: Theme.of(context).hoverColor,
+                              label: Text(e.name ?? ''),
+                              // selected: true,
+                              // onSelected: (_) {},
                             ),
                           )
                           .toList(),
@@ -333,18 +361,19 @@ Widget getMovieGridContent(BuildContext context, movie) => Expanded(
               errorBuilder:
                   (BuildContext context, Object error, StackTrace? stackTrace) {
                 return Image.asset(
-                  'assets/images/placeholder.png',
+                  fit: BoxFit.cover,
+                  'assets/images/logo.png',
                 );
               },
             ),
           ),
           Positioned(
-            top: 6,
-            left: 6,
-            right: 6,
+            top: 4,
+            left: 4,
+            right: 4,
             child: Wrap(
-              spacing: 6,
-              runSpacing: 6,
+              spacing: 4,
+              runSpacing: 4,
               children: [
                 Container(
                   decoration: BoxDecoration(

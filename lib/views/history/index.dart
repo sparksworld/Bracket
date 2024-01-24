@@ -61,7 +61,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   void initState() {
-    _fetchData();
+    // _fetchData();
     super.initState();
   }
 
@@ -70,7 +70,7 @@ class _HistoryPageState extends State<HistoryPage> {
     return Scaffold(
       appBar: AppBar(),
       body: LoadingView(
-        loading: _data == null,
+        loading: true,
         builder: (ctx) {
           return Column(children: [
             ..._tags.keys.map((e) {

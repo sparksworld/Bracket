@@ -35,6 +35,7 @@ class _DetailPageState extends State<DetailPage> {
 
   Future _fetchData() async {
     int id = widget.arguments?['id'];
+    setState(() {});
     var res = await Api.filmDetail(
       queryParameters: {
         'id': id,
@@ -45,6 +46,10 @@ class _DetailPageState extends State<DetailPage> {
       setState(() {
         _data = jsonData.data;
       });
+    } else {
+      await Future.delayed(const Duration(seconds: 2));
+      // setState(() {});
+      _fetchData();
     }
   }
 

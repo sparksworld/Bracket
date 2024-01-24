@@ -128,77 +128,81 @@ Widget getMovieGridContent(BuildContext context, Movie? movie) => Expanded(
               errorBuilder:
                   (BuildContext context, Object error, StackTrace? stackTrace) {
                 return Image.asset(
-                  'assets/images/placeholder.png',
+                  fit: BoxFit.cover,
+                  'assets/images/logo.png',
                 );
               },
             ),
           ),
           Positioned(
-            top: 6,
-            left: 6,
-            right: 6,
-            child: Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withAlpha(200),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Text(
-                      movie?.year ?? '',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize:
-                            Theme.of(context).textTheme.bodySmall?.fontSize,
+            top: 4,
+            left: 4,
+            right: 4,
+            bottom: 0,
+            child: IntrinsicHeight(
+              child: Wrap(
+                spacing: 4,
+                runSpacing: 4,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withAlpha(200),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Text(
+                        movie?.year ?? '',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize:
+                              Theme.of(context).textTheme.bodySmall?.fontSize,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
                     ),
                   ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withAlpha(200),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Text(
-                      movie?.cName ?? '',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize:
-                            Theme.of(context).textTheme.bodySmall?.fontSize,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withAlpha(200),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Text(
+                        movie?.cName ?? '',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize:
+                              Theme.of(context).textTheme.bodySmall?.fontSize,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
                     ),
                   ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withAlpha(200),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Text(
-                      movie?.remarks ?? '',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize:
-                            Theme.of(context).textTheme.bodySmall?.fontSize,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withAlpha(200),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Text(
+                        movie?.remarks ?? '',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize:
+                              Theme.of(context).textTheme.bodySmall?.fontSize,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

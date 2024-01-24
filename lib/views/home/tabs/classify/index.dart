@@ -1,10 +1,10 @@
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:bracket/model/index/content.dart';
 import 'package:bracket/model/index/data.dart';
 
 import '/plugins.dart';
 
 class ClassifyTab extends StatefulWidget {
+  const ClassifyTab({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _ClassifyTabState();
@@ -12,21 +12,21 @@ class ClassifyTab extends StatefulWidget {
 }
 
 class _ClassifyTabState extends State<ClassifyTab>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+    with AutomaticKeepAliveClientMixin {
+  // late TabController _tabController;
   late ScrollController _scrollViewController;
   Data? _data;
   bool _loading = false;
-  bool _error = false;
+  // bool _error = false;
 
-  List<Content> get _content {
-    return _data?.content ?? [];
-  }
+  // List<Content> get _content {
+  //   return _data?.content ?? [];
+  // }
 
-  Future<bool> _fetchData() async {
+  Future _fetchData() async {
     setState(() {
       _loading = true;
-      _error = false;
+      // _error = false;
     });
     var res = await Api.index();
 
@@ -37,20 +37,20 @@ class _ClassifyTabState extends State<ClassifyTab>
         _data = jsonData.data;
       });
     } else {
-      setState(() {
-        _error = true;
-        _loading = false;
-        _data = null;
-      });
-    }
+      await Future.delayed(const Duration(seconds: 2));
 
-    return true;
+      setState(() {
+        _loading = false;
+      });
+      await _fetchData();
+    }
+    // return true;
   }
 
   @override
   void initState() {
     _fetchData();
-    _tabController = TabController(length: 6, vsync: this);
+    // _tabController = TabController(length: 6, vsync: this);
     _scrollViewController = ScrollController();
     super.initState();
   }
@@ -64,13 +64,14 @@ class _ClassifyTabState extends State<ClassifyTab>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    // _tabController.dispose();
     _scrollViewController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: NestedScrollView(
         floatHeaderSlivers: true,
@@ -84,83 +85,92 @@ class _ClassifyTabState extends State<ClassifyTab>
             ),
           ];
         },
-        body: RefreshIndicator(
-          child: MediaQuery.removePadding(
+        body: LoadingView(
+          loading: _loading,
+          builder: (_) => MediaQuery.removePadding(
             removeTop: true,
             context: context,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: ListView(
-                children: [
-                  Column(
-                    children: [
-                      ...?_data?.category?.children!.map(
-                        (e) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Text(
-                                e.name ?? '',
-                                // style: Theme.of(context).textTheme.titleLarge,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.fontSize,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: SingleChildScrollView(
-                                    child: Wrap(
-                                      spacing: 8,
-                                      runSpacing: 4,
-                                      alignment: WrapAlignment.start,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.start,
-                                      children: e.children!
-                                          .map(
-                                            (item) => ChoiceChip(
-                                              label: Text(item.name ?? ''),
-                                              selected: false,
-                                              onSelected: (newValue) {
-                                                Navigator.of(context).pushNamed(
-                                                    MYRouter.filterPagePath,
-                                                    arguments: {
-                                                      "pid": e.id,
-                                                      "category": item.id
-                                                    });
-                                              },
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
+            child: ListView(
+              children: [
+                Column(
+                  children: [
+                    ...?_data?.category?.children!.map(
+                      (e) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  MYRouter.filterPagePath,
+                                  arguments: {
+                                    "pid": e.id,
+                                  },
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Text(
+                                  e.name ?? '',
+                                  // style: Theme.of(context).textTheme.titleLarge,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.fontSize,
                                   ),
                                 ),
-                              )
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                              ),
+                            ),
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: SingleChildScrollView(
+                                  child: Wrap(
+                                    spacing: 8,
+                                    // runSpacing: 2,
+                                    alignment: WrapAlignment.start,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
+                                    children: e.children!
+                                        .map(
+                                          (item) => ChoiceChip(
+                                            label: Text(item.name ?? ''),
+                                            selected: false,
+                                            onSelected: (newValue) {
+                                              Navigator.of(context).pushNamed(
+                                                MYRouter.filterPagePath,
+                                                arguments: {
+                                                  "pid": e.id,
+                                                  "category": item.id
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
-          onRefresh: () async {
-            await _fetchData();
-          },
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
