@@ -168,14 +168,14 @@ class _RecommendTabState extends State<RecommendTab>
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 300,
-                            child: const MySwiper(),
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
+                          // SizedBox(
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 300,
+                          //   child: const MySwiper(),
+                          // ),
+                          // const SizedBox(
+                          //   height: 12,
+                          // ),
                           getHomeGrid(_content)
                         ],
                       );
