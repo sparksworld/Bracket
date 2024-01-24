@@ -1,6 +1,8 @@
 import 'package:bracket/model/index/child.dart';
 import 'package:bracket/model/index/data.dart';
 import 'package:bracket/model/index/content.dart';
+import 'package:bracket/views/home/tabs/recommend/search/search_bar.dart';
+import 'package:bracket/views/home/tabs/recommend/test.dart';
 import 'search/sliver_search_app_bar.dart';
 
 import '/plugins.dart';
@@ -105,7 +107,13 @@ class _RecommendTabState extends State<RecommendTab>
             //   primary: false,
             // ),
             SliverPersistentHeader(
-              delegate: SliverSearchAppBar(tags: _tags),
+              delegate: SearchHeader(
+                icon: Icons.terrain,
+                title: 'Bracket',
+                search: SearchAppBar(
+                  height: 44,
+                ),
+              ),
               pinned: true,
             ),
             SliverList(

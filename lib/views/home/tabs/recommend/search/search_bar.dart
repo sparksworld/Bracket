@@ -21,7 +21,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.height,
+      // height: widget.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,9 +40,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 child: Container(
                   height: 50,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    // border: Border.all(
+                    //   color: Theme.of(context).colorScheme.primary,
+                    // ),
                     borderRadius: const BorderRadius.all(
                       Radius.circular(10),
                     ),
@@ -56,9 +56,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.search,
-                                // color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                               const SizedBox(
                                 width: 10,
@@ -66,7 +66,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                               Text(
                                 '搜索视频',
                                 style: TextStyle(
-                                  // color: Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontSize: Theme.of(context)
                                       .textTheme
                                       .titleMedium
