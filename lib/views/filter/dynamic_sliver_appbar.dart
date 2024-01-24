@@ -49,7 +49,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       // primary: false,
       toolbarHeight: toolbarHeight,
       expandedHeight: (isHeightCalculated ? height : widget.maxHeight) +
-          widget.bottom!.preferredSize.height,
+          (widget.bottom?.preferredSize.height ?? 0),
       bottom: widget.bottom,
       flexibleSpace: FlexibleSpaceBar(
         background: Column(
