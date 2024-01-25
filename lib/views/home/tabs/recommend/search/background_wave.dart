@@ -16,12 +16,13 @@ class BackgroundWave extends StatelessWidget {
           height: height,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.inversePrimary,
-                Theme.of(context).colorScheme.primaryContainer
-              ],
-            ),
+            color: Theme.of(context).colorScheme.inversePrimary,
+            // gradient: LinearGradient(
+            //   colors: [
+            //     Theme.of(context).colorScheme.inversePrimary,
+            //     Theme.of(context).colorScheme.primaryContainer
+            //   ],
+            // ),
             borderRadius: const BorderRadius.all(Radius.circular(12)),
             // shape: RoundedRectangleBorder(
             //   // <--- ここ

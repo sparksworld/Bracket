@@ -24,22 +24,21 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
 
   @override
   void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (!isHeightCalculated) {
-        isHeightCalculated = true;
         setState(() {
           height = (_childKey.currentContext?.findRenderObject() as RenderBox)
               .size
               .height;
         });
+        isHeightCalculated = true;
       }
     });
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SliverAppBar(
       // snap: true,
       pinned: true,
@@ -58,13 +57,13 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
             NotificationListener<SizeChangedLayoutNotification>(
               onNotification: (notification) {
                 WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                  isHeightCalculated = true;
                   setState(() {
                     height = (_childKey.currentContext?.findRenderObject()
                             as RenderBox)
                         .size
                         .height;
                   });
+                  isHeightCalculated = true;
                 });
                 return false;
               },

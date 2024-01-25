@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:bracket/plugins.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 class ThemeProvider {
@@ -43,14 +43,16 @@ class ThemeProvider {
       );
 
   TextTheme textTheme(ColorScheme colors) {
-    return const TextTheme();
+    return const TextTheme().copyWith();
   }
 
   CardTheme cardTheme(ColorScheme colors) {
     return CardTheme(
+      elevation: 10,
       color: colors.surface,
       shape: shapeMedium,
       clipBehavior: Clip.antiAlias,
+      shadowColor: Colors.transparent,
     );
   }
 
@@ -94,7 +96,7 @@ class ThemeProvider {
   BottomNavigationBarThemeData bottomNavigationBarTheme(ColorScheme colors) {
     return BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: colors.surfaceVariant,
+      backgroundColor: colors.onSecondary,
       selectedItemColor: colors.onSurface,
       unselectedItemColor: colors.onSurfaceVariant,
       elevation: 0,
@@ -119,6 +121,7 @@ class ThemeProvider {
       // canvasColor: selfColor.surface,
       pageTransitionsTheme: pageTransitionsTheme,
       colorScheme: selfColor,
+      // chipTheme: chipTheme(selfColor),
       // textTheme: textTheme(selfColor),
       appBarTheme: appBarTheme(selfColor),
       cardTheme: cardTheme(selfColor),
@@ -139,6 +142,7 @@ class ThemeProvider {
       // canvasColor: selfColor.surface,
       pageTransitionsTheme: pageTransitionsTheme,
       colorScheme: selfColor,
+      // chipTheme: chipTheme(selfColor),
       // textTheme: textTheme(selfColor),
       appBarTheme: appBarTheme(selfColor),
       cardTheme: cardTheme(selfColor),

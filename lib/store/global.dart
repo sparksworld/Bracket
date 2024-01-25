@@ -53,6 +53,11 @@ class Global with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  clearSearchRecord() async {
+    await PreferenceUtil.setStringList('searchRecord', []);
+    notifyListeners();
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);

@@ -1,6 +1,3 @@
-// import 'sliver_search_app_bar.dart';
-// import 'package:flutter/material.dart';
-
 import 'package:bracket/model/search_film/list.dart';
 import 'package:bracket/model/search_film/search_film.dart';
 import 'package:bracket/plugins.dart';
@@ -54,28 +51,42 @@ class SearchPage extends SearchDelegate<String> {
     final suggestionList = global.searchRecord;
 
     if (suggestionList.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(12),
-        child: Wrap(
-          spacing: 8,
-          // runSpacing: 6,
-          children: suggestionList
-              .map(
-                (e) => OutlinedButton(
-                  onPressed: () {
-                    query = e;
-                    showResults(context);
-                  },
-                  child: Text(e),
-                ),
-              )
-              .toList(),
-        ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Wrap(
+              spacing: 8,
+              // runSpacing: 6,
+              children: suggestionList
+                  .map(
+                    (e) => OutlinedButton(
+                      onPressed: () {
+                        query = e;
+                        showResults(context);
+                      },
+                      child: Text(e),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                global.clearSearchRecord();
+                // global.setSearchRecord(str)
+              },
+              child: const Text('清除历史输入'),
+            ),
+          )
+        ],
       );
     }
     return const Center(
       child: Text(
-        '没有记录',
+        '没有历史搜索',
         style: TextStyle(color: Colors.grey),
       ),
     );
@@ -136,7 +147,7 @@ class _SearchListState extends State<SearchList> {
     // page = 1;
     _fetchData();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
+      if (_scrollController.position.pixels + 30 >
           _scrollController.position.maxScrollExtent) {
         //滚动到最后请求更多
         _fetchData();

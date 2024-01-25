@@ -1,14 +1,14 @@
-import 'package:bracket/model/index/child.dart';
+// import 'package:bracket/model/index/child.dart';
 import 'package:bracket/model/index/data.dart';
 import 'package:bracket/model/index/content.dart';
 import 'package:bracket/views/home/tabs/recommend/search/search_bar.dart';
 import 'package:bracket/views/home/tabs/recommend/test.dart';
-import 'search/sliver_search_app_bar.dart';
+// import 'search/sliver_search_app_bar.dart';
 
 import '/plugins.dart';
 // import './search.dart';
 import './movies.dart';
-import './swiper.dart';
+// import './swiper.dart';
 // import 'search_test.dart';
 
 class RecommendTab extends StatefulWidget {
@@ -20,7 +20,7 @@ class RecommendTab extends StatefulWidget {
 
 class _RecommendTabState extends State<RecommendTab>
     with AutomaticKeepAliveClientMixin {
-  GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
+  final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   Data? _data;
   bool _loading = false;
   bool _error = false;
@@ -29,12 +29,12 @@ class _RecommendTabState extends State<RecommendTab>
     return _data?.content ?? [];
   }
 
-  List<Child>? get _tags {
-    List<Child>? children = _data?.category?.children;
-    return children;
-  }
+  // List<Child>? get _tags {
+  //   List<Child>? children = _data?.category?.children;
+  //   return children;
+  // }
 
-  Future<bool> _fetchData() async {
+  Future _fetchData() async {
     setState(() {
       _loading = true;
       _error = false;
@@ -47,7 +47,7 @@ class _RecommendTabState extends State<RecommendTab>
       Recommend jsonData = Recommend.fromJson(res);
       setState(() {
         _loading = false;
-        _refreshKey = GlobalKey();
+        // _refreshKey = GlobalKey();
         _data = jsonData.data;
       });
     } else {
@@ -55,12 +55,10 @@ class _RecommendTabState extends State<RecommendTab>
       setState(() {
         _error = true;
         _loading = false;
-        _refreshKey = GlobalKey();
+        // _refreshKey = GlobalKey();
       });
       await _fetchData();
     }
-
-    return true;
   }
 
   Widget getHomeGrid(List<Content> list) {
@@ -75,14 +73,16 @@ class _RecommendTabState extends State<RecommendTab>
             .toList(),
       );
     }
-    return const Center(
-      child: Text('暂无数据'),
-    );
+    return const Center();
   }
 
   @override
   void initState() {
-    _fetchData();
+    // _fetchData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //关键代码，直接触发下拉刷新
+      _refreshKey.currentState?.show();
+    });
     super.initState();
   }
 
@@ -97,95 +97,75 @@ class _RecommendTabState extends State<RecommendTab>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      body: RefreshIndicator(
-        key: _refreshKey,
-        edgeOffset: MediaQuery.of(context).padding.top,
-        onRefresh: _fetchData,
-        child: CustomScrollView(
-          slivers: [
-            // SliverAppBar(
-            //   primary: false,
-            // ),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
             SliverPersistentHeader(
               delegate: SearchHeader(
-                icon: Icons.terrain,
-                title: 'Bracket',
-                search: SearchAppBar(
+                title: '推荐',
+                search: const SearchAppBar(
                   height: 44,
                 ),
               ),
               pinned: true,
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (ctx, index) {
-                  return Consumer2<Profile, Global>(
-                    builder: (_, profile, global, child) {
-                      // String? token = profile.user?.userToken;
-                      if (_error) {
-                        return Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '网络出错了～，请刷新重试',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).colorScheme.error,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              SizedBox(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    _fetchData();
-                                  },
-                                  child: const Padding(
-                                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                                    child: Text('刷新'),
-                                  ),
-                                ),
-                              ),
-                            ],
+          ];
+        },
+        body: RefreshIndicator(
+          key: _refreshKey,
+          child: SingleChildScrollView(
+            child: Consumer2<Profile, Global>(
+              builder: (_, profile, global, child) {
+                // String? token = profile.user?.userToken;
+                if (_error) {
+                  return Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '网络出错了～，请刷新重试',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.error,
                           ),
-                        );
-                      }
-                      if (_loading) {
-                        return Align(
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _fetchData();
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                              child: Text('刷新'),
                             ),
                           ),
-                        );
-                      }
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // SizedBox(
-                          //   width: MediaQuery.of(context).size.width,
-                          //   height: 300,
-                          //   child: const MySwiper(),
-                          // ),
-                          // const SizedBox(
-                          //   height: 12,
-                          // ),
-                          getHomeGrid(_content)
-                        ],
-                      );
-                    },
+                        ),
+                      ],
+                    ),
                   );
-                },
-                childCount: 1,
-              ),
-            )
-          ],
+                }
+                // if (_loading) {
+                //   return Center(
+                //     child: CircularProgressIndicator(
+                //       strokeWidth: 2,
+                //       valueColor: AlwaysStoppedAnimation<Color>(
+                //         Theme.of(context).colorScheme.primary,
+                //       ),
+                //     ),
+                //   );
+                // }
+
+                return getHomeGrid(_content);
+              },
+            ),
+          ),
+          onRefresh: () async {
+            return await _fetchData();
+          },
         ),
       ),
     );

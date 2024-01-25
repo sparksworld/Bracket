@@ -4,12 +4,12 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
   final double minTopBarHeight = 100;
   final double maxTopBarHeight = 200;
   final String title;
-  final IconData icon;
+  // final IconData icon;
   final Widget search;
 
   SearchHeader({
     required this.title,
-    required this.icon,
+    // required this.icon,
     required this.search,
   });
 
@@ -19,63 +19,66 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    var top = MediaQuery.of(context).padding.top;
+    // var top = MediaQuery.of(context).padding.top;
     var shrinkFactor = min(1, shrinkOffset / (maxExtent - minExtent));
 
-    var topBar = Positioned(
+    var bgTopBar = Positioned(
       top: 0,
       left: 0,
       right: 0,
       child: Container(
-        padding: EdgeInsets.only(top: top),
         alignment: Alignment.center,
         height: max(maxTopBarHeight * (1 - shrinkFactor), minTopBarHeight),
-        width: 100,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            // Icon(
-            //   icon,
-            //   size: 40,
-            //   color: Colors.white,
-            // )
-          ],
-        ),
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.inversePrimary,
-                Theme.of(context).colorScheme.primaryContainer
-              ],
+          color: Theme.of(context).colorScheme.inversePrimary,
+          // gradient: LinearGradient(
+          //   colors: [
+          //     Theme.of(context).colorScheme.inversePrimary,
+          //     Theme.of(context).colorScheme.primaryContainer
+          //   ],
+          // ),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(5, 5),
+              blurRadius: 10,
+              color: Theme.of(context)
+                  .colorScheme
+                  .inversePrimary
+                  .withOpacity(0.23),
+            )
+          ],
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(36),
+            bottomRight: Radius.circular(36),
+          ),
+        ),
+        // width: 100,
+        child: SafeArea(
+          child: FittedBox(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 28),
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
             ),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(36),
-              bottomRight: Radius.circular(36),
-            )),
+          ),
+        ),
       ),
     );
-    return Container(
-      height: max(maxExtent - shrinkOffset + top, minExtent + top),
+    return SizedBox(
+      height: max(maxExtent - shrinkOffset, minExtent),
       child: Stack(
         fit: StackFit.loose,
         children: [
-          if (shrinkFactor <= 0.5) topBar,
+          if (shrinkFactor <= 0.5) bgTopBar,
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(
-                bottom: 10,
-              ),
+              padding: const EdgeInsets.only(bottom: 10),
               child: Container(
                 alignment: Alignment.center,
                 width: 200,
@@ -85,11 +88,11 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 10),
+                        offset: const Offset(5, 5),
                         blurRadius: 10,
                         color: Theme.of(context)
                             .colorScheme
-                            .primaryContainer
+                            .inversePrimary
                             .withOpacity(0.23),
                       )
                     ]),
@@ -97,17 +100,17 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
               ),
             ),
           ),
-          if (shrinkFactor > 0.5) topBar,
+          if (shrinkFactor > 0.5) bgTopBar,
         ],
       ),
     );
   }
 
   @override
-  double get maxExtent => 230;
+  double get maxExtent => maxTopBarHeight + 30;
 
   @override
-  double get minExtent => 100;
+  double get minExtent => minTopBarHeight;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

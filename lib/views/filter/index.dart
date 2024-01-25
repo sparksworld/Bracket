@@ -163,6 +163,7 @@ class _FilterPageState extends State<FilterPage>
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
     return Scaffold(
       floatingActionButton: _showUpIcon
           ? ElevatedButton(
@@ -183,7 +184,7 @@ class _FilterPageState extends State<FilterPage>
             physics: const BouncingScrollPhysics(),
             slivers: [
               DynamicSliverAppBar(
-                maxHeight: MediaQuery.of(context).size.height / 2,
+                maxHeight: mediaQuery.size.height,
                 bottom: AppBar(
                   centerTitle: false,
                   title: SingleChildScrollView(
@@ -241,6 +242,8 @@ class _FilterPageState extends State<FilterPage>
                     childCount: _list.length,
                   ),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    // max: mediaQuery.size.width / 3,
+                    // mainAxisExtent: mediaQuery.size.width / 3,
                     crossAxisCount: 3,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
@@ -248,14 +251,9 @@ class _FilterPageState extends State<FilterPage>
                   ),
                 ),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return _loadMoreWidget();
-                  },
-                  childCount: 1,
-                ),
-              )
+              SliverToBoxAdapter(
+                child: _loadMoreWidget(),
+              ),
             ],
           ),
           onRefresh: () async {

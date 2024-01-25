@@ -13,39 +13,75 @@ class MovieGrid extends StatelessWidget {
       // mainAxisAlignment: MainAxisAlignment.start,
       children: [
         getMovieGridHeader(context, content),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(10.0),
-          itemCount: content?.movies?.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 12.0,
-            crossAxisSpacing: 12.0,
-            childAspectRatio: .65,
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12),
+            child: Wrap(
+              spacing: 12,
+              children: (content?.movies ?? []).map(
+                (e) {
+                  return SizedBox(
+                    width: 120,
+                    height: 240,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          MYRouter.detailPagePath,
+                          arguments: {
+                            'id': e.id,
+                          },
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          getMovieGridContent(context, e),
+                          getMovieGridFooter(context, e)
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ).toList(),
+            ),
           ),
-          itemBuilder: (BuildContext context, int index) {
-            // print(content?.movies?.length);
-            var movie = content?.movies?[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  MYRouter.detailPagePath,
-                  arguments: {
-                    'id': movie?.id,
-                  },
-                );
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  getMovieGridContent(context, movie),
-                  getMovieGridFooter(context, movie)
-                ],
-              ),
-            );
-          },
+
+          // GridView.builder(
+          //   shrinkWrap: true,
+          //   physics: const NeverScrollableScrollPhysics(),
+          //   padding: const EdgeInsets.all(10.0),
+          //   itemCount: content?.movies?.length,
+          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: 4,
+          //     mainAxisSpacing: 12.0,
+          //     crossAxisSpacing: 12.0,
+          //     childAspectRatio: .65,
+          //   ),
+          //   itemBuilder: (BuildContext context, int index) {
+          //     // print(content?.movies?.length);
+          //     var movie = content?.movies?[index];
+          //     return GestureDetector(
+          //       onTap: () {
+          //         Navigator.pushNamed(
+          //           context,
+          //           MYRouter.detailPagePath,
+          //           arguments: {
+          //             'id': movie?.id,
+          //           },
+          //         );
+          //       },
+          //       child: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           getMovieGridContent(context, movie),
+          //           getMovieGridFooter(context, movie)
+          //         ],
+          //       ),
+          //     );
+          //   },
+          // ),
         ),
         const SizedBox(
           height: 20,

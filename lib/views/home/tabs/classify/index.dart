@@ -77,12 +77,43 @@ class _ClassifyTabState extends State<ClassifyTab>
         floatHeaderSlivers: true,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            const SliverAppBar(
-              title: Text('分类'),
-              centerTitle: true,
-              floating: true,
+            SliverAppBar(
               pinned: true,
+              expandedHeight: 100.0,
+              flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: const Text('影片分类'),
+                  background: Stack(
+                    children: [
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            image: const DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  'https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'),
+                            ),
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(36),
+                              bottomRight: Radius.circular(36),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
             ),
+            // const SliverAppBar(
+            //   title: Text('分类'),
+            //   centerTitle: true,
+            //   floating: true,
+            //   pinned: true,
+            // ),
           ];
         },
         body: LoadingView(
@@ -126,33 +157,37 @@ class _ClassifyTabState extends State<ClassifyTab>
                                 ),
                               ),
                             ),
-                            Card(
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: SingleChildScrollView(
-                                  child: Wrap(
-                                    spacing: 8,
-                                    // runSpacing: 2,
-                                    alignment: WrapAlignment.start,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.start,
-                                    children: e.children!
-                                        .map(
-                                          (item) => ChoiceChip(
-                                            label: Text(item.name ?? ''),
-                                            selected: false,
-                                            onSelected: (newValue) {
-                                              Navigator.of(context).pushNamed(
-                                                MYRouter.filterPagePath,
-                                                arguments: {
-                                                  "pid": e.id,
-                                                  "category": item.id
-                                                },
-                                              );
-                                            },
-                                          ),
-                                        )
-                                        .toList(),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 12, right: 12),
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: SingleChildScrollView(
+                                    child: Wrap(
+                                      spacing: 8,
+                                      // runSpacing: 2,
+                                      alignment: WrapAlignment.start,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.start,
+                                      children: e.children!
+                                          .map(
+                                            (item) => ChoiceChip(
+                                              label: Text(item.name ?? ''),
+                                              selected: false,
+                                              onSelected: (newValue) {
+                                                Navigator.of(context).pushNamed(
+                                                  MYRouter.filterPagePath,
+                                                  arguments: {
+                                                    "pid": e.id,
+                                                    "category": item.id
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
                                   ),
                                 ),
                               ),

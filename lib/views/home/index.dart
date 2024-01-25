@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   List<Widget> _pages = [];
-  var _pageController = PageController();
+  final _pageController = PageController();
 
   void _pageChanged(int index) {
     setState(() {
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
       _currentIndex = 0;
       _pages = [
         const RecommendTab(),
-        ClassifyTab(),
+        const ClassifyTab(),
         const UserCenterTab(),
       ];
     }
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
           builder: (BuildContext context) {
             return MyDialog(
               title: '提示',
-              content: '是否退出应用？',
+              content: '是否退出应用111？',
               onConfirm: () async {
                 SystemNavigator.pop();
               },
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
           itemCount: _pages.length,
           itemBuilder: (context, index) => OrientationBuilder(
             builder: (context, orientation) {
-              return _pages[index];
+              return (_pages[index]);
             },
           ),
         ),
