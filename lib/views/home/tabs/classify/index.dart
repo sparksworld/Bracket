@@ -78,11 +78,22 @@ class _ClassifyTabState extends State<ClassifyTab>
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverAppBar(
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(36),
+                  bottomRight: Radius.circular(36),
+                ),
+              ),
+              // foregroundColor: Colors.red,
               pinned: true,
+              floating: true,
               expandedHeight: 100.0,
               flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: const Text('影片分类'),
+                  centerTitle: false,
+                  title: const Text(
+                    '影片分类',
+                  ),
                   background: Stack(
                     children: [
                       Positioned(
@@ -99,8 +110,8 @@ class _ClassifyTabState extends State<ClassifyTab>
                                   'https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'),
                             ),
                             borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(36),
-                              bottomRight: Radius.circular(36),
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
                             ),
                           ),
                         ),
