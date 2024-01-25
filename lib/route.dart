@@ -1,5 +1,3 @@
-// import 'package:provider/provider.dart';
-
 import '/plugins.dart';
 import '/views/home/index.dart';
 import '/views/login.dart';
@@ -9,6 +7,8 @@ import 'views/theme/index.dart';
 import 'views/detail/index.dart';
 import 'views/history/index.dart';
 import 'views/filter/index.dart';
+import '/views/about/index.dart';
+import '/views/feedback/index.dart';
 
 class SparkRoute {
   bool? noAuth;
@@ -23,6 +23,7 @@ class MYRouter {
   static String detailPagePath = '/detail_page';
   static String loginPagePath = '/login_page';
   static String aboutPagePath = '/about_page';
+  static String feedbackPagePath = '/feedback_page';
   static String unknownPagePath = '/unknown_page';
   static String settingPagePath = '/setting_page';
   static String themePagePath = '/theme_page';
@@ -55,6 +56,10 @@ class MYRouter {
     themePagePath: SparkRoute(builder: (_, {arguments}) => const ThemePage()),
     historyPagePath:
         SparkRoute(builder: (_, {arguments}) => const HistoryPage()),
+
+    aboutPagePath: SparkRoute(builder: (_, {arguments}) => const AboutPage()),
+    feedbackPagePath:
+        SparkRoute(builder: (_, {arguments}) => const FeedbackPage()),
     // 未知
     unknownPagePath:
         SparkRoute(builder: (_, {arguments}) => const UnknownPage()),

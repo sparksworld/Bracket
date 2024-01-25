@@ -150,8 +150,15 @@ class _UserCenterTabState extends State<UserCenterTab>
                         trailing:
                             const Icon(Icons.keyboard_arrow_right_outlined),
                         onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(MYRouter.historyPagePath);
+                          const snackBar = SnackBar(
+                            content: Text("还未开发"),
+                          );
+                          ScaffoldMessenger.of(context).removeCurrentSnackBar(
+                            reason: SnackBarClosedReason.remove,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          // Navigator.of(context)
+                          //     .pushNamed(MYRouter.historyPagePath);
                         },
                       ),
                       ListTile(
@@ -163,15 +170,24 @@ class _UserCenterTabState extends State<UserCenterTab>
                           Navigator.pushNamed(context, MYRouter.themePagePath);
                         },
                       ),
-                      const ListTile(
+                      ListTile(
                         title: Text('意见反馈'),
                         leading: Icon(Icons.send),
                         trailing: Icon(Icons.keyboard_arrow_right_outlined),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(MYRouter.feedbackPagePath);
+                        },
                       ),
-                      const ListTile(
-                        title: Text('关于'),
-                        leading: Icon(Icons.sentiment_satisfied_alt),
-                        trailing: Icon(Icons.keyboard_arrow_right_outlined),
+                      ListTile(
+                        title: const Text('关于'),
+                        leading: const Icon(Icons.sentiment_satisfied_alt),
+                        trailing:
+                            const Icon(Icons.keyboard_arrow_right_outlined),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(MYRouter.aboutPagePath);
+                        },
                       ),
                     ],
                   ),

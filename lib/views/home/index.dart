@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
           builder: (BuildContext context) {
             return MyDialog(
               title: '提示',
-              content: '是否退出应用111？',
+              content: '是否退出应用？',
               onConfirm: () async {
                 SystemNavigator.pop();
               },

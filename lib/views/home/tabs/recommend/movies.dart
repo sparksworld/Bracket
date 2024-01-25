@@ -4,7 +4,8 @@ import 'package:bracket/model/index/movie.dart';
 
 class MovieGrid extends StatelessWidget {
   final Content? content;
-  const MovieGrid({super.key, required this.content});
+  final UniqueKey imgKey;
+  const MovieGrid({super.key, required this.content, required this.imgKey});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class MovieGrid extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          getMovieGridContent(context, e),
+                          getMovieGridContent(context, e, imgKey),
                           getMovieGridFooter(context, e)
                         ],
                       ),
@@ -128,7 +129,7 @@ Widget getMovieGridHeader(BuildContext context, Content? content) {
   );
 }
 
-Widget getMovieGridContent(BuildContext context, Movie? movie) => Expanded(
+Widget getMovieGridContent(BuildContext context, Movie? movie, key) => Expanded(
       flex: 1,
       child: Stack(
         children: [
@@ -159,7 +160,7 @@ Widget getMovieGridContent(BuildContext context, Movie? movie) => Expanded(
               width: double.infinity,
               height: double.infinity,
               image: NetworkImage(
-                movie?.picture ?? '',
+                '${movie?.picture}?$key',
               ),
               errorBuilder:
                   (BuildContext context, Object error, StackTrace? stackTrace) {

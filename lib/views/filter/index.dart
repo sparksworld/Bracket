@@ -127,7 +127,7 @@ class _FilterPageState extends State<FilterPage>
       setState(() {
         _loading = false;
       });
-      await _fetchData(false);
+      return await _fetchData(init);
     }
   }
 
@@ -247,7 +247,7 @@ class _FilterPageState extends State<FilterPage>
                     crossAxisCount: 3,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
-                    childAspectRatio: .65,
+                    childAspectRatio: .6,
                   ),
                 ),
               ),
@@ -257,7 +257,7 @@ class _FilterPageState extends State<FilterPage>
             ],
           ),
           onRefresh: () async {
-            await _fetchData(true);
+            return await _fetchData(true);
           },
         ),
       ),

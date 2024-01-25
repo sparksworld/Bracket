@@ -14,7 +14,7 @@ void main() async {
   await PreferenceUtil.getInstance();
   // PreferenceUtil.clear();
 
-  Future.delayed(const Duration(seconds: 0), () {
+  Future.delayed(const Duration(seconds: 3), () {
     FlutterNativeSplash.remove();
     runApp(
       MultiProvider(

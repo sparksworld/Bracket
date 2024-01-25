@@ -21,6 +21,7 @@ class RecommendTab extends StatefulWidget {
 class _RecommendTabState extends State<RecommendTab>
     with AutomaticKeepAliveClientMixin {
   final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
+  UniqueKey _imgKey = UniqueKey();
   Data? _data;
   bool _loading = false;
   bool _error = false;
@@ -48,6 +49,7 @@ class _RecommendTabState extends State<RecommendTab>
       setState(() {
         _loading = false;
         // _refreshKey = GlobalKey();
+        _imgKey = UniqueKey();
         _data = jsonData.data;
       });
     } else {
@@ -66,9 +68,7 @@ class _RecommendTabState extends State<RecommendTab>
       return Column(
         children: list
             .map(
-              (Content content) => MovieGrid(
-                content: content,
-              ),
+              (Content content) => MovieGrid(content: content, imgKey: _imgKey),
             )
             .toList(),
       );
