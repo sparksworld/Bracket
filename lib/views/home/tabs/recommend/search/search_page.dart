@@ -42,6 +42,10 @@ class SearchPage extends SearchDelegate<String> {
   // 点击搜索出现结果
   @override
   Widget buildResults(BuildContext context) {
+    var queryString = query.trim();
+    if (queryString == "") {
+      return buildSuggestions(context);
+    }
     return SearchList(query: query.trim());
   }
 

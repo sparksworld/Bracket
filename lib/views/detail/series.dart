@@ -65,7 +65,10 @@ class _SeriesState extends State<Series> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  _detail?.descriptor?.subTitle ?? '',
+                  (_detail?.descriptor?.subTitle == "" ||
+                          _detail?.descriptor?.subTitle == null)
+                      ? '暂无数据'
+                      : (_detail?.descriptor?.subTitle ?? '暂无数据'),
                   style: TextStyle(
                     color: Theme.of(context).disabledColor,
                   ),

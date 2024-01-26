@@ -75,7 +75,9 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(_data?.detail?.name ?? ''),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -100,7 +102,13 @@ class _DetailPageState extends State<DetailPage> {
                           .map<Tab>(
                             (MyTab e) => Tab(
                               key: e.key,
-                              child: Text(e.label),
+                              child: Text(
+                                e.label,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           )
                           .toList(),

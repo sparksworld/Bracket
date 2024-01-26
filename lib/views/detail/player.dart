@@ -66,8 +66,6 @@ class _PlayerState extends State<Player> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      // height: double.maxFinite,
       color: Colors.black,
       child: Stack(
         children: [
@@ -81,19 +79,6 @@ class _PlayerState extends State<Player> {
                   controller: _chewieController!,
                 );
               },
-            ),
-          ),
-          Positioned(
-            left: 12.0,
-            top: 12.0,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
             ),
           ),
         ],
