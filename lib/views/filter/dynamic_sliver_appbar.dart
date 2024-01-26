@@ -1,14 +1,14 @@
 import 'package:bracket/plugins.dart';
 
 class DynamicSliverAppBar extends StatefulWidget {
-  final PreferredSizeWidget? bottom;
+  final Function(double)? bottomBuilder;
   final Widget child;
   final double maxHeight;
 
   const DynamicSliverAppBar({
     required this.child,
     required this.maxHeight,
-    this.bottom,
+    this.bottomBuilder,
     Key? key,
   }) : super(key: key);
 
@@ -39,6 +39,8 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    var bottom =
+        widget.bottomBuilder != null ? widget.bottomBuilder!(height) : null;
     return SliverAppBar(
       // snap: true,
       pinned: true,
@@ -49,8 +51,8 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       toolbarHeight: toolbarHeight,
       // stretchTriggerOffset: height > 0 ? height / 2 : 100,
       expandedHeight: (isHeightCalculated ? height : widget.maxHeight) +
-          (widget.bottom?.preferredSize.height ?? 0),
-      bottom: widget.bottom,
+          (bottom?.preferredSize.height ?? 0),
+      bottom: bottom,
       flexibleSpace: FlexibleSpaceBar(
         background: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

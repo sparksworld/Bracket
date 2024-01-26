@@ -28,6 +28,7 @@ class _FilterPageState extends State<FilterPage>
   Data? _data;
   bool _loading = false;
   bool _showUpIcon = false;
+  double _scrollPixels = 0;
   // bool _error = false;
 
   List<dynamic> _list = [];
@@ -137,6 +138,7 @@ class _FilterPageState extends State<FilterPage>
       double pixels = _scrollController.position.pixels;
 
       setState(() {
+        _scrollPixels = pixels;
         _showUpIcon = pixels > MediaQuery.of(context).size.height;
       });
 
@@ -184,35 +186,39 @@ class _FilterPageState extends State<FilterPage>
             slivers: [
               DynamicSliverAppBar(
                 maxHeight: mediaQuery.size.height,
-                bottom: AppBar(
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        if (_scrollController.hasClients) {
-                          _scrollController.jumpTo(0);
-                        }
-                      },
-                      icon: const Icon(Icons.filter_list),
-                    )
-                  ],
-                  centerTitle: false,
-                  title: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Wrap(
-                      spacing: 10,
-                      children: _getTags()
-                          .map<ActionChip>(
-                            (e) => ActionChip(
-                              // disabledColor: Theme.of(context).hoverColor,
-                              label: Text(e.name ?? ''),
-                              // selected: true,
-                              // onSelected: (_) {},
-                            ),
-                          )
-                          .toList(),
+                bottomBuilder: (height) {
+                  return AppBar(
+                    actions: _scrollPixels > height
+                        ? [
+                            IconButton(
+                              onPressed: () {
+                                if (_scrollController.hasClients) {
+                                  _scrollController.jumpTo(0);
+                                }
+                              },
+                              icon: const Icon(Icons.filter_list),
+                            )
+                          ]
+                        : [],
+                    centerTitle: false,
+                    title: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Wrap(
+                        spacing: 10,
+                        children: _getTags()
+                            .map<ActionChip>(
+                              (e) => ActionChip(
+                                // disabledColor: Theme.of(context).hoverColor,
+                                label: Text(e.name ?? ''),
+                                // selected: true,
+                                // onSelected: (_) {},
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
                 child: FilterBar(
                   loading: _loading,
                   activeMap: _tags,

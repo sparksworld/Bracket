@@ -17,6 +17,8 @@ extension IThemeExtension on ITheme {
   }
 }
 
+// class FilmHistrory {}
+
 class Global with ChangeNotifier, DiagnosticableTreeMixin {
   final BuildContext context;
 
@@ -24,6 +26,8 @@ class Global with ChangeNotifier, DiagnosticableTreeMixin {
       PreferenceUtil.getString('theme', defaultValue: ITheme.auto.value);
   List<String> get searchRecord =>
       PreferenceUtil.getStringList('searchRecord', defaultValue: []);
+  // List<Map> get searchRecord =>
+  //     PreferenceUtil.getStringList('searchRecord', defaultValue: []);
 
   Global(this.context) : super();
 
