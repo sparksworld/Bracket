@@ -41,7 +41,7 @@ class _DetailPageState extends State<DetailPage> {
         'id': id,
       },
     );
-    if (res != null) {
+    if (res != null && res != '') {
       FilmDetail jsonData = FilmDetail.fromJson(res);
       setState(() {
         _data = jsonData.data;

@@ -120,7 +120,7 @@ class _SearchListState extends State<SearchList> {
     if (widget.query.isNotEmpty) {
       global.setSearchRecord(widget.query);
     }
-    if (res != null) {
+    if (res != null && res != '') {
       SearchFilm jsonData = SearchFilm.fromJson(res);
       setState(() {
         _loading = false;

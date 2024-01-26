@@ -44,7 +44,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future _fetchData() async {
     var res = await Api.filmClassifySearch(queryParameters: {'Pid': 1});
-    if (res != null) {
+    if (res != null && res != '') {
       FilmClassifySearch jsonData = FilmClassifySearch.fromJson(res);
       setState(() {
         _data = jsonData.data;
