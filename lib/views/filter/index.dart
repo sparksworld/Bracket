@@ -68,7 +68,6 @@ class _FilterPageState extends State<FilterPage>
   List _getTags() {
     List? arr = [];
     _tags?.keys.forEach((e) {
-      print(_tags?[e].value);
       if (_tags?[e].value != null && _tags?[e].value != '') {
         arr.add(_tags?[e]);
       }

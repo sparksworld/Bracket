@@ -1,7 +1,21 @@
 // import 'package:bracket/service/api.dart';
 import 'package:bracket/shared/theme.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/plugins.dart';
+
+void checkConnectivity(cb) {
+  StreamSubscription<ConnectivityResult>? subscription;
+  Connectivity connectivity = Connectivity();
+
+  subscription =
+      connectivity.onConnectivityChanged.listen((ConnectivityResult event) {
+    if (event != ConnectivityResult.none) {
+      subscription?.cancel();
+      cb();
+    }
+  });
+}
 
 void main() async {
   // 初始化插件前需调用初始化代码 runApp()函数之前
@@ -14,7 +28,7 @@ void main() async {
   await PreferenceUtil.getInstance();
   // PreferenceUtil.clear();
 
-  Future.delayed(const Duration(seconds: 3), () {
+  checkConnectivity(() {
     FlutterNativeSplash.remove();
     runApp(
       MultiProvider(
