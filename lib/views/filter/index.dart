@@ -185,6 +185,16 @@ class _FilterPageState extends State<FilterPage>
               DynamicSliverAppBar(
                 maxHeight: mediaQuery.size.height,
                 bottom: AppBar(
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        if (_scrollController.hasClients) {
+                          _scrollController.jumpTo(0);
+                        }
+                      },
+                      icon: const Icon(Icons.filter_list),
+                    )
+                  ],
                   centerTitle: false,
                   title: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,

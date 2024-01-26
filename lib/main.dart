@@ -26,6 +26,7 @@ void main() async {
 
   /// 初始持久化数据
   await PreferenceUtil.getInstance();
+  await Future.delayed(const Duration(seconds: 2));
   // PreferenceUtil.clear();
 
   checkConnectivity(() {
