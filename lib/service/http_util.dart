@@ -43,7 +43,7 @@ class HttpUtil {
           await _dio.request(url, queryParameters: params, options: options);
 
       return result;
-    } on DioException catch (error) {
+    } on DioException {
       BuildContext? context = MYRouter.navigatorKey.currentState?.context;
 
       if (context != null) {

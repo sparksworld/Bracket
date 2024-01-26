@@ -47,7 +47,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   keyboardType: TextInputType.multiline,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 60,
               ),
               SizedBox(
@@ -65,7 +65,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       : null,
-                  child: Text('提交'),
+                  child: const Text('提交'),
                 ),
               )
             ],
