@@ -43,45 +43,47 @@ class FilterBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ..._tags.keys.map((key) {
-          return Row(
-            children: [
-              Expanded(
-                flex: 0,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12),
-                  child: Text(_titles[key]),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Wrap(
-                    spacing: 8,
-                    children: _tags[key]?.map<ChoiceChip>((e) {
-                      return ChoiceChip(
-                        label: Text(
-                          (e?.name ?? ''),
-                        ),
-                        selected: activeMap?[key]?.value == e?.value,
-                        onSelected: !loading
-                            ? (newValue) {
-                                Map params = {};
-                                activeMap?.forEach((k, v) {
-                                  params[k] = k == key ? e?.value : v?.value;
-                                });
-                                onSearch(params);
-                              }
-                            : null,
-                      );
-                    }).toList(),
+        ...(_tags.keys.map(
+          (key) {
+            return Row(
+              children: [
+                Expanded(
+                  flex: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text(_titles[key]),
                   ),
                 ),
-              ),
-            ],
-          );
-        }).toList(),
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Wrap(
+                      spacing: 8,
+                      children: _tags[key]?.map<ChoiceChip>((e) {
+                        return ChoiceChip(
+                          label: Text(
+                            (e?.name ?? ''),
+                          ),
+                          selected: activeMap?[key]?.value == e?.value,
+                          onSelected: !loading
+                              ? (newValue) {
+                                  Map params = {};
+                                  activeMap?.forEach((k, v) {
+                                    params[k] = k == key ? e?.value : v?.value;
+                                  });
+                                  onSearch(params);
+                                }
+                              : null,
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ).toList()),
       ],
     );
   }

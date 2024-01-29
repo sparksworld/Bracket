@@ -9,6 +9,7 @@ import 'package:bracket/model/film_classify_search/data.dart';
 
 import 'dynamic_sliver_appbar.dart';
 import 'filter_bar.dart';
+import 'sticky_appbar.dart';
 
 class FilterPage extends StatefulWidget {
   final Map? arguments;
@@ -27,9 +28,8 @@ class _FilterPageState extends State<FilterPage>
   final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   Data? _data;
   bool _loading = false;
-  bool _showUpIcon = false;
   double _scrollPixels = 0;
-  // bool _error = false;
+  double _sliverAppbarHeight = 0;
 
   List<dynamic> _list = [];
   int _current = 1;
@@ -139,7 +139,7 @@ class _FilterPageState extends State<FilterPage>
 
       setState(() {
         _scrollPixels = pixels;
-        _showUpIcon = pixels > MediaQuery.of(context).size.height;
+        // _showUpIcon = pixels > MediaQuery.of(context).size.height;
       });
 
       if (pixels + 30 >= _scrollController.position.maxScrollExtent) {
@@ -166,7 +166,7 @@ class _FilterPageState extends State<FilterPage>
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     return Scaffold(
-      floatingActionButton: _showUpIcon
+      floatingActionButton: _scrollPixels > mediaQuery.size.height
           ? ElevatedButton(
               onPressed: () {
                 if (_scrollController.hasClients) _scrollController.jumpTo(0);
@@ -184,11 +184,44 @@ class _FilterPageState extends State<FilterPage>
             controller: _scrollController,
             physics: const BouncingScrollPhysics(),
             slivers: [
+              // if (_tags!.keys.isNotEmpty)
               DynamicSliverAppBar(
+                onHeightListener: (height) {
+                  setState(() {
+                    _sliverAppbarHeight = height;
+                  });
+                },
                 maxHeight: mediaQuery.size.height,
-                bottomBuilder: (height) {
-                  return AppBar(
-                    actions: _scrollPixels > height
+                child: FilterBar(
+                  loading: _loading,
+                  activeMap: _tags,
+                  search: _search,
+                  onSearch: (Map? params) {
+                    _request = params;
+                    _fetchData(true);
+                  },
+                ),
+              ),
+              SliverPersistentHeader(
+                pinned: true, //是否固定在顶部
+                floating: true,
+                delegate: StickyAppbar(
+                  appBar: AppBar(
+                    centerTitle: false,
+                    title: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Wrap(
+                        spacing: 10,
+                        children: _getTags()
+                            .map<ActionChip>(
+                              (e) => ActionChip(
+                                label: Text(e.name ?? ''),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                    actions: _scrollPixels > _sliverAppbarHeight
                         ? [
                             IconButton(
                               onPressed: () {
@@ -200,35 +233,10 @@ class _FilterPageState extends State<FilterPage>
                             )
                           ]
                         : [],
-                    centerTitle: false,
-                    title: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                        spacing: 10,
-                        children: _getTags()
-                            .map<ActionChip>(
-                              (e) => ActionChip(
-                                // disabledColor: Theme.of(context).hoverColor,
-                                label: Text(e.name ?? ''),
-                                // selected: true,
-                                // onSelected: (_) {},
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  );
-                },
-                child: FilterBar(
-                  loading: _loading,
-                  activeMap: _tags,
-                  search: _search,
-                  onSearch: (Map? params) {
-                    _request = params;
-                    _fetchData(true);
-                  },
+                  ),
                 ),
               ),
+
               SliverPadding(
                 padding: const EdgeInsets.all(12),
                 sliver: SliverGrid(

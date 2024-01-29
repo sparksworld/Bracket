@@ -3,10 +3,23 @@ import 'package:bracket/plugins.dart';
 import "package:chewie/chewie.dart";
 import "package:video_player/video_player.dart";
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:lecle_yoyo_player/lecle_yoyo_player.dart';
 
 class Player extends StatefulWidget {
-  final PlayList? data;
-  const Player({Key? key, this.data}) : super(key: key);
+  const Player({
+    super.key,
+    this.playItem,
+    this.onNext,
+    this.onPrev,
+    required this.originIndex,
+    required this.teleplayIndex,
+  });
+
+  final PlayList? playItem;
+  final int originIndex;
+  final int teleplayIndex;
+  final Function? onNext;
+  final Function? onPrev;
 
   @override
   State<Player> createState() => _PlayerState();
@@ -24,13 +37,22 @@ class _PlayerState extends State<Player> {
     }
   }
 
+  // @override
+  // void didUpdateWidget(covariant Player oldWidget) {
+  //   setState(() {
+  //     item = widget.list?[widget.originIndex]?[widget.teleplayIndex];
+  //   });
+  //   super.didUpdateWidget(oldWidget);
+  // }
+
   @override
   void initState() {
     setState(() {
       _loading = true;
     });
+
     _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse(widget.data?.link ?? ''),
+      Uri.parse(widget.playItem?.link ?? ''),
     )
       ..addListener(_listener)
       ..initialize().then(
@@ -42,6 +64,21 @@ class _PlayerState extends State<Player> {
             looping: true,
             aspectRatio: aspectRatio,
             deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
+            subtitle: Subtitles([]),
+            // additionalOptions: (context) {
+            //   return <OptionItem>[
+            //     OptionItem(
+            //       onTap: () => debugPrint('My option works!'),
+            //       iconData: Icons.chat,
+            //       title: 'My localized title',
+            //     ),
+            //     OptionItem(
+            //       onTap: () => debugPrint('Another option working!'),
+            //       iconData: Icons.chat,
+            //       title: 'Another localized title',
+            //     ),
+            //   ];
+            // },
           );
           setState(() {
             _loading = false;
@@ -52,8 +89,14 @@ class _PlayerState extends State<Player> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void dispose() {
-    // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values); //恢复
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -65,6 +108,22 @@ class _PlayerState extends State<Player> {
 
   @override
   Widget build(BuildContext context) {
+    // return AspectRatio(
+    //   aspectRatio: 1.6,
+    //   child: LoadingView(
+    //     loading: widget.playItem?.link == null,
+    //     builder: (ctx) {
+    //       return YoYoPlayer(
+    //         key: Key(widget.playItem?.link ?? ''),
+    //         url: widget.playItem?.link ?? '',
+    //         onPlayingVideo: (type) {
+    //           print(type);
+    //         },
+    //       );
+    //     },
+    //   ),
+    // );
+
     return Container(
       color: Colors.black,
       child: Stack(

@@ -1,16 +1,16 @@
 import 'package:bracket/plugins.dart';
 
 class DynamicSliverAppBar extends StatefulWidget {
-  final Function(double)? bottomBuilder;
-  final Widget child;
-  final double maxHeight;
-
   const DynamicSliverAppBar({
-    required this.child,
     required this.maxHeight,
-    this.bottomBuilder,
+    this.child,
+    this.onHeightListener,
     Key? key,
   }) : super(key: key);
+
+  final Function(double)? onHeightListener;
+  final Widget? child;
+  final double maxHeight;
 
   @override
   State<DynamicSliverAppBar> createState() => _DynamicSliverAppBarState();
@@ -19,11 +19,16 @@ class DynamicSliverAppBar extends StatefulWidget {
 class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   final GlobalKey _childKey = GlobalKey();
   bool isHeightCalculated = false;
-  double height = 0;
+  double? height;
   double toolbarHeight = 0;
 
   @override
   void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (!isHeightCalculated) {
         setState(() {
@@ -32,15 +37,11 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
               .height;
         });
         isHeightCalculated = true;
+        if (widget.onHeightListener != null) {
+          widget.onHeightListener!(height ?? 0);
+        }
       }
     });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var bottom =
-        widget.bottomBuilder != null ? widget.bottomBuilder!(height) : null;
     return SliverAppBar(
       // snap: true,
       pinned: true,
@@ -49,30 +50,30 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       // stretch: true,
       // primary: false,
       toolbarHeight: toolbarHeight,
-      // stretchTriggerOffset: height > 0 ? height / 2 : 100,
-      expandedHeight: (isHeightCalculated ? height : widget.maxHeight) +
-          (bottom?.preferredSize.height ?? 0),
-      bottom: bottom,
+      expandedHeight: (isHeightCalculated) ? height : widget.maxHeight,
       flexibleSpace: FlexibleSpaceBar(
+        // collapseMode: CollapseMode.pin,
         background: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             NotificationListener<SizeChangedLayoutNotification>(
               onNotification: (notification) {
                 WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                  isHeightCalculated = true;
                   setState(() {
                     height = (_childKey.currentContext?.findRenderObject()
                             as RenderBox)
                         .size
                         .height;
                   });
-                  isHeightCalculated = true;
+                  if (widget.onHeightListener != null) {
+                    widget.onHeightListener!(height ?? 0);
+                  }
                 });
                 return false;
               },
               child: SizeChangedLayoutNotifier(
                 child: Container(
-                  // padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
                   key: _childKey,
                   child: widget.child,
                 ),
