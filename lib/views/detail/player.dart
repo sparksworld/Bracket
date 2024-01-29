@@ -1,8 +1,7 @@
 import 'package:bracket/model/film_detail/play_list.dart';
 import 'package:bracket/plugins.dart';
 import "package:chewie/chewie.dart";
-// import "package:video_player/video_player.dart";
-import 'package:video_viewer/video_viewer.dart';
+import "package:video_player/video_player.dart";
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class PlayerVideo extends StatefulWidget {
