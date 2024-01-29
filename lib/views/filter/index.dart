@@ -99,7 +99,7 @@ class _FilterPageState extends State<FilterPage>
       'current': _current,
       ...?_request,
     });
-    if (res != null && res != '') {
+    if (res != null && res.runtimeType != String) {
       FilmClassifySearch jsonData = FilmClassifySearch.fromJson(res);
       setState(() {
         _loading = false;

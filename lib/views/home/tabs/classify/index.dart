@@ -30,7 +30,7 @@ class _ClassifyTabState extends State<ClassifyTab>
     });
     var res = await Api.index();
 
-    if (res != null && res != '') {
+    if (res != null && res.runtimeType != String) {
       Recommend jsonData = Recommend.fromJson(res);
       setState(() {
         _loading = false;
