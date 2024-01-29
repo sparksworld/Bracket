@@ -83,7 +83,7 @@ class _DetailPageState extends State<DetailPage> {
           children: [
             Expanded(
               flex: 0,
-              child: Player(
+              child: PlayerVideo(
                 key: Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
                 // list: _playList,
                 playItem: _playItem,

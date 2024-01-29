@@ -1,12 +1,12 @@
 import 'package:bracket/model/film_detail/play_list.dart';
 import 'package:bracket/plugins.dart';
 import "package:chewie/chewie.dart";
-import "package:video_player/video_player.dart";
+// import "package:video_player/video_player.dart";
+import 'package:video_viewer/video_viewer.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-import 'package:lecle_yoyo_player/lecle_yoyo_player.dart';
 
-class Player extends StatefulWidget {
-  const Player({
+class PlayerVideo extends StatefulWidget {
+  const PlayerVideo({
     super.key,
     this.playItem,
     this.onNext,
@@ -22,10 +22,10 @@ class Player extends StatefulWidget {
   final Function? onPrev;
 
   @override
-  State<Player> createState() => _PlayerState();
+  State<PlayerVideo> createState() => _PlayerState();
 }
 
-class _PlayerState extends State<Player> {
+class _PlayerState extends State<PlayerVideo> {
   bool _loading = true;
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
@@ -36,14 +36,6 @@ class _PlayerState extends State<Player> {
       WakelockPlus.enable();
     }
   }
-
-  // @override
-  // void didUpdateWidget(covariant Player oldWidget) {
-  //   setState(() {
-  //     item = widget.list?[widget.originIndex]?[widget.teleplayIndex];
-  //   });
-  //   super.didUpdateWidget(oldWidget);
-  // }
 
   @override
   void initState() {
@@ -108,22 +100,6 @@ class _PlayerState extends State<Player> {
 
   @override
   Widget build(BuildContext context) {
-    // return AspectRatio(
-    //   aspectRatio: 1.6,
-    //   child: LoadingView(
-    //     loading: widget.playItem?.link == null,
-    //     builder: (ctx) {
-    //       return YoYoPlayer(
-    //         key: Key(widget.playItem?.link ?? ''),
-    //         url: widget.playItem?.link ?? '',
-    //         onPlayingVideo: (type) {
-    //           print(type);
-    //         },
-    //       );
-    //     },
-    //   ),
-    // );
-
     return Container(
       color: Colors.black,
       child: Stack(

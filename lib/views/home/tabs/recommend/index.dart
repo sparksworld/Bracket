@@ -44,8 +44,7 @@ class _RecommendTabState extends State<RecommendTab>
     // var a = json.decode(res);
     // print(res['data']['category']);
 
-    if (res != null && res != '') {
-      print(res);
+    if (res != null && res.runtimeType != String) {
       Recommend jsonData = Recommend.fromJson(res);
       setState(() {
         _loading = false;
