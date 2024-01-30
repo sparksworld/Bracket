@@ -44,11 +44,10 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
     });
     return SliverAppBar(
       // snap: true,
-      pinned: true,
       // floating: true,
-      centerTitle: false,
-      // stretch: true,
       // primary: false,
+      pinned: true,
+      stretch: true,
       toolbarHeight: toolbarHeight,
       expandedHeight: (isHeightCalculated) ? height : widget.maxHeight,
       flexibleSpace: FlexibleSpaceBar(
