@@ -132,6 +132,9 @@ class ThemeProvider {
       tabBarTheme: tabBarTheme(selfColor),
       drawerTheme: drawerTheme(selfColor),
       scaffoldBackgroundColor: selfColor.background,
+      snackBarTheme: const SnackBarThemeData().copyWith(
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -153,6 +156,9 @@ class ThemeProvider {
       tabBarTheme: tabBarTheme(selfColor),
       drawerTheme: drawerTheme(selfColor),
       scaffoldBackgroundColor: selfColor.background,
+      snackBarTheme: const SnackBarThemeData().copyWith(
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 

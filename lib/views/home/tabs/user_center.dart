@@ -173,7 +173,8 @@ class _UserCenterTabState extends State<UserCenterTab>
                       ListTile(
                         title: const Text('意见反馈'),
                         leading: const Icon(Icons.send),
-                        trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                        trailing:
+                            const Icon(Icons.keyboard_arrow_right_outlined),
                         onTap: () {
                           Navigator.of(context)
                               .pushNamed(MYRouter.feedbackPagePath);

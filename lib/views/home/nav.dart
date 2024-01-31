@@ -76,21 +76,25 @@ class _BottonNavWithAnimatedIconsState
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: 16,
+          vertical: 8,
         ),
-        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: BottomNavigationBarTheme.of(context).backgroundColor,
+          color: Theme.of(context).primaryColor,
           borderRadius: const BorderRadius.all(
             Radius.circular(32),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: bottonNavBgColor.withOpacity(0.3),
-              offset: const Offset(0, 20),
-              blurRadius: 20,
-            ),
-          ],
+          border: Border.all(
+            width: 8,
+            color: Theme.of(context).splashColor,
+          ),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: bottonNavBgColor.withOpacity(0.1),
+          //     offset: const Offset(0, 10),
+          //     blurRadius: 32,
+          //   ),
+          // ],
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 12, right: 12),
@@ -119,9 +123,10 @@ class _BottonNavWithAnimatedIconsState
                               riveIcon.src,
                               artboard: riveIcon.artboard,
                               onInit: (artboard) {
-                                riveOnInIt(artboard,
-                                    stateMachineName:
-                                        riveIcon.stateMachineName);
+                                riveOnInIt(
+                                  artboard,
+                                  stateMachineName: riveIcon.stateMachineName,
+                                );
                               },
                             ),
                           ),
@@ -156,7 +161,7 @@ class AnimatedBar extends StatelessWidget {
       height: 4,
       width: isActive ? 20 : 0,
       decoration: BoxDecoration(
-        color: BottomNavigationBarTheme.of(context).selectedItemColor,
+        color: Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: const BorderRadius.all(
           Radius.circular(12),
         ),
