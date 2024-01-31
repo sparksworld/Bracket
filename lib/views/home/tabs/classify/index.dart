@@ -207,6 +207,9 @@ class _ClassifyTabState extends State<ClassifyTab>
                         );
                       },
                     ),
+                    const SizedBox(
+                      height: 12,
+                    ),
                   ],
                 )
               ],

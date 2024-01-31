@@ -114,6 +114,9 @@ class _RecommendTabState extends State<RecommendTab>
         body: RefreshIndicator(
           key: _refreshKey,
           child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
             child: Consumer2<Profile, Global>(
               builder: (_, profile, global, child) {
                 // String? token = profile.user?.userToken;

@@ -1,6 +1,8 @@
 import 'package:bracket/model/film_detail/play_list.dart';
 import 'package:bracket/plugins.dart';
 import "package:chewie/chewie.dart";
+// import 'package:fijkplayer/fijkplayer.dart';
+
 import "package:video_player/video_player.dart";
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -25,6 +27,7 @@ class PlayerVideo extends StatefulWidget {
 }
 
 class _PlayerState extends State<PlayerVideo> {
+  // final FijkPlayer player = FijkPlayer();
   bool _loading = true;
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
@@ -38,6 +41,7 @@ class _PlayerState extends State<PlayerVideo> {
 
   @override
   void initState() {
+    // player.setDataSource(widget.playItem?.link ?? '', autoPlay: true);
     setState(() {
       _loading = true;
     });
@@ -94,11 +98,20 @@ class _PlayerState extends State<PlayerVideo> {
     WakelockPlus.disable();
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
+    // player.release();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // return AspectRatio(
+    //   aspectRatio: 1.6,
+    //   child: FijkView(
+    //     color: Colors.black,
+    //     player: player,
+    //     panelBuilder: fijkPanel2Builder(),
+    //   ),
+    // );
     return Container(
       color: Colors.black,
       child: Stack(

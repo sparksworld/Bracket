@@ -2,6 +2,7 @@ import '/plugins.dart';
 import './tabs/recommend/index.dart' show RecommendTab;
 import './tabs/user_center.dart' show UserCenterTab;
 import './tabs/classify/index.dart' show ClassifyTab;
+import 'nav.dart';
 
 class HomePage extends StatefulWidget {
   final String? arguments;
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void onTabTapped(int index) {
+  void _onTabTapped(int index) {
     _pageController.jumpToPage(index);
   }
 
@@ -61,24 +62,7 @@ class _HomePageState extends State<HomePage> {
         );
       },
       child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex, //New
-          onTap: onTabTapped,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: '推荐',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.movie_filter),
-              label: '分类',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: '我的',
-            )
-          ],
-        ),
+        extendBody: true,
         body: PageView.builder(
           controller: _pageController,
           // physics: NeverScrollableScrollPhysics(),
@@ -86,9 +70,13 @@ class _HomePageState extends State<HomePage> {
           itemCount: _pages.length,
           itemBuilder: (context, index) => OrientationBuilder(
             builder: (context, orientation) {
-              return (_pages[index]);
+              return _pages[index];
             },
           ),
+        ),
+        bottomNavigationBar: BottonNavWithAnimatedIcons(
+          index: _currentIndex,
+          onChange: _onTabTapped,
         ),
       ),
     );
