@@ -5,7 +5,7 @@ class ThemePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Global global = context.watch<Global>();
+    ThemeStore themeStore = context.watch<ThemeStore>();
 
     return Scaffold(
       appBar: AppBar(
@@ -16,25 +16,25 @@ class ThemePage extends StatelessWidget {
           RadioListTile<String>(
             title: const Text('跟随系统'),
             value: ITheme.auto.value,
-            groupValue: global.theme,
+            groupValue: themeStore.data,
             onChanged: (String? value) {
-              global.setTheme(ITheme.auto.value);
+              themeStore.setTheme(ITheme.auto.value);
             },
           ),
           RadioListTile<String>(
             title: const Text('暗黑模式'),
             value: ITheme.dark.value,
-            groupValue: global.theme,
+            groupValue: themeStore.data,
             onChanged: (String? value) {
-              global.setTheme(ITheme.dark.value);
+              themeStore.setTheme(ITheme.dark.value);
             },
           ),
           RadioListTile<String>(
             title: const Text('明亮模式'),
             value: ITheme.light.value,
-            groupValue: global.theme,
+            groupValue: themeStore.data,
             onChanged: (String? value) {
-              global.setTheme(ITheme.light.value);
+              themeStore.setTheme(ITheme.light.value);
             },
           )
         ],

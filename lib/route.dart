@@ -71,7 +71,8 @@ class MYRouter {
     MaterialPageRoute route = MaterialPageRoute(
       builder: (_) {
         Map? arguments = settings.arguments as Map?;
-        final profile = _.watch<Profile>();
+        final userStore = _.watch<UserStore>();
+
         String? name = settings.name;
         SparkRoute? routeData = routeTables[name];
         Widget Function(BuildContext, {Map? arguments})? builder =
@@ -81,7 +82,7 @@ class MYRouter {
         //     PreferenceUtils.getMap<Map<String, dynamic>>('profile');
 
         if (routeData?.noAuth != true) {
-          if (profile.user?.userToken == null) {
+          if (userStore.data?.userToken == null) {
             // MYRouter.navigatorKey.currentState?.pushNamedAndRemoveUntil(
             //     MYRouter.loginPagePath, (route) => false);
             builder = routeTables[loginPagePath]?.builder;

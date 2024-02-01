@@ -5,13 +5,13 @@ const Color bottonNavBgColor = Color(0xFF17203A);
 
 List<RiveModel> bottomNavItems = [
   RiveModel(
-      src: "assets/rive/animated_icons.riv",
-      artboard: "HOME",
-      stateMachineName: "HOME_interactivity"),
+      src: "assets/rive/home_icon.riv",
+      artboard: "Home",
+      stateMachineName: "HOME_Interactivity"),
   RiveModel(
-      src: "assets/rive/animated_icons.riv",
-      artboard: "LIKE/STAR",
-      stateMachineName: "STAR_Interactivity"),
+      src: "assets/rive/classify_icon.riv",
+      artboard: "Classify",
+      stateMachineName: "Classify_Interactivity"),
   RiveModel(
       src: "assets/rive/animated_icons.riv",
       artboard: "USER",
@@ -78,16 +78,21 @@ class _BottonNavWithAnimatedIconsState
         padding: const EdgeInsets.symmetric(
           vertical: 8,
         ),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 22),
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           borderRadius: const BorderRadius.all(
             Radius.circular(32),
           ),
           border: Border.all(
-            width: 8,
-            color: Theme.of(context).splashColor,
+            color: Theme.of(context).splashColor.withOpacity(0.5),
+            width: 4,
+            strokeAlign: BorderSide.strokeAlignOutside,
           ),
+          // border: Border.all(
+          //   width: 8,
+          //   color: Theme.of(context).splashColor,
+          // ),
           // boxShadow: [
           //   BoxShadow(
           //     color: bottonNavBgColor.withOpacity(0.1),
@@ -157,7 +162,7 @@ class AnimatedBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.only(bottom: 2),
+      margin: const EdgeInsets.only(top: 2),
       height: 4,
       width: isActive ? 20 : 0,
       decoration: BoxDecoration(

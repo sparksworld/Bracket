@@ -51,8 +51,8 @@ class SearchPage extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    Global global = context.watch<Global>();
-    final suggestionList = global.searchRecord;
+    SearchStore searchStore = context.watch<SearchStore>();
+    final suggestionList = searchStore.data;
 
     if (suggestionList.isNotEmpty) {
       return Column(
@@ -79,7 +79,7 @@ class SearchPage extends SearchDelegate<String> {
           Center(
             child: TextButton(
               onPressed: () {
-                global.clearSearchRecord();
+                searchStore.clearStore();
                 // global.setSearchRecord(str)
               },
               child: const Text('清除历史输入'),
@@ -113,7 +113,7 @@ class _SearchListState extends State<SearchList> {
   int _total = 0;
 
   Future<void> _fetchData() async {
-    Global global = context.read<Global>();
+    SearchStore searchStore = context.read<SearchStore>();
     if (_loading) return;
     setState(() {
       _loading = true;
@@ -122,7 +122,7 @@ class _SearchListState extends State<SearchList> {
         queryParameters: {'keyword': widget.query, 'current': _current});
 
     if (widget.query.isNotEmpty) {
-      global.setSearchRecord(widget.query);
+      searchStore.addSearchRecord(widget.query);
     }
     if (res != null && res.runtimeType != String) {
       SearchFilm jsonData = SearchFilm.fromJson(res);

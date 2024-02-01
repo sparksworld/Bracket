@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
 
                         if (_formKey.currentState?.validate() ?? false) {
                           if (uName == 'spark' && pword == "88888888") {
-                            context.read<Profile>().setData({
+                            context.read<UserStore>().setStore({
                               "user_id": 1121,
                               "user_token":
                                   base64Encode(utf8.encode('$uName-$pword')),

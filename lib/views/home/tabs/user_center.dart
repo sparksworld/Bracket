@@ -50,8 +50,8 @@ class _UserCenterTabState extends State<UserCenterTab>
   Widget build(BuildContext context) {
     super.build(context);
     // Global global = context.watch<Global>();
-    final Profile profile = context.read<Profile>();
-    final String? token = profile.user?.userToken;
+    final UserStore profileStore = context.read<UserStore>();
+    final String? token = profileStore.data?.userToken;
 
     return Scaffold(
       body: SafeArea(
@@ -212,7 +212,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                             title: '提示',
                             content: '是否确认退出登录？',
                             onConfirm: () async {
-                              profile.clearUser();
+                              profileStore.clearStore();
                             },
                           );
                         },

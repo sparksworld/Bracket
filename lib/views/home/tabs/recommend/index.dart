@@ -117,7 +117,7 @@ class _RecommendTabState extends State<RecommendTab>
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).padding.bottom,
             ),
-            child: Consumer2<Profile, Global>(
+            child: Consumer2<UserStore, ThemeStore>(
               builder: (_, profile, global, child) {
                 // String? token = profile.user?.userToken;
                 if (_error) {

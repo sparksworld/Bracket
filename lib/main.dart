@@ -34,11 +34,14 @@ void main() async {
     runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider<Global>(
-            create: (_) => Global(_),
+          ChangeNotifierProvider<ThemeStore>(
+            create: (_) => ThemeStore(),
           ),
-          ChangeNotifierProvider<Profile>(
-            create: (_) => Profile(),
+          ChangeNotifierProvider<UserStore>(
+            create: (_) => UserStore(),
+          ),
+          ChangeNotifierProvider<SearchStore>(
+            create: (_) => SearchStore(),
           ),
         ],
         child: const MyApp(),
@@ -84,13 +87,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final global = context.watch<Global>();
+    final themeStore = context.watch<ThemeStore>();
 
     SparkPxFit.initialize(context);
 
     return MaterialApp(
       title: 'Bracket',
-      theme: MyTheme(context, global.theme!).theme,
+      theme: MyTheme(context, themeStore.data!).theme,
       navigatorKey: MYRouter.navigatorKey,
       initialRoute: MYRouter.homePagePath,
       onGenerateRoute: MYRouter.generateRoute,
