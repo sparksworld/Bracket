@@ -176,18 +176,20 @@ class _SearchListState extends State<SearchList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.all(6),
-      controller: _scrollController,
-      itemBuilder: (context, index) {
-        if (index < _list.length) {
-          var item = _list[index];
-          return searchItemView(item);
-        }
+    return SafeArea(
+      child: ListView.builder(
+        padding: const EdgeInsets.all(6),
+        controller: _scrollController,
+        itemBuilder: (context, index) {
+          if (index < _list.length) {
+            var item = _list[index];
+            return searchItemView(item);
+          }
 
-        return _loadMoreWidget(_list);
-      },
-      itemCount: _list.length + 1,
+          return _loadMoreWidget(_list);
+        },
+        itemCount: _list.length + 1,
+      ),
     );
   }
 

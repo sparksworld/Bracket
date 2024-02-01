@@ -45,7 +45,14 @@ class _AboutPageState extends State<AboutPage> {
                   height: 12,
                 ),
                 Text(
-                    '${_packageInfo?.appName}.${_packageInfo?.version}.${_packageInfo?.buildNumber}'),
+                  '${_packageInfo?.appName}.${_packageInfo?.version}.${_packageInfo?.buildNumber}',
+                ),
+                const Text(
+                  'By Spark',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),

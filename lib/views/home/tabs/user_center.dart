@@ -150,15 +150,15 @@ class _UserCenterTabState extends State<UserCenterTab>
                         trailing:
                             const Icon(Icons.keyboard_arrow_right_outlined),
                         onTap: () {
-                          const snackBar = SnackBar(
-                            content: Text("还未开发"),
-                          );
-                          ScaffoldMessenger.of(context).removeCurrentSnackBar(
-                            reason: SnackBarClosedReason.remove,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          // Navigator.of(context)
-                          //     .pushNamed(MYRouter.historyPagePath);
+                          // const snackBar = SnackBar(
+                          //   content: Text("还未开发"),
+                          // );
+                          // ScaffoldMessenger.of(context).removeCurrentSnackBar(
+                          //   reason: SnackBarClosedReason.remove,
+                          // );
+                          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.of(context)
+                              .pushNamed(MYRouter.historyPagePath);
                         },
                       ),
                       ListTile(

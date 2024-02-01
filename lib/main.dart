@@ -1,5 +1,6 @@
 // import 'package:bracket/service/api.dart';
 import 'package:bracket/shared/theme.dart';
+import 'package:bracket/store/history.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/plugins.dart';
@@ -42,6 +43,9 @@ void main() async {
           ),
           ChangeNotifierProvider<SearchStore>(
             create: (_) => SearchStore(),
+          ),
+          ChangeNotifierProvider<HistoryStore>(
+            create: (_) => HistoryStore(),
           ),
         ],
         child: const MyApp(),
