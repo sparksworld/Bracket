@@ -121,11 +121,14 @@ class _RecommendTabState extends State<RecommendTab>
               builder: (_, profile, global, child) {
                 // String? token = profile.user?.userToken;
                 if (_error) {
-                  return Center(
+                  return Container(
+                    margin: const EdgeInsets.only(top: 50),
+                    width: MediaQuery.of(context).size.width,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        const NoDataView(),
                         Text(
                           '网络出错了～，请刷新重试',
                           style: TextStyle(

@@ -52,6 +52,7 @@ dependencies:
   connectivity_plus: ^5.0.2
   permission_handler: ^11.2.0
   rive: ^0.12.4
+  flutter_slidable: ^3.0.1
 
 dev_dependencies:
   flutter_test:

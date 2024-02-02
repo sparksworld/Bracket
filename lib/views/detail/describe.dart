@@ -17,7 +17,7 @@ class _DescribeState extends State<Describe> {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingView(
+    return LoadingViewBuilder(
       loading: widget.data == null,
       builder: (_) => SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

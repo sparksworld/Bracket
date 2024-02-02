@@ -1,8 +1,8 @@
 import 'package:bracket/plugins.dart';
 import 'package:rive/rive.dart';
 
-class Loading extends StatelessWidget {
-  const Loading({
+class NoDataView extends StatelessWidget {
+  const NoDataView({
     super.key,
   });
 
@@ -10,11 +10,11 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: SizedBox(
-        height: 120,
-        width: 120,
+        height: 180,
+        width: 180,
         child: RiveAnimation.asset(
-          'assets/rive/loading_smile.riv',
-          artboard: 'Loading',
+          'assets/rive/404_cat.riv',
+          artboard: '404',
           // fit: BoxFit.scaleDown,
         ),
       ),

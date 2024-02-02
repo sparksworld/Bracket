@@ -118,7 +118,7 @@ class _PlayerState extends State<PlayerVideo> {
         children: [
           AspectRatio(
             aspectRatio: 1.6,
-            child: LoadingView(
+            child: LoadingViewBuilder(
               loading: _loading,
               builder: (ctx) {
                 return Chewie(

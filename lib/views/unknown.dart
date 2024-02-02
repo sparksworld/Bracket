@@ -9,12 +9,10 @@ class UnknownPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('404'),
+        title: const Text('页面未找到'),
       ),
       body: const SafeArea(
-        child: Center(
-          child: Text('页面未找到～'),
-        ),
+        child: Center(child: NoDataView()),
       ),
     );
   }

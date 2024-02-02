@@ -38,9 +38,7 @@ class ThemeProvider {
     );
   }
 
-  ShapeBorder get shapeMedium => RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      );
+  // ShapeBorder get shapeMedium =>
 
   TextTheme textTheme(ColorScheme colors) {
     return const TextTheme().copyWith();
@@ -48,17 +46,30 @@ class ThemeProvider {
 
   CardTheme cardTheme(ColorScheme colors) {
     return CardTheme(
-      elevation: 10,
-      color: colors.surface,
-      shape: shapeMedium,
-      clipBehavior: Clip.antiAlias,
-      shadowColor: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(
+          color: Theme.of(context).primaryColor.withOpacity(0.2),
+          width: 1,
+          strokeAlign: BorderSide.strokeAlignOutside,
+        ),
+      ),
+      clipBehavior: Clip.none,
+      // shadowColor: Colors.transparent,
     );
   }
 
   ListTileThemeData listTileTheme(ColorScheme colors) {
     return ListTileThemeData(
-      shape: shapeMedium,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        // side: BorderSide(
+        //   color: Theme.of(context).primaryColor.withOpacity(0.5),
+        //   width: 2,
+        //   strokeAlign: BorderSide.strokeAlignOutside,
+        // ),
+      ),
       selectedColor: colors.secondary,
     );
   }
@@ -117,36 +128,36 @@ class ThemeProvider {
   ThemeData light() {
     final selfColor = colors(Brightness.light);
     return ThemeData.light().copyWith(
-      // primaryColor: sourceColor,
-      // canvasColor: selfColor.surface,
-      pageTransitionsTheme: pageTransitionsTheme,
-      colorScheme: selfColor,
-      // chipTheme: chipTheme(selfColor),
-      // textTheme: textTheme(selfColor),
-      appBarTheme: appBarTheme(selfColor),
-      cardTheme: cardTheme(selfColor),
-      listTileTheme: listTileTheme(selfColor),
-      bottomAppBarTheme: bottomAppBarTheme(selfColor),
-      bottomNavigationBarTheme: bottomNavigationBarTheme(selfColor),
-      navigationRailTheme: navigationRailTheme(selfColor),
-      tabBarTheme: tabBarTheme(selfColor),
-      drawerTheme: drawerTheme(selfColor),
-      scaffoldBackgroundColor: selfColor.background,
-      snackBarTheme: const SnackBarThemeData().copyWith(
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+        colorScheme: selfColor,
+        primaryColor: sourceColor,
+        pageTransitionsTheme: pageTransitionsTheme,
+        appBarTheme: appBarTheme(selfColor),
+        cardTheme: cardTheme(selfColor),
+        listTileTheme: listTileTheme(selfColor),
+        bottomAppBarTheme: bottomAppBarTheme(selfColor),
+        bottomNavigationBarTheme: bottomNavigationBarTheme(selfColor),
+        navigationRailTheme: navigationRailTheme(selfColor),
+        tabBarTheme: tabBarTheme(selfColor),
+        drawerTheme: drawerTheme(selfColor),
+        scaffoldBackgroundColor: selfColor.background,
+        snackBarTheme: const SnackBarThemeData().copyWith(
+          behavior: SnackBarBehavior.floating,
+        ),
+        // ElevatedButton
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: sourceColor,
+              foregroundColor: Colors.white,
+              textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+        ));
   }
 
   ThemeData dark() {
     final selfColor = colors(Brightness.dark);
     return ThemeData.dark().copyWith(
-      // primaryColor: sourceColor,
-      // canvasColor: selfColor.surface,
-      pageTransitionsTheme: pageTransitionsTheme,
       colorScheme: selfColor,
-      // chipTheme: chipTheme(selfColor),
-      // textTheme: textTheme(selfColor),
+      primaryColor: sourceColor,
+      pageTransitionsTheme: pageTransitionsTheme,
       appBarTheme: appBarTheme(selfColor),
       cardTheme: cardTheme(selfColor),
       listTileTheme: listTileTheme(selfColor),

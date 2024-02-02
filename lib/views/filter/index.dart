@@ -289,19 +289,9 @@ class _FilterPageState extends State<FilterPage>
 
   Widget _loadMoreWidget() {
     return Align(
-      heightFactor: 2,
       alignment: Alignment.center,
       child: _loading
-          ? SizedBox(
-              height: 22,
-              width: 22,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            )
+          ? const Loading()
           : _list.length == _total
               ? const Text('暂无更多数据')
               : const Text('上拉加载'),

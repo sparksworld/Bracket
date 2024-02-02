@@ -33,14 +33,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                // decoration: BoxDecoration(
-                //   border: Border.all(color: Colors.red),
-                //   borderRadius: BorderRadius.all(
-                //     Radius.circular(
-                //       10,
-                //     ),
-                //   ),
-                // ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: TextField(
                   controller: _inputController,
                   maxLines: 4,

@@ -64,15 +64,15 @@ class _UserCenterTabState extends State<UserCenterTab>
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Theme.of(context).focusColor,
-                      ),
+                    border: Border.all(
+                      color: Theme.of(context).primaryColor.withOpacity(0.5),
+                      width: 4,
+                      strokeAlign: BorderSide.strokeAlignOutside,
                     ),
                     // shape: BoxShape.circle,
                     borderRadius: BorderRadius.circular(30),
                     // color: Theme.of(context).primaryColor,
-                    color: Theme.of(context).colorScheme.inversePrimary,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(50, 30, 50, 30),
@@ -94,13 +94,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                                   ),
                                   width: 60,
                                   height: 60,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.sentiment_satisfied_alt,
-                                      size: 60,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
+                                  child: const NoDataView(),
                                 ),
                               ),
                               const SizedBox(
@@ -117,15 +111,21 @@ class _UserCenterTabState extends State<UserCenterTab>
                                         "$token",
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleMedium,
+                                            .titleMedium
+                                            ?.copyWith(
+                                              color: Colors.grey[100],
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                         overflow: TextOverflow.ellipsis,
                                         softWrap: false,
                                       ),
                                     ),
                                     Text(
                                       '签名写在这里',
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(color: Colors.grey[200]),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ],

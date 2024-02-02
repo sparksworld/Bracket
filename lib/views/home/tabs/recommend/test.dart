@@ -30,7 +30,13 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
         alignment: Alignment.center,
         height: max(maxTopBarHeight * (1 - shrinkFactor), minTopBarHeight),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.inversePrimary,
+          color: Theme.of(context).primaryColor,
+          border: Border.all(
+            color: Theme.of(context).primaryColor.withOpacity(0.5),
+            width: 4,
+            strokeAlign: BorderSide.strokeAlignOutside,
+          ),
+          // color: Theme.of(context).colorScheme.inversePrimary,
           // gradient: LinearGradient(
           //   colors: [
           //     Theme.of(context).colorScheme.inversePrimary,

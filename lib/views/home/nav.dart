@@ -1,8 +1,6 @@
 import 'package:bracket/plugins.dart';
 import 'package:rive/rive.dart';
 
-const Color bottonNavBgColor = Color(0xFF17203A);
-
 List<RiveModel> bottomNavItems = [
   RiveModel(
       src: "assets/rive/home_icon.riv",
@@ -85,21 +83,10 @@ class _BottonNavWithAnimatedIconsState
             Radius.circular(32),
           ),
           border: Border.all(
-            color: Theme.of(context).splashColor.withOpacity(0.5),
+            color: Theme.of(context).primaryColor.withOpacity(0.5),
             width: 4,
             strokeAlign: BorderSide.strokeAlignOutside,
           ),
-          // border: Border.all(
-          //   width: 8,
-          //   color: Theme.of(context).splashColor,
-          // ),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: bottonNavBgColor.withOpacity(0.1),
-          //     offset: const Offset(0, 10),
-          //     blurRadius: 32,
-          //   ),
-          // ],
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 12, right: 12),
@@ -165,9 +152,9 @@ class AnimatedBar extends StatelessWidget {
       margin: const EdgeInsets.only(top: 2),
       height: 4,
       width: isActive ? 20 : 0,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
-        borderRadius: const BorderRadius.all(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
           Radius.circular(12),
         ),
       ),
