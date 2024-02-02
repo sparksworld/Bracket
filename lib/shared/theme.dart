@@ -51,7 +51,7 @@ class ThemeProvider {
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
           color: Theme.of(context).primaryColor.withOpacity(0.2),
-          width: 1,
+          width: 2,
           strokeAlign: BorderSide.strokeAlignOutside,
         ),
       ),
