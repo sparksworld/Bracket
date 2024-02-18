@@ -52,9 +52,10 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.all(8),
+          // padding: const EdgeInsets.all(8),
           child: list.isNotEmpty
               ? ListView.separated(
+                  padding: const EdgeInsets.all(8),
                   itemBuilder: (context, index) {
                     var item = list[index];
                     return SlidableTile(
