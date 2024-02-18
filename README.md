@@ -8,7 +8,6 @@ Flutter film project.
 flutter run
 ```
 
-
 ## Preview
 
-![20201024190527-README_2020-10-24](./flutter_01.png)
+<img width="200" src="./flutter_01.png"/>
