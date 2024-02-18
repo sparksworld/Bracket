@@ -1,5 +1,4 @@
 import 'package:bracket/plugins.dart';
-import 'package:rive/rive.dart';
 
 class Loading extends StatelessWidget {
   const Loading({
@@ -8,14 +7,15 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: SizedBox(
-        height: 120,
-        width: 120,
-        child: RiveAnimation.asset(
-          'assets/rive/loading_smile.riv',
-          artboard: 'Loading',
-          // fit: BoxFit.scaleDown,
+        height: 22,
+        width: 22,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Theme.of(context).colorScheme.primary,
+          ),
         ),
       ),
     );

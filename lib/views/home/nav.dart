@@ -76,15 +76,16 @@ class _BottonNavWithAnimatedIconsState
         padding: const EdgeInsets.symmetric(
           vertical: 8,
         ),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 22),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
         decoration: BoxDecoration(
+          // color: Theme.of(context).primaryColor,
           color: Theme.of(context).primaryColor,
           borderRadius: const BorderRadius.all(
             Radius.circular(32),
           ),
           border: Border.all(
             color: Theme.of(context).primaryColor.withOpacity(0.5),
-            width: 4,
+            width: 5,
             strokeAlign: BorderSide.strokeAlignOutside,
           ),
         ),

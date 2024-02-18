@@ -289,6 +289,7 @@ class _FilterPageState extends State<FilterPage>
 
   Widget _loadMoreWidget() {
     return Align(
+      heightFactor: 1,
       alignment: Alignment.center,
       child: _loading
           ? const Loading()

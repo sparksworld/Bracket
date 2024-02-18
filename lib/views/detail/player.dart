@@ -118,15 +118,12 @@ class _PlayerState extends State<PlayerVideo> {
         children: [
           AspectRatio(
             aspectRatio: 1.6,
-            child: LoadingViewBuilder(
-              loading: _loading,
-              builder: (ctx) {
-                return Chewie(
-                  key: widget.key,
-                  controller: _chewieController!,
-                );
-              },
-            ),
+            child: _loading
+                ? const RiveLoading()
+                : Chewie(
+                    key: widget.key,
+                    controller: _chewieController!,
+                  ),
           ),
         ],
       ),

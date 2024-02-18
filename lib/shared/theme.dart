@@ -47,13 +47,14 @@ class ThemeProvider {
   CardTheme cardTheme(ColorScheme colors) {
     return CardTheme(
       elevation: 0,
+      color: colors.onInverseSurface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(
-          color: Theme.of(context).primaryColor.withOpacity(0.2),
-          width: 2,
-          strokeAlign: BorderSide.strokeAlignOutside,
-        ),
+        // side: BorderSide(
+        //   color: Theme.of(context).primaryColor.withOpacity(0.2),
+        //   width: 1,
+        //   strokeAlign: BorderSide.strokeAlignOutside,
+        // ),
       ),
       clipBehavior: Clip.none,
       // shadowColor: Colors.transparent,
@@ -139,7 +140,7 @@ class ThemeProvider {
         navigationRailTheme: navigationRailTheme(selfColor),
         tabBarTheme: tabBarTheme(selfColor),
         drawerTheme: drawerTheme(selfColor),
-        scaffoldBackgroundColor: selfColor.background,
+        // scaffoldBackgroundColor: selfColor.background,
         snackBarTheme: const SnackBarThemeData().copyWith(
           behavior: SnackBarBehavior.floating,
         ),
@@ -166,7 +167,7 @@ class ThemeProvider {
       navigationRailTheme: navigationRailTheme(selfColor),
       tabBarTheme: tabBarTheme(selfColor),
       drawerTheme: drawerTheme(selfColor),
-      scaffoldBackgroundColor: selfColor.background,
+      // scaffoldBackgroundColor: selfColor.background,
       snackBarTheme: const SnackBarThemeData().copyWith(
         behavior: SnackBarBehavior.floating,
       ),

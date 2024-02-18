@@ -50,13 +50,16 @@ class FilterBar extends StatelessWidget {
                 Expanded(
                   flex: 0,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    padding: const EdgeInsets.only(
+                      left: 12,
+                    ),
                     child: Text(_titles[key]),
                   ),
                 ),
                 Expanded(
                   flex: 1,
                   child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     scrollDirection: Axis.horizontal,
                     child: Wrap(
                       spacing: 8,

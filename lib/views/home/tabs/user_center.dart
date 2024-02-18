@@ -64,11 +64,11 @@ class _UserCenterTabState extends State<UserCenterTab>
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).primaryColor.withOpacity(0.5),
-                      width: 4,
-                      strokeAlign: BorderSide.strokeAlignOutside,
-                    ),
+                    // border: Border.all(
+                    //   color: Theme.of(context).primaryColor.withOpacity(0.5),
+                    //   width: 4,
+                    //   strokeAlign: BorderSide.strokeAlignOutside,
+                    // ),
                     // shape: BoxShape.circle,
                     borderRadius: BorderRadius.circular(30),
                     // color: Theme.of(context).primaryColor,
@@ -161,6 +161,10 @@ class _UserCenterTabState extends State<UserCenterTab>
                               .pushNamed(MYRouter.historyPagePath);
                         },
                       ),
+                      Divider(
+                        indent: 12,
+                        endIndent: 12,
+                      ),
                       ListTile(
                         title: const Text('系统主题'),
                         leading: const Icon(Icons.border_color),
@@ -169,6 +173,10 @@ class _UserCenterTabState extends State<UserCenterTab>
                         onTap: () {
                           Navigator.pushNamed(context, MYRouter.themePagePath);
                         },
+                      ),
+                      Divider(
+                        indent: 12,
+                        endIndent: 12,
                       ),
                       ListTile(
                         title: const Text('意见反馈'),
@@ -179,6 +187,10 @@ class _UserCenterTabState extends State<UserCenterTab>
                           Navigator.of(context)
                               .pushNamed(MYRouter.feedbackPagePath);
                         },
+                      ),
+                      Divider(
+                        indent: 12,
+                        endIndent: 12,
                       ),
                       ListTile(
                         title: const Text('关于'),

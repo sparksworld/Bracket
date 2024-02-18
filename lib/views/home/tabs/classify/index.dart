@@ -79,16 +79,16 @@ class _ClassifyTabState extends State<ClassifyTab>
           return [
             SliverAppBar(
               backgroundColor: Theme.of(context).primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: const BorderRadius.only(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(36),
                   bottomRight: Radius.circular(36),
                 ),
-                side: BorderSide(
-                  color: Theme.of(context).primaryColor.withOpacity(0.5),
-                  width: 4,
-                  strokeAlign: BorderSide.strokeAlignOutside,
-                ),
+                // side: BorderSide(
+                //   color: Theme.of(context).primaryColor.withOpacity(0.5),
+                //   width: 4,
+                //   strokeAlign: BorderSide.strokeAlignOutside,
+                // ),
               ),
               // foregroundColor: Colors.red,
               pinned: true,
@@ -116,10 +116,10 @@ class _ClassifyTabState extends State<ClassifyTab>
                                 'assets/images/header.jpeg',
                               ),
                             ),
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(36),
-                              bottomRight: Radius.circular(36),
-                            ),
+                            // borderRadius: const BorderRadius.only(
+                            //   bottomLeft: Radius.circular(36),
+                            //   bottomRight: Radius.circular(36),
+                            // ),
                           ),
                         ),
                       ),
@@ -134,6 +134,12 @@ class _ClassifyTabState extends State<ClassifyTab>
             removeTop: true,
             context: context,
             child: ListView(
+              padding: EdgeInsets.only(
+                top: 24,
+                bottom: MediaQuery.of(_).padding.bottom,
+                left: 8,
+                right: 8,
+              ),
               children: [
                 Column(
                   children: [
@@ -154,24 +160,20 @@ class _ClassifyTabState extends State<ClassifyTab>
                                   },
                                 );
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Text(
-                                  e.name ?? '',
-                                  // style: Theme.of(context).textTheme.titleLarge,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.fontSize,
-                                  ),
+                              child: Text(
+                                e.name ?? '',
+                                // style: Theme.of(context).textTheme.titleLarge,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.fontSize,
                                 ),
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 12, right: 12),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
                               child: Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(12),
