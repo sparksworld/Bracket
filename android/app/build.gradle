@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.spark.bracket"
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion "25.1.8937393"
     // compileSdkVersion flutter.compileSdkVersion
     // ndkVersion flutter.ndkVersion
