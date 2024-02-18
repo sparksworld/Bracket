@@ -95,6 +95,7 @@ class _ClassifyTabState extends State<ClassifyTab>
               floating: true,
               expandedHeight: 100.0,
               flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.pin,
                   centerTitle: false,
                   title: const Text(
                     '影片分类',
@@ -116,10 +117,10 @@ class _ClassifyTabState extends State<ClassifyTab>
                                 'assets/images/header.jpeg',
                               ),
                             ),
-                            // borderRadius: const BorderRadius.only(
-                            //   bottomLeft: Radius.circular(36),
-                            //   bottomRight: Radius.circular(36),
-                            // ),
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(36),
+                              bottomRight: Radius.circular(36),
+                            ),
                           ),
                         ),
                       ),
