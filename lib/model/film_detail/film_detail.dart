@@ -7,10 +7,11 @@ part 'film_detail.g.dart';
 
 @JsonSerializable()
 class FilmDetail {
+  int? code;
   Data? data;
-  String? status;
+  String? msg;
 
-  FilmDetail({this.data, this.status});
+  FilmDetail({this.code, this.data, this.msg});
 
   factory FilmDetail.fromJson(Map<String, dynamic> json) {
     return _$FilmDetailFromJson(json);
@@ -27,5 +28,5 @@ class FilmDetail {
   }
 
   @override
-  int get hashCode => data.hashCode ^ status.hashCode;
+  int get hashCode => code.hashCode ^ data.hashCode ^ msg.hashCode;
 }

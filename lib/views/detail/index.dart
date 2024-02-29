@@ -1,7 +1,6 @@
 import "package:bracket/model/film_detail/data.dart";
-import "package:bracket/model/film_detail/film_detail.dart";
-import "package:bracket/model/film_detail/play_list.dart";
-import "package:bracket/store/history.dart";
+import "package:bracket/model/film_detail/link_list.dart";
+import "package:bracket/model/film_detail/list.dart";
 import "package:bracket/views/detail/describe.dart";
 import 'package:bracket/plugins.dart';
 import "package:bracket/views/detail/player.dart";
@@ -61,12 +60,22 @@ class _DetailPageState extends State<DetailPage> {
     }
   }
 
-  List<List<PlayList>?>? get _playList {
-    return _data?.detail?.playList;
+  List<OriginList?>? get _originList {
+    return _data?.detail?.list ?? [];
   }
 
-  PlayList? get _playItem {
-    return _playList?[_originIndex]?[_teleplayIndex];
+  List<LinkList?>? get _playList {
+    if (_originList!.isNotEmpty) {
+      return _originList?[_originIndex]?.linkList ?? [];
+    }
+    return [];
+  }
+
+  LinkList? get _playItem {
+    if (_playList!.isNotEmpty) {
+      return _playList?[_teleplayIndex];
+    }
+    return LinkList(episode: '', link: '');
   }
 
   @override
@@ -93,7 +102,6 @@ class _DetailPageState extends State<DetailPage> {
               flex: 0,
               child: PlayerVideo(
                 key: Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                // list: _playList,
                 playItem: _playItem,
                 originIndex: _originIndex,
                 teleplayIndex: _teleplayIndex,

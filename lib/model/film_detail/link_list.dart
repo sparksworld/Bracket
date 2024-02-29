@@ -1,25 +1,25 @@
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'download_list.g.dart';
+part 'link_list.g.dart';
 
 @JsonSerializable()
-class DownloadList {
+class LinkList {
   String? episode;
   String? link;
 
-  DownloadList({this.episode, this.link});
+  LinkList({this.episode, this.link});
 
-  factory DownloadList.fromJson(Map<String, dynamic> json) {
-    return _$DownloadListFromJson(json);
+  factory LinkList.fromJson(Map<String, dynamic> json) {
+    return _$LinkListFromJson(json);
   }
 
-  Map<String, dynamic> toJson() => _$DownloadListToJson(this);
+  Map<String, dynamic> toJson() => _$LinkListToJson(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! DownloadList) return false;
+    if (other is! LinkList) return false;
     final mapEquals = const DeepCollectionEquality().equals;
     return mapEquals(other.toJson(), toJson());
   }

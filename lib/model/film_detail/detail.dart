@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'descriptor.dart';
-import 'download_list.dart';
+import 'list.dart';
 import 'play_list.dart';
 
 part 'detail.g.dart';
@@ -18,8 +18,9 @@ class Detail {
   @JsonKey(name: 'DownFrom')
   String? downFrom;
   List<List<PlayList>>? playList;
-  List<List<DownloadList>>? downloadList;
+  dynamic downloadList;
   Descriptor? descriptor;
+  List<OriginList>? list;
 
   Detail({
     this.id,
@@ -32,6 +33,7 @@ class Detail {
     this.playList,
     this.downloadList,
     this.descriptor,
+    this.list,
   });
 
   factory Detail.fromJson(Map<String, dynamic> json) {
@@ -59,5 +61,6 @@ class Detail {
       downFrom.hashCode ^
       playList.hashCode ^
       downloadList.hashCode ^
-      descriptor.hashCode;
+      descriptor.hashCode ^
+      list.hashCode;
 }

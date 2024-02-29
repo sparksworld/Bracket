@@ -1,4 +1,4 @@
-import 'package:bracket/model/film_detail/play_list.dart';
+import 'package:bracket/model/film_detail/link_list.dart';
 import 'package:bracket/plugins.dart';
 import "package:chewie/chewie.dart";
 // import 'package:fijkplayer/fijkplayer.dart';
@@ -16,7 +16,7 @@ class PlayerVideo extends StatefulWidget {
     required this.teleplayIndex,
   });
 
-  final PlayList? playItem;
+  final LinkList? playItem;
   final int originIndex;
   final int teleplayIndex;
   final Function? onNext;

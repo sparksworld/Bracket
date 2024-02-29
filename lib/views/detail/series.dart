@@ -1,5 +1,7 @@
 import 'package:bracket/model/film_detail/data.dart';
 import 'package:bracket/model/film_detail/detail.dart';
+import 'package:bracket/model/film_detail/link_list.dart';
+import 'package:bracket/model/film_detail/list.dart';
 import 'package:bracket/model/film_detail/play_list.dart';
 import 'package:bracket/plugins.dart';
 
@@ -27,16 +29,16 @@ class _SeriesState extends State<Series> {
 
   _SeriesState(this._originIndex, this._teleplayIndex);
 
-  List<List<PlayList>?>? get _playList {
-    return widget.data?.detail?.playList ?? [];
-  }
-
   Detail? get _detail {
     return widget.data?.detail;
   }
 
-  List<PlayList?> _playListItem(i) {
-    return _playList?[i] ?? [];
+  List<OriginList>? get _originList {
+    return _detail?.list ?? [];
+  }
+
+  List<LinkList> get _playList {
+    return _originList?[_originIndex].linkList ?? [];
   }
 
   @override
@@ -96,11 +98,11 @@ class _SeriesState extends State<Series> {
                     widget.callback(_originIndex, _teleplayIndex);
                   });
                 },
-                segments: (_playList ?? [])
+                segments: (_originList ?? [])
                     .mapIndexed(
                       (index, element) => ButtonSegment(
                         value: index,
-                        label: Text('源${index + 1}'),
+                        label: Text(element.name ?? ''),
                       ),
                     )
                     .toList(),
@@ -119,10 +121,10 @@ class _SeriesState extends State<Series> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _playListItem(_originIndex).isNotEmpty
+                        _playList.isNotEmpty
                             ? Wrap(
                                 spacing: 6,
-                                children: _playListItem(_originIndex)
+                                children: _playList
                                     .mapIndexed(
                                       (i, e) => ChoiceChip(
                                         label: Text(e?.episode ?? ''),

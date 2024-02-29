@@ -1,18 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'download_list.dart';
+part of 'link_list.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-DownloadList _$DownloadListFromJson(Map<String, dynamic> json) => DownloadList(
+LinkList _$LinkListFromJson(Map<String, dynamic> json) => LinkList(
       episode: json['episode'] as String?,
       link: json['link'] as String?,
     );
 
-Map<String, dynamic> _$DownloadListToJson(DownloadList instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$LinkListToJson(LinkList instance) => <String, dynamic>{
       'episode': instance.episode,
       'link': instance.link,
     };

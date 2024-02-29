@@ -21,14 +21,13 @@ Detail _$DetailFromJson(Map<String, dynamic> json) => Detail(
               .map((e) => PlayList.fromJson(e as Map<String, dynamic>))
               .toList())
           .toList(),
-      downloadList: (json['downloadList'] as List<dynamic>?)
-          ?.map((e) => (e as List<dynamic>)
-              .map((e) => DownloadList.fromJson(e as Map<String, dynamic>))
-              .toList())
-          .toList(),
+      downloadList: json['downloadList'],
       descriptor: json['descriptor'] == null
           ? null
           : Descriptor.fromJson(json['descriptor'] as Map<String, dynamic>),
+      list: (json['list'] as List<dynamic>?)
+          ?.map((e) => OriginList.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$DetailToJson(Detail instance) => <String, dynamic>{
@@ -42,4 +41,5 @@ Map<String, dynamic> _$DetailToJson(Detail instance) => <String, dynamic>{
       'playList': instance.playList,
       'downloadList': instance.downloadList,
       'descriptor': instance.descriptor,
+      'list': instance.list,
     };
