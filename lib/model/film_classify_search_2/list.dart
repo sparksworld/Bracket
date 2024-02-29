@@ -37,8 +37,9 @@ class VideoList {
     this.year,
   });
 
-  factory VideoList.fromJson(Map<String, dynamic> json) =>
-      _$VideoListFromJson(json);
+  factory VideoList.fromJson(Map<String, dynamic> json) {
+    return _$VideoListFromJson(json);
+  }
 
   Map<String, dynamic> toJson() => _$VideoListToJson(this);
 

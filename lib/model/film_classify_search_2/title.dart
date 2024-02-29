@@ -8,9 +8,8 @@ class Title {
   int? id;
   int? pid;
   String? name;
-  bool? show;
 
-  Title({this.id, this.pid, this.name, this.show});
+  Title({this.id, this.pid, this.name});
 
   factory Title.fromJson(Map<String, dynamic> json) => _$TitleFromJson(json);
 
@@ -25,6 +24,5 @@ class Title {
   }
 
   @override
-  int get hashCode =>
-      id.hashCode ^ pid.hashCode ^ name.hashCode ^ show.hashCode;
+  int get hashCode => id.hashCode ^ pid.hashCode ^ name.hashCode;
 }

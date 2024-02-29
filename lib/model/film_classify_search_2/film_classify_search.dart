@@ -2,16 +2,17 @@ import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'data.dart';
+import 'page.dart';
 
 part 'film_classify_search.g.dart';
 
 @JsonSerializable()
 class FilmClassifySearch {
-  int? code;
   Data? data;
-  String? msg;
+  Page? page;
+  String? status;
 
-  FilmClassifySearch({this.code, this.data, this.msg});
+  FilmClassifySearch({this.data, this.page, this.status});
 
   factory FilmClassifySearch.fromJson(Map<String, dynamic> json) {
     return _$FilmClassifySearchFromJson(json);
@@ -28,5 +29,5 @@ class FilmClassifySearch {
   }
 
   @override
-  int get hashCode => code.hashCode ^ data.hashCode ^ msg.hashCode;
+  int get hashCode => data.hashCode ^ page.hashCode ^ status.hashCode;
 }
