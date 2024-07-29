@@ -47,17 +47,6 @@ class _VideoBuilderState extends State<VideoBuilder> {
               child: widget.controllerProvider,
             ),
           ),
-          Positioned(
-            left: 0,
-            top: 20,
-            child: SafeArea(
-              child: BackButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-          ),
         ],
       ),
     );

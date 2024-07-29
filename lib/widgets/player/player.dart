@@ -1,6 +1,6 @@
 import 'package:bracket/model/film_detail/play_list.dart';
 import 'package:bracket/plugins.dart';
-import "package:chewie/chewie.dart";
+import "package:bracket/chewie/chewie.dart";
 // import 'package:fijkplayer/fijkplayer.dart';
 
 import "package:video_player/video_player.dart";
@@ -51,13 +51,22 @@ class _PlayerState extends State<Player> {
       ..addListener(_listener)
       ..initialize().then(
         (value) {
+          setState(() {
+            _loading = false;
+          });
+
           var aspectRatio = _videoPlayerController?.value.aspectRatio;
           _chewieController = ChewieController(
             videoPlayerController: _videoPlayerController!,
             allowFullScreen: true,
             autoPlay: true,
             looping: true,
+            showControlsOnInitialize: true,
             aspectRatio: aspectRatio,
+            autoInitialize: true,
+            errorBuilder: (context, errorMessage) {
+              return Text('Error: $errorMessage');
+            },
             routePageBuilder:
                 (context, animation, secondaryAnimation, controllerProvider) {
               return AnimatedBuilder(
@@ -67,14 +76,12 @@ class _PlayerState extends State<Player> {
                 },
               );
             },
+            placeholder: const RiveLoading(),
             // deviceOrientationsAfterFullScreen: [
             //   DeviceOrientation.portraitUp,
             //   DeviceOrientation.portraitDown
             // ],
           );
-          setState(() {
-            _loading = false;
-          });
         },
       );
     super.initState();
@@ -107,17 +114,12 @@ class _PlayerState extends State<Player> {
         children: [
           AspectRatio(
             aspectRatio: 1.6,
-            child: _loading
-                ? const RiveLoading()
-                : Theme(
-                    data: Theme.of(context).copyWith(
-                      platform: TargetPlatform.android,
-                    ),
-                    child: Chewie(
-                      key: widget.key,
-                      controller: _chewieController!,
-                    ),
-                  ),
+            child: _chewieController != null
+                ? Chewie(
+                    key: widget.key,
+                    controller: _chewieController!,
+                  )
+                : const RiveLoading(),
           ),
         ],
       ),

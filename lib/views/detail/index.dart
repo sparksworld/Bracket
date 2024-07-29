@@ -83,9 +83,9 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_data?.detail?.name ?? ''),
-      ),
+      // appBar: AppBar(
+      //   title: Text(_data?.detail?.name ?? ''),
+      // ),
       body: SafeArea(
         child: Column(
           children: [

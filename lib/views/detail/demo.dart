@@ -1,5 +1,5 @@
 import 'package:bracket/plugins.dart';
-import 'package:chewie/chewie.dart';
+import 'package:bracket/chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 
 class ChewieDemo extends StatefulWidget {
