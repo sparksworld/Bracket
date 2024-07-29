@@ -165,6 +165,9 @@ class _FilterPageState extends State<FilterPage>
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
+
+    print(mediaQuery.size.width);
+
     return Scaffold(
       floatingActionButton: _scrollPixels > mediaQuery.size.height
           ? ElevatedButton(
@@ -264,10 +267,10 @@ class _FilterPageState extends State<FilterPage>
                     },
                     childCount: _list.length,
                   ),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     // max: mediaQuery.size.width / 3,
                     // mainAxisExtent: mediaQuery.size.width / 3,
-                    crossAxisCount: 3,
+                    crossAxisCount: (mediaQuery.size.width / 130).truncate(),
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
                     childAspectRatio: .6,
