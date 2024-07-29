@@ -4,7 +4,7 @@ import "package:bracket/model/film_detail/play_list.dart";
 import "package:bracket/store/history.dart";
 import "package:bracket/views/detail/describe.dart";
 import 'package:bracket/plugins.dart';
-import "package:bracket/views/detail/player.dart";
+import "package:bracket/widgets/player/player.dart";
 
 import "series.dart";
 
@@ -91,9 +91,8 @@ class _DetailPageState extends State<DetailPage> {
           children: [
             Expanded(
               flex: 0,
-              child: PlayerVideo(
+              child: Player(
                 key: Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                // list: _playList,
                 playItem: _playItem,
                 originIndex: _originIndex,
                 teleplayIndex: _teleplayIndex,

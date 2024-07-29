@@ -5,9 +5,10 @@ import "package:chewie/chewie.dart";
 
 import "package:video_player/video_player.dart";
 import 'package:wakelock_plus/wakelock_plus.dart';
+import './video_builder.dart';
 
-class PlayerVideo extends StatefulWidget {
-  const PlayerVideo({
+class Player extends StatefulWidget {
+  const Player({
     super.key,
     this.playItem,
     this.onNext,
@@ -23,10 +24,10 @@ class PlayerVideo extends StatefulWidget {
   final Function? onPrev;
 
   @override
-  State<PlayerVideo> createState() => _PlayerState();
+  State<Player> createState() => _PlayerState();
 }
 
-class _PlayerState extends State<PlayerVideo> {
+class _PlayerState extends State<Player> {
   bool _loading = true;
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
@@ -40,13 +41,12 @@ class _PlayerState extends State<PlayerVideo> {
 
   @override
   void initState() {
-    // player.setDataSource(widget.playItem?.link ?? '', autoPlay: true);
     setState(() {
       _loading = true;
     });
 
     _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse('https://www.w3schools.com/html/mov_bbb.mp4'),
+      Uri.parse(widget.playItem?.link ?? ''),
     )
       ..addListener(_listener)
       ..initialize().then(
@@ -61,17 +61,16 @@ class _PlayerState extends State<PlayerVideo> {
             routePageBuilder:
                 (context, animation, secondaryAnimation, controllerProvider) {
               return AnimatedBuilder(
-                  animation: animation,
-                  builder: (context, child) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        title: Text('12121'),
-                      ),
-                      body: controllerProvider,
-                    );
-                  });
+                animation: animation,
+                builder: (context, child) {
+                  return VideoBuilder(controllerProvider: controllerProvider);
+                },
+              );
             },
-            deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
+            // deviceOrientationsAfterFullScreen: [
+            //   DeviceOrientation.portraitUp,
+            //   DeviceOrientation.portraitDown
+            // ],
           );
           setState(() {
             _loading = false;
@@ -110,9 +109,14 @@ class _PlayerState extends State<PlayerVideo> {
             aspectRatio: 1.6,
             child: _loading
                 ? const RiveLoading()
-                : Chewie(
-                    key: widget.key,
-                    controller: _chewieController!,
+                : Theme(
+                    data: Theme.of(context).copyWith(
+                      platform: TargetPlatform.android,
+                    ),
+                    child: Chewie(
+                      key: widget.key,
+                      controller: _chewieController!,
+                    ),
                   ),
           ),
         ],
