@@ -10,13 +10,14 @@ import './video_builder.dart';
 class Player extends StatefulWidget {
   const Player({
     super.key,
+    this.title,
     this.playItem,
     this.onNext,
     this.onPrev,
     required this.originIndex,
     required this.teleplayIndex,
   });
-
+  final String? title;
   final PlayList? playItem;
   final int originIndex;
   final int teleplayIndex;
@@ -36,6 +37,8 @@ class _PlayerState extends State<Player> {
     bool isWakelockUp = await WakelockPlus.enabled;
     if (_videoPlayerController!.value.isPlaying && !isWakelockUp) {
       WakelockPlus.enable();
+    } else {
+      WakelockPlus.disable();
     }
   }
 
@@ -57,33 +60,42 @@ class _PlayerState extends State<Player> {
 
           var aspectRatio = _videoPlayerController?.value.aspectRatio;
           _chewieController = ChewieController(
+            title: widget.title,
             videoPlayerController: _videoPlayerController!,
             allowFullScreen: true,
             autoPlay: true,
-            looping: true,
+            looping: false,
             showControlsOnInitialize: true,
             aspectRatio: aspectRatio,
-            autoInitialize: true,
+            // showOptions: false,
             errorBuilder: (context, errorMessage) {
-              return Text('Error: $errorMessage');
+              return Center(
+                child: Text('Error: $errorMessage'),
+              );
             },
             routePageBuilder:
                 (context, animation, secondaryAnimation, controllerProvider) {
               return AnimatedBuilder(
                 animation: animation,
                 builder: (context, child) {
-                  return VideoBuilder(controllerProvider: controllerProvider);
+                  return VideoBuilder(
+                    controllerProvider: controllerProvider,
+                  );
                 },
               );
             },
-            placeholder: const RiveLoading(),
             // deviceOrientationsAfterFullScreen: [
             //   DeviceOrientation.portraitUp,
             //   DeviceOrientation.portraitDown
             // ],
+            // deviceOrientationsOnEnterFullScreen: [
+            //   DeviceOrientation.landscapeLeft,
+            //   DeviceOrientation.landscapeRight
+            // ],
           );
         },
       );
+
     super.initState();
   }
 
@@ -102,27 +114,57 @@ class _PlayerState extends State<Player> {
     WakelockPlus.disable();
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
-    // player.release();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: Stack(
-        children: [
-          AspectRatio(
-            aspectRatio: 1.6,
-            child: _chewieController != null
-                ? Chewie(
-                    key: widget.key,
-                    controller: _chewieController!,
-                  )
-                : const RiveLoading(),
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Container(
+          color: Colors.black,
+          child: Stack(
+            children: [
+              AspectRatio(
+                aspectRatio: 1.6,
+                child: _chewieController != null
+                    ? Theme(
+                        data: Theme.of(context).copyWith(
+                          platform: TargetPlatform.android,
+                        ),
+                        child: Chewie(
+                          controller: _chewieController!,
+                        ),
+                      )
+                    : const RiveLoading(),
+              ),
+              Positioned(
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    Text(
+                      widget.title ?? '',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

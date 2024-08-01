@@ -89,14 +89,12 @@ class _DetailPageState extends State<DetailPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(
-              flex: 0,
-              child: Player(
-                key: Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                playItem: _playItem,
-                originIndex: _originIndex,
-                teleplayIndex: _teleplayIndex,
-              ),
+            Player(
+              key: Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+              playItem: _playItem,
+              originIndex: _originIndex,
+              teleplayIndex: _teleplayIndex,
+              title: _data?.detail?.name ?? '',
             ),
             Expanded(
               flex: 1,

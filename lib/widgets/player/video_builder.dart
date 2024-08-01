@@ -1,7 +1,10 @@
 import 'package:bracket/plugins.dart';
 
 class VideoBuilder extends StatefulWidget {
-  const VideoBuilder({super.key, required this.controllerProvider});
+  const VideoBuilder({
+    super.key,
+    required this.controllerProvider,
+  });
 
   final Widget controllerProvider;
 
@@ -14,8 +17,8 @@ class _VideoBuilderState extends State<VideoBuilder> {
   void initState() {
     print('initState');
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
 
     super.initState();

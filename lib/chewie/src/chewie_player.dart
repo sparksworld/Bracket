@@ -304,6 +304,7 @@ class ChewieController extends ChangeNotifier {
     this.progressIndicatorDelay,
     this.hideControlsTimer = defaultHideControlsTimer,
     this.controlsSafeAreaMinimum = EdgeInsets.zero,
+    this.title = '',
   }) : assert(
           playbackSpeeds.every((speed) => speed > 0),
           'The playbackSpeeds values must all be greater than 0',
@@ -333,6 +334,7 @@ class ChewieController extends ChangeNotifier {
     TransformationController? transformationController,
     bool? zoomAndPan,
     double? maxScale,
+    String? title,
     Subtitles? subtitle,
     Widget Function(BuildContext, dynamic)? subtitleBuilder,
     Widget? customControls,
@@ -359,6 +361,7 @@ class ChewieController extends ChangeNotifier {
     )? routePageBuilder,
   }) {
     return ChewieController(
+      title: title ?? this.title,
       draggableProgressBar: draggableProgressBar ?? this.draggableProgressBar,
       videoPlayerController:
           videoPlayerController ?? this.videoPlayerController,
@@ -554,6 +557,7 @@ class ChewieController extends ChangeNotifier {
   /// Adds additional padding to the controls' [SafeArea] as desired.
   /// Defaults to [EdgeInsets.zero].
   final EdgeInsets controlsSafeAreaMinimum;
+  final String? title;
 
   static ChewieController of(BuildContext context) {
     final chewieControllerProvider =

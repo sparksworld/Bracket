@@ -151,14 +151,22 @@ class _MaterialControlsState extends State<MaterialControls>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BackButton(
-                    color: Colors.white,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+                  OrientationBuilder(builder: (_, orientation) {
+                    return Row(
+                      children: [
+                        BackButton(
+                          color: Colors.white,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        // Text(orientation.toString())
+                      ],
+                    );
+                  }),
+
                   _buildSubtitleToggle(),
-                  if (chewieController.showOptions) _buildOptionsButton()
+                  // if (chewieController.showOptions) _buildOptionsButton()
                 ],
               ),
             ),
@@ -194,8 +202,20 @@ class _MaterialControlsState extends State<MaterialControls>
     return AnimatedOpacity(
       opacity: notifier.hideStuff ? 0.0 : 1.0,
       duration: const Duration(milliseconds: 250),
-      child: IconButton(
-        onPressed: () async {
+      child: GestureDetector(
+        child: Container(
+          margin: const EdgeInsets.only(right: 12.0),
+          padding: const EdgeInsets.only(
+            left: 8.0,
+            right: 8.0,
+          ),
+          child: const Icon(
+            Icons.more_vert,
+            color: Colors.white,
+          ),
+        ),
+
+        onTap: () async {
           _hideTimer?.cancel();
 
           if (chewieController.optionsBuilder != null) {
@@ -217,10 +237,10 @@ class _MaterialControlsState extends State<MaterialControls>
             _startHideTimer();
           }
         },
-        icon: const Icon(
-          Icons.more_vert,
-          color: Colors.white,
-        ),
+        // icon: const Icon(
+        //   Icons.more_vert,
+        //   color: Colors.white,
+        // ),
       ),
     );
   }
@@ -294,11 +314,9 @@ class _MaterialControlsState extends State<MaterialControls>
                       _buildMuteButton(controller),
                     const Spacer(),
                     if (chewieController.allowFullScreen) _buildExpandButton(),
+                    if (chewieController.showOptions) _buildOptionsButton(),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: chewieController.isFullScreen ? 15.0 : 0,
               ),
               if (!chewieController.isLive)
                 Expanded(
@@ -311,6 +329,9 @@ class _MaterialControlsState extends State<MaterialControls>
                     ),
                   ),
                 ),
+              // SizedBox(
+              //   height: chewieController.isFullScreen ? 15.0 : 0,
+              // ),
             ],
           ),
         ),
@@ -359,7 +380,7 @@ class _MaterialControlsState extends State<MaterialControls>
         duration: const Duration(milliseconds: 300),
         child: Container(
           height: barHeight + (chewieController.isFullScreen ? 15.0 : 0),
-          margin: const EdgeInsets.only(right: 12.0),
+          // margin: const EdgeInsets.only(right: 12.0),
           padding: const EdgeInsets.only(
             left: 8.0,
             right: 8.0,
