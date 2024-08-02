@@ -34,9 +34,9 @@ class _PlayerState extends State<Player> {
   ChewieController? _chewieController;
 
   Future<void> _listener() async {
-    bool isWakelockUp = await WakelockPlus.enabled;
-    if (_videoPlayerController!.value.isPlaying && !isWakelockUp) {
-      WakelockPlus.enable();
+    if (_videoPlayerController!.value.isPlaying) {
+      bool isWakelockUp = await WakelockPlus.enabled;
+      if (!isWakelockUp) WakelockPlus.enable();
     } else {
       WakelockPlus.disable();
     }
@@ -65,7 +65,7 @@ class _PlayerState extends State<Player> {
             allowFullScreen: true,
             autoPlay: true,
             looping: false,
-            showControlsOnInitialize: true,
+            showControlsOnInitialize: false,
             aspectRatio: aspectRatio,
             // showOptions: false,
             errorBuilder: (context, errorMessage) {
