@@ -1,4 +1,4 @@
-import 'package:bracket/model/film_detail/play_list.dart';
+import 'package:bracket/model/film_play_info/play_list.dart';
 import 'package:bracket/plugins.dart';
 import "package:bracket/chewie/chewie.dart";
 // import 'package:fijkplayer/fijkplayer.dart';
@@ -150,14 +150,17 @@ class _PlayerState extends State<Player> {
                         Navigator.of(context).pop();
                       },
                     ),
-                    Text(
-                      widget.title ?? '',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Text(
+                        widget.title ?? '',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               )

@@ -7,9 +7,9 @@ part of 'relate.dart';
 // **************************************************************************
 
 Relate _$RelateFromJson(Map<String, dynamic> json) => Relate(
-      id: json['id'] as int?,
-      cid: json['cid'] as int?,
-      pid: json['pid'] as int?,
+      id: (json['id'] as num?)?.toInt(),
+      cid: (json['cid'] as num?)?.toInt(),
+      pid: (json['pid'] as num?)?.toInt(),
       name: json['name'] as String?,
       subTitle: json['subTitle'] as String?,
       cName: json['cName'] as String?,

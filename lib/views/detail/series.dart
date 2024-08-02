@@ -1,6 +1,6 @@
-import 'package:bracket/model/film_detail/data.dart';
-import 'package:bracket/model/film_detail/detail.dart';
-import 'package:bracket/model/film_detail/play_list.dart';
+import 'package:bracket/model/film_play_info/data.dart';
+import 'package:bracket/model/film_play_info/detail.dart';
+import 'package:bracket/model/film_play_info/play_list.dart';
 import 'package:bracket/plugins.dart';
 
 class Series extends StatefulWidget {

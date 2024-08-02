@@ -23,10 +23,10 @@ Descriptor _$DescriptorFromJson(Map<String, dynamic> json) => Descriptor(
       year: json['year'] as String?,
       state: json['state'] as String?,
       updateTime: json['updateTime'] as String?,
-      addTime: json['addTime'] as int?,
-      dbId: json['dbId'] as int?,
+      addTime: (json['addTime'] as num?)?.toInt(),
+      dbId: (json['dbId'] as num?)?.toInt(),
       dbScore: json['dbScore'] as String?,
-      hits: json['hits'] as int?,
+      hits: (json['hits'] as num?)?.toInt(),
       content: json['content'] as String?,
     );
 

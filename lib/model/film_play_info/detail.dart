@@ -1,8 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'descriptor.dart';
 import 'download_list.dart';
+import 'list.dart';
 import 'play_list.dart';
 
 part 'detail.g.dart';
@@ -20,6 +20,7 @@ class Detail {
   List<List<PlayList>>? playList;
   List<List<DownloadList>>? downloadList;
   Descriptor? descriptor;
+  List<ListData>? list;
 
   Detail({
     this.id,
@@ -32,6 +33,7 @@ class Detail {
     this.playList,
     this.downloadList,
     this.descriptor,
+    this.list,
   });
 
   factory Detail.fromJson(Map<String, dynamic> json) {
@@ -39,25 +41,4 @@ class Detail {
   }
 
   Map<String, dynamic> toJson() => _$DetailToJson(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    if (other is! Detail) return false;
-    final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson(), toJson());
-  }
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      cid.hashCode ^
-      pid.hashCode ^
-      name.hashCode ^
-      picture.hashCode ^
-      playFrom.hashCode ^
-      downFrom.hashCode ^
-      playList.hashCode ^
-      downloadList.hashCode ^
-      descriptor.hashCode;
 }

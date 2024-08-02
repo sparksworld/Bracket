@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'titles.g.dart';
@@ -35,22 +34,4 @@ class Titles {
   }
 
   Map<String, dynamic> toJson() => _$TitlesToJson(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    if (other is! Titles) return false;
-    final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson(), toJson());
-  }
-
-  @override
-  int get hashCode =>
-      area.hashCode ^
-      category.hashCode ^
-      initial.hashCode ^
-      language.hashCode ^
-      plot.hashCode ^
-      sort.hashCode ^
-      year.hashCode;
 }

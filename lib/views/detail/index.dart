@@ -1,7 +1,6 @@
-import "package:bracket/model/film_detail/data.dart";
-import "package:bracket/model/film_detail/film_detail.dart";
-import "package:bracket/model/film_detail/play_list.dart";
-import "package:bracket/store/history.dart";
+import "package:bracket/model/film_play_info/data.dart";
+import "package:bracket/model/film_play_info/film_play_info.dart";
+import "package:bracket/model/film_play_info/play_list.dart";
 import "package:bracket/views/detail/describe.dart";
 import 'package:bracket/plugins.dart';
 import "package:bracket/widgets/player/player.dart";
@@ -36,18 +35,20 @@ class _DetailPageState extends State<DetailPage> {
 
   Future _fetchData() async {
     int id = widget.arguments?['id'];
-    var a = context.read<HistoryStore>();
+    var historyContext = context.read<HistoryStore>();
     var res = await Api.filmDetail(
       queryParameters: {
         'id': id,
       },
     );
     if (res != null && res.runtimeType != String) {
-      FilmDetail jsonData = FilmDetail.fromJson(res);
+      FilmPlayInfo jsonData = FilmPlayInfo.fromJson(res);
+
       setState(() {
         _data = jsonData.data;
       });
-      a.addHistory({
+
+      historyContext.addHistory({
         'id': _data?.detail?.id,
         "name": _data?.detail?.name,
         "timeStamp": DateTime.now().microsecondsSinceEpoch,

@@ -7,9 +7,9 @@ part of 'detail.dart';
 // **************************************************************************
 
 Detail _$DetailFromJson(Map<String, dynamic> json) => Detail(
-      id: json['id'] as int?,
-      cid: json['cid'] as int?,
-      pid: json['pid'] as int?,
+      id: (json['id'] as num?)?.toInt(),
+      cid: (json['cid'] as num?)?.toInt(),
+      pid: (json['pid'] as num?)?.toInt(),
       name: json['name'] as String?,
       picture: json['picture'] as String?,
       playFrom: (json['playFrom'] as List<dynamic>?)
@@ -29,6 +29,9 @@ Detail _$DetailFromJson(Map<String, dynamic> json) => Detail(
       descriptor: json['descriptor'] == null
           ? null
           : Descriptor.fromJson(json['descriptor'] as Map<String, dynamic>),
+      list: (json['list'] as List<dynamic>?)
+          ?.map((e) => ListData.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$DetailToJson(Detail instance) => <String, dynamic>{
@@ -42,4 +45,5 @@ Map<String, dynamic> _$DetailToJson(Detail instance) => <String, dynamic>{
       'playList': instance.playList,
       'downloadList': instance.downloadList,
       'descriptor': instance.descriptor,
+      'list': instance.list,
     };

@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'relate.g.dart';
@@ -42,29 +41,4 @@ class Relate {
   }
 
   Map<String, dynamic> toJson() => _$RelateToJson(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    if (other is! Relate) return false;
-    final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson(), toJson());
-  }
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      cid.hashCode ^
-      pid.hashCode ^
-      name.hashCode ^
-      subTitle.hashCode ^
-      cName.hashCode ^
-      state.hashCode ^
-      picture.hashCode ^
-      actor.hashCode ^
-      director.hashCode ^
-      blurb.hashCode ^
-      remarks.hashCode ^
-      area.hashCode ^
-      year.hashCode;
 }

@@ -106,8 +106,8 @@ class _FilterPageState extends State<FilterPage>
         _data = jsonData.data;
         _request = _data?.params?.toJson();
 
-        _current = jsonData.page?.current ?? 1;
-        _total = jsonData.page?.total ?? 0;
+        _current = jsonData.data?.page?.current ?? 1;
+        _total = jsonData.data?.page?.total ?? 0;
 
         if (_current == 1) {
           _list = _data?.list ?? [];

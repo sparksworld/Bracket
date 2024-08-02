@@ -8,8 +8,11 @@ part of 'data.dart';
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       list: (json['list'] as List<dynamic>?)
-          ?.map((e) => VideoList.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => ListData.fromJson(e as Map<String, dynamic>))
           .toList(),
+      page: json['page'] == null
+          ? null
+          : Page.fromJson(json['page'] as Map<String, dynamic>),
       params: json['params'] == null
           ? null
           : Params.fromJson(json['params'] as Map<String, dynamic>),
@@ -23,6 +26,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'list': instance.list,
+      'page': instance.page,
       'params': instance.params,
       'search': instance.search,
       'title': instance.title,

@@ -1,20 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'film_detail.dart';
+part of 'film_play_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-FilmDetail _$FilmDetailFromJson(Map<String, dynamic> json) => FilmDetail(
+FilmPlayInfo _$FilmPlayInfoFromJson(Map<String, dynamic> json) => FilmPlayInfo(
+      code: (json['code'] as num?)?.toInt(),
       data: json['data'] == null
           ? null
           : Data.fromJson(json['data'] as Map<String, dynamic>),
-      status: json['status'] as String?,
+      msg: json['msg'] as String?,
     );
 
-Map<String, dynamic> _$FilmDetailToJson(FilmDetail instance) =>
+Map<String, dynamic> _$FilmPlayInfoToJson(FilmPlayInfo instance) =>
     <String, dynamic>{
+      'code': instance.code,
       'data': instance.data,
-      'status': instance.status,
+      'msg': instance.msg,
     };

@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'tags.dart';
@@ -19,15 +18,4 @@ class Search {
   }
 
   Map<String, dynamic> toJson() => _$SearchToJson(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    if (other is! Search) return false;
-    final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson(), toJson());
-  }
-
-  @override
-  int get hashCode => sortList.hashCode ^ tags.hashCode ^ titles.hashCode;
 }
