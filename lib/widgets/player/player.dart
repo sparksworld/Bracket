@@ -29,9 +29,9 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> {
-  bool _loading = true;
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
+  bool _loading = true;
 
   Future<void> _listener() async {
     if (_videoPlayerController!.value.isPlaying) {
@@ -84,14 +84,14 @@ class _PlayerState extends State<Player> {
                 },
               );
             },
-            // deviceOrientationsAfterFullScreen: [
-            //   DeviceOrientation.portraitUp,
-            //   DeviceOrientation.portraitDown
-            // ],
-            // deviceOrientationsOnEnterFullScreen: [
-            //   DeviceOrientation.landscapeLeft,
-            //   DeviceOrientation.landscapeRight
-            // ],
+            deviceOrientationsAfterFullScreen: [
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown
+            ],
+            deviceOrientationsOnEnterFullScreen: [
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight
+            ],
           );
         },
       );
@@ -110,6 +110,7 @@ class _PlayerState extends State<Player> {
   void dispose() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
     ]);
     WakelockPlus.disable();
     _videoPlayerController?.dispose();
@@ -119,55 +120,56 @@ class _PlayerState extends State<Player> {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return Container(
-          color: Colors.black,
-          child: Stack(
-            children: [
-              AspectRatio(
+    return Container(
+      color: Colors.black,
+      child: Stack(
+        children: [
+          OrientationBuilder(builder: (context, orientation) {
+            var chewie = _chewieController != null
+                ? Theme(
+                    data: Theme.of(context).copyWith(
+                      platform: TargetPlatform.android,
+                    ),
+                    child: Chewie(
+                      controller: _chewieController!,
+                    ))
+                : const RiveLoading();
+            if (orientation == Orientation.portrait) {
+              return AspectRatio(
                 aspectRatio: 1.6,
-                child: _chewieController != null
-                    ? Theme(
-                        data: Theme.of(context).copyWith(
-                          platform: TargetPlatform.android,
-                        ),
-                        child: Chewie(
-                          controller: _chewieController!,
-                        ),
-                      )
-                    : const RiveLoading(),
-              ),
-              Positioned(
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    Expanded(
-                      child: Text(
-                        widget.title ?? '',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
+                child: chewie,
+              );
+            }
+            return chewie;
+          }),
+          Positioned(
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-              )
-            ],
-          ),
-        );
-      },
+                Expanded(
+                  child: Text(
+                    widget.title ?? '',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

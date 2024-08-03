@@ -1,3 +1,4 @@
+import 'package:bracket/model/film_play_info/play_list.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'list.g.dart';
@@ -6,11 +7,9 @@ part 'list.g.dart';
 class ListData {
   String? id;
   String? name;
+  List<PlayList>? linkList;
 
-  ListData({
-    this.id,
-    this.name,
-  });
+  ListData({this.id, this.name, this.linkList});
 
   factory ListData.fromJson(Map<String, dynamic> json) =>
       _$ListDataFromJson(json);

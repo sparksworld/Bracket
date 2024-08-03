@@ -1,6 +1,6 @@
 import 'package:bracket/model/film_play_info/data.dart';
 import 'package:bracket/model/film_play_info/detail.dart';
-import 'package:bracket/model/film_play_info/play_list.dart';
+import 'package:bracket/model/film_play_info/list.dart';
 import 'package:bracket/plugins.dart';
 
 class Series extends StatefulWidget {
@@ -27,16 +27,16 @@ class _SeriesState extends State<Series> {
 
   _SeriesState(this._originIndex, this._teleplayIndex);
 
-  List<List<PlayList>?>? get _playList {
-    return widget.data?.detail?.playList ?? [];
+  List<ListData>? get _playList {
+    return widget.data?.detail?.list;
   }
 
   Detail? get _detail {
     return widget.data?.detail;
   }
 
-  List<PlayList?> _playListItem(i) {
-    return _playList?[i] ?? [];
+  ListData? _playListItem(i) {
+    return _playList?[i];
   }
 
   @override
@@ -81,33 +81,26 @@ class _SeriesState extends State<Series> {
               const SizedBox(
                 height: 12,
               ),
-              SegmentedButton(
-                style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+              if (_playList != null)
+                SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    spacing: 8,
+                    children: _playList!.mapIndexed((i, e) {
+                      return ChoiceChip(
+                          label: Text(e.name ?? '未知源'),
+                          selected: _originIndex == i,
+                          onSelected: (_) {
+                            setState(() {
+                              _originIndex = i;
+                              _teleplayIndex = 0;
+                              widget.callback(_originIndex, _teleplayIndex);
+                            });
+                          });
+                    }).toList(),
                   ),
                 ),
-                onSelectionChanged: (value) {
-                  setState(() {
-                    _originIndex = value.first;
-                    _teleplayIndex = 0;
-                    widget.callback(_originIndex, _teleplayIndex);
-                  });
-                },
-                segments: (_playList ?? [])
-                    .mapIndexed(
-                      (index, element) => ButtonSegment(
-                        value: index,
-                        label: Text('源${index + 1}'),
-                      ),
-                    )
-                    .toList(),
-                selected: {
-                  _originIndex,
-                },
-              ),
               const SizedBox(
                 height: 12,
               ),
@@ -119,23 +112,22 @@ class _SeriesState extends State<Series> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _playListItem(_originIndex).isNotEmpty
+                        _playListItem(_originIndex) != null
                             ? Wrap(
                                 spacing: 6,
-                                children: _playListItem(_originIndex)
-                                    .mapIndexed(
-                                      (i, e) => ChoiceChip(
-                                        label: Text(e?.episode ?? ''),
-                                        selected: i == _teleplayIndex,
-                                        onSelected: (value) {
-                                          _teleplayIndex = i;
-                                          widget.callback(
-                                            _originIndex,
-                                            _teleplayIndex,
-                                          );
-                                        },
-                                      ),
-                                    )
+                                children: _playListItem(_originIndex)!
+                                    .linkList!
+                                    .mapIndexed((i, e) => ChoiceChip(
+                                          label: Text(e.episode ?? ''),
+                                          selected: i == _teleplayIndex,
+                                          onSelected: (value) {
+                                            _teleplayIndex = i;
+                                            widget.callback(
+                                              _originIndex,
+                                              _teleplayIndex,
+                                            );
+                                          },
+                                        ))
                                     .toList(),
                               )
                             : const Center(

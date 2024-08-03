@@ -1,5 +1,6 @@
 import "package:bracket/model/film_play_info/data.dart";
 import "package:bracket/model/film_play_info/film_play_info.dart";
+import "package:bracket/model/film_play_info/list.dart";
 import "package:bracket/model/film_play_info/play_list.dart";
 import "package:bracket/views/detail/describe.dart";
 import 'package:bracket/plugins.dart';
@@ -62,12 +63,12 @@ class _DetailPageState extends State<DetailPage> {
     }
   }
 
-  List<List<PlayList>?>? get _playList {
-    return _data?.detail?.playList;
+  List<ListData?>? get _playList {
+    return _data?.detail?.list;
   }
 
   PlayList? get _playItem {
-    return _playList?[_originIndex]?[_teleplayIndex];
+    return _playList?[_originIndex]?.linkList?[_teleplayIndex];
   }
 
   @override
@@ -87,66 +88,78 @@ class _DetailPageState extends State<DetailPage> {
       // appBar: AppBar(
       //   title: Text(_data?.detail?.name ?? ''),
       // ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Player(
-              key: Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-              playItem: _playItem,
-              originIndex: _originIndex,
-              teleplayIndex: _teleplayIndex,
-              title: _data?.detail?.name ?? '',
-            ),
-            Expanded(
-              flex: 1,
-              child: DefaultTabController(
-                length: _tabs.length,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TabBar(
-                      tabAlignment: TabAlignment.start,
-                      isScrollable: true,
-                      tabs: _tabs
-                          .map<Tab>(
-                            (MyTab e) => Tab(
-                              key: e.key,
-                              child: Text(
-                                e.label,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: TabBarView(
-                        children: [
-                          Series(
-                            initOriginIndex: _originIndex,
-                            initTeleplayIndex: _teleplayIndex,
-                            data: _data,
-                            callback: (originIndex, teleplayIndex) {
-                              setState(() {
-                                _originIndex = originIndex;
-                                _teleplayIndex = teleplayIndex;
-                              });
-                            },
-                          ),
-                          Describe(data: _data)
-                        ],
-                      ),
-                    )
-                  ],
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return SafeArea(
+            child: Flex(
+              direction: orientation == Orientation.portrait
+                  ? Axis.vertical
+                  : Axis.horizontal,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: orientation == Orientation.portrait ? 0 : 1,
+                  child: Player(
+                    key:
+                        Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                    playItem: _playItem,
+                    originIndex: _originIndex,
+                    teleplayIndex: _teleplayIndex,
+                    title: _data?.detail?.name ?? '',
+                  ),
                 ),
-              ),
+                Expanded(
+                  flex: 1,
+                  child: DefaultTabController(
+                    length: _tabs.length,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TabBar(
+                          tabAlignment: TabAlignment.start,
+                          isScrollable: true,
+                          tabs: _tabs
+                              .map<Tab>(
+                                (MyTab e) => Tab(
+                                  key: e.key,
+                                  child: Text(
+                                    e.label,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: TabBarView(
+                            children: [
+                              Series(
+                                initOriginIndex: _originIndex,
+                                initTeleplayIndex: _teleplayIndex,
+                                data: _data,
+                                callback: (originIndex, teleplayIndex) {
+                                  setState(() {
+                                    _originIndex = originIndex;
+                                    _teleplayIndex = teleplayIndex;
+                                  });
+                                },
+                              ),
+                              Describe(data: _data)
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

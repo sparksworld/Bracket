@@ -10,7 +10,7 @@ class HttpUtil {
 
   HttpUtil._internal() {
     BaseOptions options = BaseOptions();
-    options.baseUrl = "http://1.94.30.26:3600/api/";
+    options.baseUrl = "https://film.fe-spark.cn/api/";
     options.connectTimeout = const Duration(seconds: 10);
     options.receiveTimeout = const Duration(seconds: 10);
     options.contentType = 'application/json; charset=utf-8';

@@ -47,7 +47,9 @@ class _VideoBuilderState extends State<VideoBuilder> {
               data: Theme.of(context).copyWith(
                 platform: TargetPlatform.android,
               ),
-              child: widget.controllerProvider,
+              child: OverflowBox(
+                child: widget.controllerProvider,
+              ),
             ),
           ),
         ],
