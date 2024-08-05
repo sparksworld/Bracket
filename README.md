@@ -2,7 +2,9 @@
 
 > A film and television APP written in flutter
 
-<img src="https://img.shields.io/badge/dart-v3.2.6%20(stable)-blue"> <img src="https://img.shields.io/badge/flutter-v3.16.9-red"> <img src="https://img.shields.io/badge/fvm-v2.4.1-yellow">
+<img src="https://img.shields.io/badge/dart-v3.2.6%20(stable)-blue">
+<img src="https://img.shields.io/badge/flutter-v3.16.9-red">
+<img src="https://img.shields.io/badge/fvm-v2.4.1-yellow">
 
 ## Film data source
 [GoFilm](https://github.com/ProudMuBai/GoFilm)
