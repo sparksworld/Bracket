@@ -1,5 +1,4 @@
-// import 'package:bracket/service/api.dart';
-import 'package:bracket/shared/theme.dart';
+import '/shared/theme.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/plugins.dart';
@@ -21,6 +20,13 @@ void main() async {
   // 初始化插件前需调用初始化代码 runApp()函数之前
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight
+  ]);
 
   // await SystemChrome.setPreferredOrientations(
   //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

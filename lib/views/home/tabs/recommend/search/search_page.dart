@@ -1,6 +1,6 @@
-import 'package:bracket/model/search_film/list.dart';
-import 'package:bracket/model/search_film/search_film.dart';
-import 'package:bracket/plugins.dart';
+import '/model/search_film/list.dart';
+import '/model/search_film/search_film.dart';
+import '/plugins.dart';
 
 class SearchPage extends SearchDelegate<String> {
   BuildContext context;

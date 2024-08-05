@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class SlidableTile extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:bracket/model/index/data.dart';
+import '/model/index/data.dart';
 
 import '/plugins.dart';
 

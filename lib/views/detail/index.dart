@@ -1,10 +1,10 @@
-import "package:bracket/model/film_play_info/data.dart";
-import "package:bracket/model/film_play_info/film_play_info.dart";
-import "package:bracket/model/film_play_info/list.dart";
-import "package:bracket/model/film_play_info/play_list.dart";
-import "package:bracket/views/detail/describe.dart";
-import 'package:bracket/plugins.dart';
-import "package:bracket/widgets/player/player.dart";
+import "/model/film_play_info/data.dart";
+import "/model/film_play_info/film_play_info.dart";
+import "/model/film_play_info/list.dart";
+import "/model/film_play_info/play_list.dart";
+import "/views/detail/describe.dart";
+import '/plugins.dart';
+import "/widgets/player/player.dart";
 
 import "series.dart";
 
@@ -85,9 +85,6 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(_data?.detail?.name ?? ''),
-      // ),
       body: OrientationBuilder(
         builder: (context, orientation) {
           return SafeArea(
@@ -95,17 +92,20 @@ class _DetailPageState extends State<DetailPage> {
               direction: orientation == Orientation.portrait
                   ? Axis.vertical
                   : Axis.horizontal,
-              // crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   flex: orientation == Orientation.portrait ? 0 : 1,
-                  child: Player(
-                    key:
-                        Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                    playItem: _playItem,
-                    originIndex: _originIndex,
-                    teleplayIndex: _teleplayIndex,
-                    title: _data?.detail?.name ?? '',
+                  child: Container(
+                    color: Colors.black,
+                    child: Player(
+                      key: Key(
+                          '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                      playItem: _playItem,
+                      originIndex: _originIndex,
+                      teleplayIndex: _teleplayIndex,
+                      title: _data?.detail?.name ?? '',
+                    ),
                   ),
                 ),
                 Expanded(

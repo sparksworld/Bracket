@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 
 class SearchHeader extends SliverPersistentHeaderDelegate {
   final double minTopBarHeight = 100;

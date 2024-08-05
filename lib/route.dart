@@ -9,6 +9,7 @@ import 'views/history/index.dart';
 import 'views/filter/index.dart';
 import '/views/about/index.dart';
 import '/views/feedback/index.dart';
+import '/views/test/index.dart';
 
 class SparkRoute {
   bool? noAuth;
@@ -29,6 +30,7 @@ class MYRouter {
   static String themePagePath = '/theme_page';
   static String historyPagePath = '/history_page';
   static String filterPagePath = '/filter_page';
+  static String testPagePath = '/test_page';
 
   static String get initialRoute => homePagePath;
 
@@ -38,12 +40,18 @@ class MYRouter {
   static Map<String, SparkRoute> routeTables = {
     //启动页
     splashPagePath: SparkRoute(
-        noAuth: true, builder: (_, {arguments}) => const SplashPage()),
+      noAuth: true,
+      builder: (_, {arguments}) => const SplashPage(),
+    ),
     //登录
     loginPagePath: SparkRoute(
-        noAuth: false, builder: (_, {arguments}) => const LoginPage()),
+      noAuth: false,
+      builder: (_, {arguments}) => const LoginPage(),
+    ),
     //首页
-    homePagePath: SparkRoute(builder: (_, {arguments}) => const HomePage()),
+    homePagePath: SparkRoute(
+      builder: (_, {arguments}) => const HomePage(),
+    ),
     detailPagePath: SparkRoute(
       builder: (_, {arguments}) => DetailPage(arguments: arguments),
     ),
@@ -53,13 +61,22 @@ class MYRouter {
     ),
 
     //主题
-    themePagePath: SparkRoute(builder: (_, {arguments}) => const ThemePage()),
-    historyPagePath:
-        SparkRoute(builder: (_, {arguments}) => const HistoryPage()),
+    themePagePath: SparkRoute(
+      builder: (_, {arguments}) => const ThemePage(),
+    ),
+    historyPagePath: SparkRoute(
+      builder: (_, {arguments}) => const HistoryPage(),
+    ),
 
-    aboutPagePath: SparkRoute(builder: (_, {arguments}) => const AboutPage()),
-    feedbackPagePath:
-        SparkRoute(builder: (_, {arguments}) => const FeedbackPage()),
+    aboutPagePath: SparkRoute(
+      builder: (_, {arguments}) => const AboutPage(),
+    ),
+    feedbackPagePath: SparkRoute(
+      builder: (_, {arguments}) => const FeedbackPage(),
+    ),
+    testPagePath: SparkRoute(
+      builder: (_, {arguments}) => const TestPage(),
+    ),
     // 未知
     unknownPagePath:
         SparkRoute(builder: (_, {arguments}) => const UnknownPage()),

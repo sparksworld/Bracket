@@ -1,11 +1,11 @@
-// import 'package:bracket/model/film_classify_search/params.dart';
+// import '/model/film_classify_search/params.dart';
 
 // import 'package:flutter/cupertino.dart';
 
 import '/plugins.dart';
-import 'package:bracket/model/film_classify_search/film_classify_search.dart';
-import 'package:bracket/model/film_classify_search/search.dart';
-import 'package:bracket/model/film_classify_search/data.dart';
+import '/model/film_classify_search/film_classify_search.dart';
+import '/model/film_classify_search/search.dart';
+import '/model/film_classify_search/data.dart';
 
 import 'dynamic_sliver_appbar.dart';
 import 'filter_bar.dart';

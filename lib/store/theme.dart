@@ -1,5 +1,5 @@
-import 'package:bracket/plugins.dart';
-// import 'package:bracket/utils/preference.dart';
+import '/plugins.dart';
+// import '//utils/preference.dart';
 import 'package:flutter/foundation.dart';
 
 enum ITheme { auto, dark, light }

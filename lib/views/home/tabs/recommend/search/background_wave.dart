@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 
 class BackgroundWave extends StatelessWidget {
   final double height;

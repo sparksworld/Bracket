@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 import 'package:rive/rive.dart';
 
 class NoDataView extends StatelessWidget {

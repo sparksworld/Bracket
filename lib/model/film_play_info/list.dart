@@ -1,4 +1,4 @@
-import 'package:bracket/model/film_play_info/play_list.dart';
+import '/model/film_play_info/play_list.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'list.g.dart';

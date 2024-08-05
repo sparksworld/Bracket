@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 
 class VideoBuilder extends StatefulWidget {
   const VideoBuilder({
@@ -30,6 +30,8 @@ class _VideoBuilderState extends State<VideoBuilder> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
 
     super.dispose();
@@ -38,6 +40,7 @@ class _VideoBuilderState extends State<VideoBuilder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           Positioned(

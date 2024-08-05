@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  brightness_volume:
+    dependency: "direct main"
+    description:
+      name: brightness_volume
+      sha256: "543b2ef64130b25a48fb2e49a6c91d60a41cc99c516b9a2021a64e14b0443124"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   build:
     dependency: transitive
     description:
@@ -145,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  chewie:
+    dependency: "direct main"
+    description:
+      name: chewie
+      sha256: "8bc4ac4cf3f316e50a25958c0f5eb9bb12cf7e8308bb1d74a43b230da2cfc144"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.7.5"
   clock:
     dependency: transitive
     description:

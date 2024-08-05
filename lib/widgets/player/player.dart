@@ -1,11 +1,15 @@
-import 'package:bracket/model/film_play_info/play_list.dart';
-import 'package:bracket/plugins.dart';
-import "package:bracket/chewie/chewie.dart";
+import '/model/film_play_info/play_list.dart';
+import '/plugins.dart';
+import "/chewie/chewie.dart";
+import '/widgets/rcplayer/video_player_bottom.dart';
+import '/widgets/rcplayer/video_player_gestures.dart';
+import '/widgets/rcplayer/video_player_top.dart';
 // import 'package:fijkplayer/fijkplayer.dart';
 
 import "package:video_player/video_player.dart";
 import 'package:wakelock_plus/wakelock_plus.dart';
 import './video_builder.dart';
+import 'player_control.dart';
 
 class Player extends StatefulWidget {
   const Player({
@@ -31,6 +35,7 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> {
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
+  final double _aspectRatio = 16 / 9;
   bool _loading = true;
 
   Future<void> _listener() async {
@@ -44,6 +49,8 @@ class _PlayerState extends State<Player> {
 
   @override
   void initState() {
+    super.initState();
+
     setState(() {
       _loading = true;
     });
@@ -66,13 +73,15 @@ class _PlayerState extends State<Player> {
             autoPlay: true,
             looping: false,
             showControlsOnInitialize: false,
-            aspectRatio: aspectRatio,
+            aspectRatio: aspectRatio ?? _aspectRatio,
             // showOptions: false,
+            customControls: const PlayerControl(),
             errorBuilder: (context, errorMessage) {
               return Center(
                 child: Text('Error: $errorMessage'),
               );
             },
+
             routePageBuilder:
                 (context, animation, secondaryAnimation, controllerProvider) {
               return AnimatedBuilder(
@@ -84,19 +93,9 @@ class _PlayerState extends State<Player> {
                 },
               );
             },
-            deviceOrientationsAfterFullScreen: [
-              DeviceOrientation.portraitUp,
-              DeviceOrientation.portraitDown
-            ],
-            deviceOrientationsOnEnterFullScreen: [
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.landscapeRight
-            ],
           );
         },
       );
-
-    super.initState();
   }
 
   @override
@@ -108,10 +107,6 @@ class _PlayerState extends State<Player> {
 
   @override
   void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     WakelockPlus.disable();
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
@@ -120,28 +115,20 @@ class _PlayerState extends State<Player> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
+    return AspectRatio(
+      aspectRatio: _aspectRatio,
       child: Stack(
         children: [
-          OrientationBuilder(builder: (context, orientation) {
-            var chewie = _chewieController != null
-                ? Theme(
-                    data: Theme.of(context).copyWith(
-                      platform: TargetPlatform.android,
-                    ),
-                    child: Chewie(
-                      controller: _chewieController!,
-                    ))
-                : const RiveLoading();
-            if (orientation == Orientation.portrait) {
-              return AspectRatio(
-                aspectRatio: 1.6,
-                child: chewie,
-              );
-            }
-            return chewie;
-          }),
+          !_loading
+              ? Theme(
+                  data: Theme.of(context).copyWith(
+                    platform: TargetPlatform.android,
+                  ),
+                  child: Chewie(
+                    controller: _chewieController!,
+                  ),
+                )
+              : const RiveLoading(),
           Positioned(
             child: Row(
               children: [
