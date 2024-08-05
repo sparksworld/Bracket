@@ -2,9 +2,7 @@
 
 > A film and television APP written in flutter
 
-<img src="https://img.shields.io/badge/dart-v3.2.6%20(stable)-blue">
-<img src="https://img.shields.io/badge/flutter-v3.16.9-red">
-<img src="https://img.shields.io/badge/fvm-v2.4.1-yellow">
+<img src="https://img.shields.io/badge/dart-v3.2.6%20(stable)-blue"><img src="https://img.shields.io/badge/flutter-v3.16.9-red"><img src="https://img.shields.io/badge/fvm-v2.4.1-yellow">
 
 ## Film data source
 [GoFilm](https://github.com/ProudMuBai/GoFilm)
@@ -29,10 +27,7 @@ flutter build apk
 
 ## Preview
 
-<img width="200" style="margin: 10" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.45.png">
-<img width="200" style="margin: 10" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.48.png">
-<img width="200" style="margin: 10" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.52.png">
-<img width="200" style="margin: 10" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.03.19.png">
+<img width="200" style="margin: 10" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.45.png"><img width="200" style="margin: 10" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.48.png"><img width="200" style="margin: 10" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.52.png"><img width="200" style="margin: 10" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.03.19.png">
 
 
 > 免责声明：数据来源均来自于网络，不做下载功能，本项目仅供学习交流
