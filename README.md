@@ -31,5 +31,9 @@ flutter build apk
 
 <img width="200" style="margin: 10px" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.45.png"><img width="200" style="margin: 10px" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.48.png"><img width="200" style="margin: 10px" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.02.52.png"><img width="200" style="margin: 10px" src="./preview/Simulator Screenshot - iPhone 15 Pro - 2024-08-05 at 22.03.19.png">
 
+## Matters needing attention
+> 关于账号密码问题
+请在项目源码中获取，没有做后台鉴权，之后版本考虑废弃登陆
 
+## Write at the end
 > 免责声明：数据来源均来自于网络，不做下载功能，本项目仅供学习交流
