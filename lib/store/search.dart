@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 import 'package:flutter/foundation.dart';
 
 class SearchStore with ChangeNotifier, DiagnosticableTreeMixin {

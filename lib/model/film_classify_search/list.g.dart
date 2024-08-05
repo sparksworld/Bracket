@@ -6,10 +6,10 @@ part of 'list.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-VideoList _$VideoListFromJson(Map<String, dynamic> json) => VideoList(
-      id: json['id'] as int?,
-      cid: json['cid'] as int?,
-      pid: json['pid'] as int?,
+ListData _$ListDataFromJson(Map<String, dynamic> json) => ListData(
+      id: (json['id'] as num?)?.toInt(),
+      cid: (json['cid'] as num?)?.toInt(),
+      pid: (json['pid'] as num?)?.toInt(),
       name: json['name'] as String?,
       subTitle: json['subTitle'] as String?,
       cName: json['cName'] as String?,
@@ -23,7 +23,7 @@ VideoList _$VideoListFromJson(Map<String, dynamic> json) => VideoList(
       year: json['year'] as String?,
     );
 
-Map<String, dynamic> _$VideoListToJson(VideoList instance) => <String, dynamic>{
+Map<String, dynamic> _$ListDataToJson(ListData instance) => <String, dynamic>{
       'id': instance.id,
       'cid': instance.cid,
       'pid': instance.pid,

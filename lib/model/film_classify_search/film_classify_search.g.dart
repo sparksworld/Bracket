@@ -8,18 +8,16 @@ part of 'film_classify_search.dart';
 
 FilmClassifySearch _$FilmClassifySearchFromJson(Map<String, dynamic> json) =>
     FilmClassifySearch(
+      code: (json['code'] as num?)?.toInt(),
       data: json['data'] == null
           ? null
           : Data.fromJson(json['data'] as Map<String, dynamic>),
-      page: json['page'] == null
-          ? null
-          : Page.fromJson(json['page'] as Map<String, dynamic>),
-      status: json['status'] as String?,
+      msg: json['msg'] as String?,
     );
 
 Map<String, dynamic> _$FilmClassifySearchToJson(FilmClassifySearch instance) =>
     <String, dynamic>{
+      'code': instance.code,
       'data': instance.data,
-      'page': instance.page,
-      'status': instance.status,
+      'msg': instance.msg,
     };

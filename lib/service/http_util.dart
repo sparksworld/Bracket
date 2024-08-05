@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 import 'package:dio/dio.dart';
 
 class HttpUtil {
@@ -10,7 +10,7 @@ class HttpUtil {
 
   HttpUtil._internal() {
     BaseOptions options = BaseOptions();
-    options.baseUrl = "http://film.fe-spark.cn/api/";
+    options.baseUrl = "https://film.fe-spark.cn/api/";
     options.connectTimeout = const Duration(seconds: 10);
     options.receiveTimeout = const Duration(seconds: 10);
     options.contentType = 'application/json; charset=utf-8';

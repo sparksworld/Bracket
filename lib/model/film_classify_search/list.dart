@@ -1,10 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'list.g.dart';
 
 @JsonSerializable()
-class VideoList {
+class ListData {
   int? id;
   int? cid;
   int? pid;
@@ -20,7 +19,7 @@ class VideoList {
   String? area;
   String? year;
 
-  VideoList({
+  ListData({
     this.id,
     this.cid,
     this.pid,
@@ -37,34 +36,8 @@ class VideoList {
     this.year,
   });
 
-  factory VideoList.fromJson(Map<String, dynamic> json) {
-    return _$VideoListFromJson(json);
-  }
+  factory ListData.fromJson(Map<String, dynamic> json) =>
+      _$ListDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$VideoListToJson(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    if (other is! VideoList) return false;
-    final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson(), toJson());
-  }
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      cid.hashCode ^
-      pid.hashCode ^
-      name.hashCode ^
-      subTitle.hashCode ^
-      cName.hashCode ^
-      state.hashCode ^
-      picture.hashCode ^
-      actor.hashCode ^
-      director.hashCode ^
-      blurb.hashCode ^
-      remarks.hashCode ^
-      area.hashCode ^
-      year.hashCode;
+  Map<String, dynamic> toJson() => _$ListDataToJson(this);
 }

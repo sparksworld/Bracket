@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({Key? key}) : super(key: key);

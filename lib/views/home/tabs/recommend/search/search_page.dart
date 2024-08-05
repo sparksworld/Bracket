@@ -1,6 +1,6 @@
-import 'package:bracket/model/search_film/list.dart';
-import 'package:bracket/model/search_film/search_film.dart';
-import 'package:bracket/plugins.dart';
+import '/model/search_film/list.dart';
+import '/model/search_film/search_film.dart';
+import '/plugins.dart';
 
 class SearchPage extends SearchDelegate<String> {
   BuildContext context;
@@ -108,7 +108,7 @@ class SearchList extends StatefulWidget {
 class _SearchListState extends State<SearchList> {
   bool _loading = false;
   final ScrollController _scrollController = ScrollController();
-  List<VideoList> _list = [];
+  List<ListData> _list = [];
   int _current = 1;
   int _total = 0;
 
@@ -214,7 +214,7 @@ class _SearchListState extends State<SearchList> {
     );
   }
 
-  Widget searchItemView(VideoList item) {
+  Widget searchItemView(ListData item) {
     return Container(
       margin: const EdgeInsets.only(bottom: 6),
       child: GestureDetector(

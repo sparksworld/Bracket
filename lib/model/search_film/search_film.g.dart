@@ -7,14 +7,16 @@ part of 'search_film.dart';
 // **************************************************************************
 
 SearchFilm _$SearchFilmFromJson(Map<String, dynamic> json) => SearchFilm(
+      code: (json['code'] as num?)?.toInt(),
       data: json['data'] == null
           ? null
           : Data.fromJson(json['data'] as Map<String, dynamic>),
-      status: json['status'] as String?,
+      msg: json['msg'] as String?,
     );
 
 Map<String, dynamic> _$SearchFilmToJson(SearchFilm instance) =>
     <String, dynamic>{
+      'code': instance.code,
       'data': instance.data,
-      'status': instance.status,
+      'msg': instance.msg,
     };

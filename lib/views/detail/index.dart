@@ -1,10 +1,10 @@
-import "package:bracket/model/film_detail/data.dart";
-import "package:bracket/model/film_detail/film_detail.dart";
-import "package:bracket/model/film_detail/play_list.dart";
-import "package:bracket/store/history.dart";
-import "package:bracket/views/detail/describe.dart";
-import 'package:bracket/plugins.dart';
-import "package:bracket/views/detail/player.dart";
+import "/model/film_play_info/data.dart";
+import "/model/film_play_info/film_play_info.dart";
+import "/model/film_play_info/list.dart";
+import "/model/film_play_info/play_list.dart";
+import "/views/detail/describe.dart";
+import '/plugins.dart';
+import "/widgets/player/player.dart";
 
 import "series.dart";
 
@@ -36,18 +36,20 @@ class _DetailPageState extends State<DetailPage> {
 
   Future _fetchData() async {
     int id = widget.arguments?['id'];
-    var a = context.read<HistoryStore>();
+    var historyContext = context.read<HistoryStore>();
     var res = await Api.filmDetail(
       queryParameters: {
         'id': id,
       },
     );
     if (res != null && res.runtimeType != String) {
-      FilmDetail jsonData = FilmDetail.fromJson(res);
+      FilmPlayInfo jsonData = FilmPlayInfo.fromJson(res);
+
       setState(() {
         _data = jsonData.data;
       });
-      a.addHistory({
+
+      historyContext.addHistory({
         'id': _data?.detail?.id,
         "name": _data?.detail?.name,
         "timeStamp": DateTime.now().microsecondsSinceEpoch,
@@ -61,12 +63,12 @@ class _DetailPageState extends State<DetailPage> {
     }
   }
 
-  List<List<PlayList>?>? get _playList {
-    return _data?.detail?.playList;
+  List<ListData?>? get _playList {
+    return _data?.detail?.list;
   }
 
   PlayList? get _playItem {
-    return _playList?[_originIndex]?[_teleplayIndex];
+    return _playList?[_originIndex]?.linkList?[_teleplayIndex];
   }
 
   @override
@@ -83,72 +85,81 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_data?.detail?.name ?? ''),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 0,
-              child: PlayerVideo(
-                key: Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                // list: _playList,
-                playItem: _playItem,
-                originIndex: _originIndex,
-                teleplayIndex: _teleplayIndex,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: DefaultTabController(
-                length: _tabs.length,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TabBar(
-                      tabAlignment: TabAlignment.start,
-                      isScrollable: true,
-                      tabs: _tabs
-                          .map<Tab>(
-                            (MyTab e) => Tab(
-                              key: e.key,
-                              child: Text(
-                                e.label,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          )
-                          .toList(),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return SafeArea(
+            child: Flex(
+              direction: orientation == Orientation.portrait
+                  ? Axis.vertical
+                  : Axis.horizontal,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  flex: orientation == Orientation.portrait ? 0 : 1,
+                  child: Container(
+                    color: Colors.black,
+                    child: Player(
+                      key: Key(
+                          '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                      playItem: _playItem,
+                      originIndex: _originIndex,
+                      teleplayIndex: _teleplayIndex,
+                      title: _data?.detail?.name ?? '',
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: TabBarView(
-                        children: [
-                          Series(
-                            initOriginIndex: _originIndex,
-                            initTeleplayIndex: _teleplayIndex,
-                            data: _data,
-                            callback: (originIndex, teleplayIndex) {
-                              setState(() {
-                                _originIndex = originIndex;
-                                _teleplayIndex = teleplayIndex;
-                              });
-                            },
-                          ),
-                          Describe(data: _data)
-                        ],
-                      ),
-                    )
-                  ],
+                  ),
                 ),
-              ),
+                Expanded(
+                  flex: 1,
+                  child: DefaultTabController(
+                    length: _tabs.length,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TabBar(
+                          tabAlignment: TabAlignment.start,
+                          isScrollable: true,
+                          tabs: _tabs
+                              .map<Tab>(
+                                (MyTab e) => Tab(
+                                  key: e.key,
+                                  child: Text(
+                                    e.label,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: TabBarView(
+                            children: [
+                              Series(
+                                initOriginIndex: _originIndex,
+                                initTeleplayIndex: _teleplayIndex,
+                                data: _data,
+                                callback: (originIndex, teleplayIndex) {
+                                  setState(() {
+                                    _originIndex = originIndex;
+                                    _teleplayIndex = teleplayIndex;
+                                  });
+                                },
+                              ),
+                              Describe(data: _data)
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

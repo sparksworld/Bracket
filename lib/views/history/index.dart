@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 
 import 'slidable_tile.dart';
 

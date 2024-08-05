@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 import 'package:card_swiper/card_swiper.dart';
 
 class MySwiper extends StatelessWidget {

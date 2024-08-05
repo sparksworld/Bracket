@@ -1,6 +1,6 @@
-import 'package:bracket/model/film_detail/data.dart';
-import 'package:bracket/model/film_detail/detail.dart';
-import 'package:bracket/plugins.dart';
+import '/model/film_play_info/data.dart';
+import '/model/film_play_info/detail.dart';
+import '/plugins.dart';
 
 class Describe extends StatefulWidget {
   final Data? data;

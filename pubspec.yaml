@@ -1,8 +1,8 @@
 name: bracket
-description: 'Film project.'
+description: "Film project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.2.1+1
 
 environment:
-  sdk: '>=3.2.2 <4.0.0'
+  sdk: ">=3.2.2 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,12 +39,11 @@ dependencies:
   shared_preferences: ^2.2.2
   collection: ^1.18.0
   json_annotation: ^4.8.1
-  google_fonts: ^6.1.0
+  google_fonts: 6.1.0
   material_color_utilities: ^0.5.0
   dio: ^5.4.0
   common_utils: ^2.1.0
   card_swiper: ^3.0.1
-  chewie: ^1.7.4
   video_player: ^2.8.2
   wakelock_plus: ^1.1.4
   flutter_staggered_grid_view: ^0.7.0
@@ -53,6 +52,8 @@ dependencies:
   permission_handler: ^11.2.0
   rive: ^0.12.4
   flutter_slidable: ^3.0.1
+  brightness_volume: ^1.0.3
+  chewie: ^1.7.5
 
 dev_dependencies:
   flutter_test:
@@ -109,12 +110,12 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 flutter_native_splash:
-  color: '#D3BBFF'
-  color_dark: '#6D54A4'
+  color: "#D3BBFF"
+  color_dark: "#6D54A4"
   image: assets/images/logo.png
 
   android_12:
-    icon_background_color: '#D3BBFF'
-    icon_background_color_dark: '#6D54A4'
+    icon_background_color: "#D3BBFF"
+    icon_background_color_dark: "#6D54A4"
 
   web: false

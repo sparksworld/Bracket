@@ -1,4 +1,4 @@
-import 'package:bracket/model/index/child.dart';
+import '/model/index/child.dart';
 
 import 'background_wave.dart';
 import 'search_bar.dart';

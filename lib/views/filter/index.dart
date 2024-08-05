@@ -1,11 +1,11 @@
-// import 'package:bracket/model/film_classify_search/params.dart';
+// import '/model/film_classify_search/params.dart';
 
 // import 'package:flutter/cupertino.dart';
 
 import '/plugins.dart';
-import 'package:bracket/model/film_classify_search/film_classify_search.dart';
-import 'package:bracket/model/film_classify_search/search.dart';
-import 'package:bracket/model/film_classify_search/data.dart';
+import '/model/film_classify_search/film_classify_search.dart';
+import '/model/film_classify_search/search.dart';
+import '/model/film_classify_search/data.dart';
 
 import 'dynamic_sliver_appbar.dart';
 import 'filter_bar.dart';
@@ -106,8 +106,8 @@ class _FilterPageState extends State<FilterPage>
         _data = jsonData.data;
         _request = _data?.params?.toJson();
 
-        _current = jsonData.page?.current ?? 1;
-        _total = jsonData.page?.total ?? 0;
+        _current = jsonData.data?.page?.current ?? 1;
+        _total = jsonData.data?.page?.total ?? 0;
 
         if (_current == 1) {
           _list = _data?.list ?? [];

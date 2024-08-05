@@ -1,5 +1,5 @@
-import 'package:bracket/model/index/child.dart';
-import 'package:bracket/plugins.dart';
+import '/model/index/child.dart';
+import '/plugins.dart';
 import 'search_page.dart';
 
 class SearchAppBar extends StatefulWidget {

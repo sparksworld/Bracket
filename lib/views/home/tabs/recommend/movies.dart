@@ -1,6 +1,6 @@
-import "package:bracket/plugins.dart";
-import 'package:bracket/model/index/content.dart';
-import 'package:bracket/model/index/movie.dart';
+import "/plugins.dart";
+import '/model/index/content.dart';
+import '/model/index/movie.dart';
 
 class MovieGrid extends StatelessWidget {
   final Content? content;

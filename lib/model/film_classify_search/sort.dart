@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'sort.g.dart';
@@ -15,15 +14,4 @@ class Sort {
   factory Sort.fromJson(Map<String, dynamic> json) => _$SortFromJson(json);
 
   Map<String, dynamic> toJson() => _$SortToJson(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    if (other is! Sort) return false;
-    final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson(), toJson());
-  }
-
-  @override
-  int get hashCode => name.hashCode ^ value.hashCode;
 }

@@ -7,10 +7,10 @@ part of 'page.dart';
 // **************************************************************************
 
 Page _$PageFromJson(Map<String, dynamic> json) => Page(
-      pageSize: json['pageSize'] as int?,
-      current: json['current'] as int?,
-      pageCount: json['pageCount'] as int?,
-      total: json['total'] as int?,
+      pageSize: (json['pageSize'] as num?)?.toInt(),
+      current: (json['current'] as num?)?.toInt(),
+      pageCount: (json['pageCount'] as num?)?.toInt(),
+      total: (json['total'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{

@@ -1,4 +1,4 @@
-import 'package:bracket/plugins.dart';
+import '/plugins.dart';
 
 class LoadingViewBuilder extends StatelessWidget {
   final Function(BuildContext) builder;

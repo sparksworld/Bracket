@@ -1,5 +1,5 @@
-import 'package:bracket/model/film_classify_search/search.dart';
-import 'package:bracket/plugins.dart';
+import '/model/film_classify_search/search.dart';
+import '/plugins.dart';
 
 class FilterBar extends StatelessWidget {
   final Map<String, dynamic>? activeMap;

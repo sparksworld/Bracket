@@ -8,7 +8,7 @@ part of 'data.dart';
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       list: (json['list'] as List<dynamic>?)
-          ?.map((e) => VideoList.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => ListData.fromJson(e as Map<String, dynamic>))
           .toList(),
       page: json['page'] == null
           ? null

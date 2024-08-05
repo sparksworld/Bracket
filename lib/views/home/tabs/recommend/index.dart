@@ -1,8 +1,8 @@
-// import 'package:bracket/model/index/child.dart';
-import 'package:bracket/model/index/data.dart';
-import 'package:bracket/model/index/content.dart';
-import 'package:bracket/views/home/tabs/recommend/search/search_bar.dart';
-import 'package:bracket/views/home/tabs/recommend/test.dart';
+// import '/model/index/child.dart';
+import '/model/index/data.dart';
+import '/model/index/content.dart';
+import '/views/home/tabs/recommend/search/search_bar.dart';
+import '/views/home/tabs/recommend/test.dart';
 // import 'search/sliver_search_app_bar.dart';
 
 import '/plugins.dart';
