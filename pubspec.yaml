@@ -54,6 +54,7 @@ dependencies:
   flutter_slidable: ^3.0.1
   brightness_volume: ^1.0.3
   chewie: ^1.7.5
+  fijkplayer: ^0.11.0
 
 dev_dependencies:
   flutter_test:

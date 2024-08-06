@@ -75,7 +75,7 @@ class MYRouter {
       builder: (_, {arguments}) => const FeedbackPage(),
     ),
     testPagePath: SparkRoute(
-      builder: (_, {arguments}) => const TestPage(),
+      builder: (_, {arguments}) => TestPage(),
     ),
     // 未知
     unknownPagePath:
