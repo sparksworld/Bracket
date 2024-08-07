@@ -9,7 +9,7 @@ import 'views/history/index.dart';
 import 'views/filter/index.dart';
 import '/views/about/index.dart';
 import '/views/feedback/index.dart';
-import '/views/test/index.dart';
+import 'views/test/index.dart';
 
 class SparkRoute {
   bool? noAuth;
