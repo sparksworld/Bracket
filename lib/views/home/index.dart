@@ -78,12 +78,6 @@ class _HomePageState extends State<HomePage> {
           index: _currentIndex,
           onChange: _onTabTapped,
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Text('test'),
-          onPressed: () {
-            Navigator.of(context).pushNamed(MYRouter.testPagePath);
-          },
-        ),
       ),
     );
   }
