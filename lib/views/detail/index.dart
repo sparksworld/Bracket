@@ -125,10 +125,16 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ),
                 ),
-                Container(
-                  width: 0.5,
-                  color: Colors.white70,
-                ),
+                if (orientation == Orientation.portrait)
+                  Container()
+                else
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      width: 0.5,
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  ),
                 Expanded(
                   flex: 1,
                   child: DefaultTabController(

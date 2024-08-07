@@ -133,18 +133,6 @@ class _PlayerState extends State<Player> {
             Positioned(
               child: Row(
                 children: widget.title ?? [],
-                // Expanded(
-                //   child: Text(
-                //     widget.title ?? '',
-                //     style: const TextStyle(
-                //       color: Colors.white,
-                //       fontSize: 17,
-                //       fontWeight: FontWeight.bold,
-                //       overflow: TextOverflow.ellipsis,
-                //     ),
-                //   ),
-                // ),
-                // ],
               ),
             )
           ],
