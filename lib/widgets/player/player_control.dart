@@ -1,23 +1,36 @@
+import 'package:brightness_volume/brightness_volume.dart' show BVUtils;
+
 import '/plugins.dart';
 import 'package:video_player/video_player.dart';
-import '/chewie/src/helpers/utils.dart';
-import '/chewie/src/material/widgets/playback_speed_dialog.dart';
-import '/chewie/src/center_play_button.dart';
-import '/chewie/src/material/widgets/options_dialog.dart';
-import '/chewie/src/models/option_item.dart';
-import '/chewie/src/material/material_progress_bar.dart';
-import '/chewie/src/chewie_progress_colors.dart';
-import '/chewie/src/chewie_player.dart';
-import '/chewie/src/notifiers/index.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/helpers/utils.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/material/widgets/playback_speed_dialog.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/center_play_button.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/material/widgets/options_dialog.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/models/option_item.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/material/material_progress_bar.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/chewie_progress_colors.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/chewie_player.dart';
+// ignore: implementation_imports
+import 'package:chewie/src/notifiers/index.dart';
 import 'percentage.dart';
 
 class PlayerControl extends StatefulWidget {
   const PlayerControl({
-    this.showPlayButton = true,
     super.key,
+    this.showPlayButton = true,
+    this.title,
   });
 
   final bool showPlayButton;
+  final List<Widget>? title;
 
   @override
   State<StatefulWidget> createState() {
@@ -27,43 +40,36 @@ class PlayerControl extends StatefulWidget {
 
 class _PlayerControlState extends State<PlayerControl>
     with SingleTickerProviderStateMixin {
+  final barHeight = 48.0 * 1.5;
+  final marginSize = 5.0;
   late PlayerNotifier notifier;
   late VideoPlayerValue _latestValue;
-  double _width = 0.0; // 组件宽度
-  double _height = 0.0; // 组件高度
+  late PercentageWidget _percentageWidget;
+  late VideoPlayerController controller;
+
   double? _latestVolume;
   Timer? _hideTimer;
   Timer? _initTimer;
-
   Timer? _showAfterExpandCollapseTimer;
+  Timer? _bufferingDisplayTimer;
+  double _tempPlaybackSpeed = 1.0;
+
   bool _dragging = false;
   bool _displayTapped = false;
-  Timer? _bufferingDisplayTimer;
   bool _displayBufferingIndicator = false;
-  Offset _startPanOffset = const Offset(0, 0);
-  double _brightnessValue = 0.0; // 设备当前的亮度
-  double _volumeValue = 0.0; // 设备本身的音量
-  bool _brightnessOk = false;
-  bool _volumeOk = false;
-  double _movePan = 0;
+  bool _varTouchInitSuc = false;
+  bool _isDargVerLeft = false;
+  double _updatePrevDy = 0;
+  double _updateDargVarVal = 0;
 
-  late PercentageWidget _percentageWidget;
-  // 滑动的偏移量累计总和
-  // double _y = 0;
-
-  final barHeight = 48.0 * 1.5;
-  final marginSize = 5.0;
-
-  late VideoPlayerController controller;
   ChewieController? _chewieController;
-
   // We know that _chewieController is set in didChangeDependencies
   ChewieController get chewieController => _chewieController!;
 
   @override
   void initState() {
     super.initState();
-    _setInit();
+    // _setInit();
     _percentageWidget = PercentageWidget();
     notifier = Provider.of<PlayerNotifier>(context, listen: false);
   }
@@ -84,70 +90,107 @@ class _PlayerControlState extends State<PlayerControl>
           );
     }
 
-    return MouseRegion(
-      onHover: (_) {
-        _cancelAndRestartTimer();
+    return GestureDetector(
+      onTap: () => _cancelAndRestartTimer(),
+      onLongPressStart: (detail) {
+        _tempPlaybackSpeed = controller.value.playbackSpeed;
+        print(controller.value.playbackSpeed);
+        controller.setPlaybackSpeed(3.0);
+        _percentageWidget.percentageCallback('3.0x');
       },
-      child: GestureDetector(
-        onTap: () => _cancelAndRestartTimer(),
-        onVerticalDragStart: (DragStartDetails details) {
-          _resetPan();
-          _startPanOffset = details.globalPosition;
-          if (_startPanOffset.dx < _width * 0.5) {
-            // 左边调整亮度
-            print('亮度');
-            _brightnessOk = true;
-          } else {
-            // 右边调整声音
-            print('声音');
-            _volumeOk = true;
-          }
-        }, // 根据起始位置。确定是调整亮度还是调整声音
-        onVerticalDragUpdate: (DragUpdateDetails details) async {
-          var distance = details.globalPosition.dy - _startPanOffset.dy;
-          _startPanOffset = details.globalPosition;
+      onLongPressEnd: (detail) {
+        controller.setPlaybackSpeed(_tempPlaybackSpeed);
+        _percentageWidget.offstageCallback(true);
+        print('onLongPressEnd');
+      },
+      onVerticalDragStart: (DragStartDetails details) async {
+        double clientW = context.size!.width;
+        double curTouchPosX = details.globalPosition.dx;
 
-          _movePan += -distance / 10;
+        setState(() {
+          // 更新位置
+          _updatePrevDy = details.globalPosition.dy;
+          // 是否左边
+          _isDargVerLeft = (curTouchPosX > (clientW / 2)) ? false : true;
+        });
 
-          if (_startPanOffset.dx < (_width / 2)) {
-            if (_brightnessOk) {
-              _brightnessValue = _getBrightnessValue();
-              _percentageWidget.percentageCallback(
-                  "亮度：${(_brightnessValue * 100).toInt()}%");
-              VideoPlayerUtils.setBrightness(_brightnessValue);
-            }
+        if (!_isDargVerLeft) {
+          await getVolume().then((double v) {
+            _varTouchInitSuc = true;
+            setState(() {
+              _updateDargVarVal = v;
+            });
+          });
+        } else {
+          // 亮度
+          await getBrightness().then((double v) {
+            _varTouchInitSuc = true;
+            setState(() {
+              _updateDargVarVal = v;
+            });
+          });
+        }
+      }, // 根据起始位置。确定是调整亮度还是调整声音
+      onVerticalDragUpdate: (DragUpdateDetails details) async {
+        if (!_varTouchInitSuc) return;
+        double curDragDy = details.globalPosition.dy;
+        // 确定当前是前进或者后退
+        int cdy = curDragDy.toInt();
+        int pdy = _updatePrevDy.toInt();
+        bool isBefore = cdy < pdy;
+        // + -, 不满足, 上下滑动合法滑动值，> 3
+        if (isBefore && pdy - cdy < 3 || !isBefore && cdy - pdy < 3) return;
+        // 区间
+        double dragRange =
+            isBefore ? _updateDargVarVal + 0.03 : _updateDargVarVal - 0.03;
+        // 是否溢出
+        if (dragRange > 1) {
+          dragRange = 1.0;
+        }
+        if (dragRange < 0) {
+          dragRange = 0.0;
+        }
+        setState(() {
+          _updatePrevDy = curDragDy;
+          _varTouchInitSuc = true;
+          _updateDargVarVal = dragRange;
+          // 音量
+          if (!_isDargVerLeft) {
+            setVolume(dragRange);
+            _percentageWidget
+                .percentageCallback('音量：${(dragRange * 100).toInt()}%');
           } else {
-            if (_volumeOk) {
-              _volumeValue = _getVolumeValue();
-              _percentageWidget
-                  .percentageCallback("音量：${(_volumeValue * 100).toInt()}%");
-              VideoPlayerUtils.setVolume(_volumeValue);
-            }
+            setBrightness(dragRange);
+            _percentageWidget
+                .percentageCallback('亮度：${(dragRange * 100).toInt()}%');
           }
-        }, // 一般在更新的时候，同步调整亮度或声音
-        onVerticalDragEnd: (_) {
-          _percentageWidget.offstageCallback(true);
-        },
-        child: AbsorbPointer(
-          absorbing: notifier.hideStuff,
-          child: Stack(
-            children: [
-              if (_displayBufferingIndicator)
-                const Center(
-                  child: CircularProgressIndicator(),
-                )
-              else
-                _buildHitArea(),
-              _buildActionBar(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  _buildBottomBar(context),
-                ],
-              ),
-              _percentageWidget,
-            ],
-          ),
+        });
+      }, // 一般在更新的时候，同步调整亮度或声音
+      onVerticalDragEnd: (_) {
+        _percentageWidget.offstageCallback(true);
+        setState(() {
+          _varTouchInitSuc = false;
+        });
+      },
+      child: AbsorbPointer(
+        absorbing: notifier.hideStuff,
+        child: Stack(
+          children: [
+            if (_displayBufferingIndicator)
+              const Center(
+                child: CircularProgressIndicator(),
+              )
+            else
+              _buildHitArea(),
+            _buildActionBar(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                _buildBottomBar(context),
+              ],
+            ),
+            _percentageWidget,
+          ],
         ),
       ),
     );
@@ -180,6 +223,25 @@ class _PlayerControlState extends State<PlayerControl>
     super.didChangeDependencies();
   }
 
+  static Future<double> getVolume() async {
+    return await BVUtils.volume;
+  }
+
+  // 设置音量
+  static Future<void> setVolume(double volume) async {
+    return await BVUtils.setVolume(volume);
+  }
+
+  // 获取亮度
+  static Future<double> getBrightness() async {
+    return await BVUtils.brightness;
+  }
+
+  // 设置亮度
+  static Future<void> setBrightness(double brightness) async {
+    return await BVUtils.setBrightness(brightness);
+  }
+
   Widget _buildActionBar() {
     return SafeArea(
       child: Row(
@@ -191,22 +253,10 @@ class _PlayerControlState extends State<PlayerControl>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  OrientationBuilder(builder: (_, orientation) {
-                    return Row(
-                      children: [
-                        BackButton(
-                          color: Colors.white,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        // Text(orientation.toString())
-                      ],
-                    );
-                  }),
-
-                  // _buildSubtitleToggle(),
-                  // if (chewieController.showOptions) _buildOptionsButton()
+                  Row(
+                    children:
+                        chewieController.isFullScreen ? widget.title ?? [] : [],
+                  ),
                 ],
               ),
             ),
@@ -449,45 +499,10 @@ class _PlayerControlState extends State<PlayerControl>
     }
   }
 
-  // 计算亮度百分比
-  double _getBrightnessValue() {
-    double value = double.parse(
-      (_movePan / _height + _brightnessValue).toStringAsFixed(2),
-    );
-    if (value >= 1.00) {
-      value = 1.00;
-    } else if (value <= 0.00) {
-      value = 0.00;
-    }
-    return value;
-  }
-
-  // 计算声音百分比
-  double _getVolumeValue() {
-    double value = double.parse(
-      (_movePan / _height + _volumeValue).toStringAsFixed(2),
-    );
-    if (value >= 1.0) {
-      value = 1.0;
-    } else if (value <= 0.0) {
-      value = 0.0;
-    }
-    return value;
-  }
-
-  void _resetPan() async {
-    _movePan = 0;
-    _width = context.size!.width;
-    _height = context.size!.height;
-    _volumeOk = false;
-    _brightnessOk = false;
-    _startPanOffset = const Offset(0, 0);
-  }
-
-  Future<void> _setInit() async {
-    _brightnessValue = await VideoPlayerUtils.getBrightness();
-    _volumeValue = await VideoPlayerUtils.getVolume();
-  }
+  // Future<void> _setInit() async {
+  //   _brightnessValue = await VideoPlayerUtils.getBrightness();
+  //   _volumeValue = await VideoPlayerUtils.getVolume();
+  // }
 
   void _cancelAndRestartTimer() {
     _hideTimer?.cancel();

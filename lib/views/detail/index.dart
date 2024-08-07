@@ -1,10 +1,10 @@
-import "/model/film_play_info/data.dart";
-import "/model/film_play_info/film_play_info.dart";
-import "/model/film_play_info/list.dart";
-import "/model/film_play_info/play_list.dart";
-import "/views/detail/describe.dart";
 import '/plugins.dart';
-import "/widgets/player/player.dart";
+import "/model/film_play_info/data.dart" show Data;
+import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
+import "/model/film_play_info/list.dart" show ListData;
+import "/model/film_play_info/play_list.dart" show PlayList;
+import "/views/detail/describe.dart" show Describe;
+import "/widgets/player/player.dart" show Player;
 
 import "series.dart";
 
@@ -104,7 +104,23 @@ class _DetailPageState extends State<DetailPage> {
                       playItem: _playItem,
                       originIndex: _originIndex,
                       teleplayIndex: _teleplayIndex,
-                      title: _data?.detail?.name ?? '',
+                      title: [
+                        BackButton(
+                          color: Colors.white,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        Text(
+                          _data?.detail?.name ?? '',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -127,7 +143,9 @@ class _DetailPageState extends State<DetailPage> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
                               )
