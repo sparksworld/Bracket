@@ -7,7 +7,7 @@ style="margin-right: 10px" src="https://img.shields.io/badge/fvm-v2.4.1-yellow">
 
 ## Film data source
 
-本项目通过[GoFilm](https://github.com/ProudMuBai/GoFilm)接入数据，如有条件可自行部署云端服务(项目中含有多种部署方案),部署后自行修改`/lib/service/http_util.dart`文件中的`options.baseUrl`进行接入。
+本项目通过[GoFilm](https://github.com/ProudMuBai/GoFilm)接入数据，如有条件可自行部署云端服务(项目中含有多种部署方案),部署后自行修改[`/lib/service/http_util.dart`](https://github.com/sparksworld/bracket/blob/feature/player/lib/service/http_util.dart)文件中的[`options.baseUrl`](https://github.com/sparksworld/bracket/blob/feature/player/lib/service/http_util.dart#L13)进行接入。
 
 ## Getting Started
 
