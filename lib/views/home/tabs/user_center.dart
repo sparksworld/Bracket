@@ -161,7 +161,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                               .pushNamed(MYRouter.historyPagePath);
                         },
                       ),
-                      Divider(
+                      const Divider(
                         indent: 12,
                         endIndent: 12,
                       ),
@@ -174,7 +174,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                           Navigator.pushNamed(context, MYRouter.themePagePath);
                         },
                       ),
-                      Divider(
+                      const Divider(
                         indent: 12,
                         endIndent: 12,
                       ),
@@ -188,7 +188,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                               .pushNamed(MYRouter.feedbackPagePath);
                         },
                       ),
-                      Divider(
+                      const Divider(
                         indent: 12,
                         endIndent: 12,
                       ),

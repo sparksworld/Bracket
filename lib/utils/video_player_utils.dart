@@ -165,7 +165,7 @@ class VideoPlayerUtils {
     int sec = second % 60;
     String minString = min < 10 ? "0$min" : min.toString();
     String secString = sec < 10 ? "0$sec" : sec.toString();
-    return minString + ":" + secString;
+    return "$minString:$secString";
   }
 
   // 释放资源
