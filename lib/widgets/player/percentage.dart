@@ -2,10 +2,12 @@ import '/plugins.dart';
 
 class PercentageWidget extends StatefulWidget {
   PercentageWidget({Key? key}) : super(key: key);
+
   late Function(String) percentageCallback; // 百分比
   late Function(bool) offstageCallback;
+
   @override
-  _PercentageWidgetState createState() => _PercentageWidgetState();
+  State createState() => _PercentageWidgetState();
 }
 
 class _PercentageWidgetState extends State<PercentageWidget> {
@@ -28,12 +30,21 @@ class _PercentageWidgetState extends State<PercentageWidget> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Center(
+    return Container(
+      padding: const EdgeInsets.only(top: 30),
+      alignment: Alignment.topCenter,
       child: Offstage(
         offstage: _offstage,
         child: Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           decoration: const BoxDecoration(
             color: Colors.black87,
             borderRadius: BorderRadius.all(
@@ -42,7 +53,10 @@ class _PercentageWidgetState extends State<PercentageWidget> {
           ),
           child: Text(
             _percentage,
-            style: const TextStyle(color: Colors.white, fontSize: 14),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
           ),
         ),
       ),

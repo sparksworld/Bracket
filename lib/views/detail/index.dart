@@ -104,7 +104,23 @@ class _DetailPageState extends State<DetailPage> {
                       playItem: _playItem,
                       originIndex: _originIndex,
                       teleplayIndex: _teleplayIndex,
-                      title: _data?.detail?.name ?? '',
+                      title: [
+                        BackButton(
+                          color: Colors.white,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        Text(
+                          _data?.detail?.name ?? '',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -127,7 +143,9 @@ class _DetailPageState extends State<DetailPage> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
                               )

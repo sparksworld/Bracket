@@ -9,7 +9,7 @@ import 'views/history/index.dart';
 import 'views/filter/index.dart';
 import '/views/about/index.dart';
 import '/views/feedback/index.dart';
-import 'views/test/index.dart';
+// import 'views/test/index.dart';
 
 class SparkRoute {
   bool? noAuth;
@@ -74,9 +74,9 @@ class MYRouter {
     feedbackPagePath: SparkRoute(
       builder: (_, {arguments}) => const FeedbackPage(),
     ),
-    testPagePath: SparkRoute(
-      builder: (_, {arguments}) => TestPage(),
-    ),
+    // testPagePath: SparkRoute(
+    //   builder: (_, {arguments}) => TestPage(),
+    // ),
     // 未知
     unknownPagePath:
         SparkRoute(builder: (_, {arguments}) => const UnknownPage()),
