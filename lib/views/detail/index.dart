@@ -97,29 +97,32 @@ class _DetailPageState extends State<DetailPage> {
               children: [
                 Expanded(
                   flex: orientation == Orientation.portrait ? 0 : 1,
-                  child: Player(
-                    key:
-                        Key('${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                    playItem: _playItem,
-                    originIndex: _originIndex,
-                    teleplayIndex: _teleplayIndex,
-                    title: [
-                      BackButton(
-                        color: Colors.white,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      Text(
-                        _data?.detail?.name ?? '',
-                        style: const TextStyle(
+                  child: Container(
+                    color: Colors.black,
+                    child: Player(
+                      key: Key(
+                          '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                      playItem: _playItem,
+                      originIndex: _originIndex,
+                      teleplayIndex: _teleplayIndex,
+                      title: [
+                        BackButton(
                           color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
-                      )
-                    ],
+                        Text(
+                          _data?.detail?.name ?? '',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -128,53 +131,51 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Container(
-                    child: DefaultTabController(
-                      length: _tabs.length,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TabBar(
-                            tabAlignment: TabAlignment.start,
-                            isScrollable: true,
-                            tabs: _tabs
-                                .map<Tab>(
-                                  (MyTab e) => Tab(
-                                    key: e.key,
-                                    child: Text(
-                                      e.label,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
+                  child: DefaultTabController(
+                    length: _tabs.length,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TabBar(
+                          tabAlignment: TabAlignment.start,
+                          isScrollable: true,
+                          tabs: _tabs
+                              .map<Tab>(
+                                (MyTab e) => Tab(
+                                  key: e.key,
+                                  child: Text(
+                                    e.label,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
-                                )
-                                .toList(),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: TabBarView(
-                              children: [
-                                Series(
-                                  initOriginIndex: _originIndex,
-                                  initTeleplayIndex: _teleplayIndex,
-                                  data: _data,
-                                  callback: (originIndex, teleplayIndex) {
-                                    setState(() {
-                                      _originIndex = originIndex;
-                                      _teleplayIndex = teleplayIndex;
-                                    });
-                                  },
                                 ),
-                                Describe(data: _data)
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                              )
+                              .toList(),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: TabBarView(
+                            children: [
+                              Series(
+                                initOriginIndex: _originIndex,
+                                initTeleplayIndex: _teleplayIndex,
+                                data: _data,
+                                callback: (originIndex, teleplayIndex) {
+                                  setState(() {
+                                    _originIndex = originIndex;
+                                    _teleplayIndex = teleplayIndex;
+                                  });
+                                },
+                              ),
+                              Describe(data: _data)
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
