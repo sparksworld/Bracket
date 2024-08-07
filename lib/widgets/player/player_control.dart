@@ -92,11 +92,17 @@ class _PlayerControlState extends State<PlayerControl>
 
     return GestureDetector(
       onTap: () => _cancelAndRestartTimer(),
+      onDoubleTap: () => {
+        if (chewieController.isFullScreen)
+          {chewieController.exitFullScreen()}
+        else
+          {chewieController.enterFullScreen()}
+      },
       onLongPressStart: (detail) {
         _tempPlaybackSpeed = controller.value.playbackSpeed;
         print(controller.value.playbackSpeed);
-        controller.setPlaybackSpeed(3.0);
-        _percentageWidget.percentageCallback('3.0x');
+        controller.setPlaybackSpeed(Platform.isIOS ? 2.0 : 3.0);
+        _percentageWidget.percentageCallback(Platform.isIOS ? '2.0x' : '3.0x');
       },
       onLongPressEnd: (detail) {
         controller.setPlaybackSpeed(_tempPlaybackSpeed);
@@ -207,6 +213,7 @@ class _PlayerControlState extends State<PlayerControl>
     _hideTimer?.cancel();
     _initTimer?.cancel();
     _showAfterExpandCollapseTimer?.cancel();
+    resetCustomBrightness();
   }
 
   @override
@@ -240,6 +247,10 @@ class _PlayerControlState extends State<PlayerControl>
   // 设置亮度
   static Future<void> setBrightness(double brightness) async {
     return await BVUtils.setBrightness(brightness);
+  }
+
+  static Future<void> resetCustomBrightness() async {
+    return await BVUtils.resetCustomBrightness();
   }
 
   Widget _buildActionBar() {

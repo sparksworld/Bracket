@@ -78,11 +78,12 @@ class _PlayerState extends State<Player> {
             ],
             // showOptions: false,
             customControls: PlayerControl(title: widget.title),
-            errorBuilder: (context, errorMessage) {
-              return Center(
-                child: Text('Error: $errorMessage'),
-              );
-            },
+            // errorBuilder: (context, errorMessage) {
+
+            //   return Center(
+            //     child: Text('Error: $errorMessage'),
+            //   );
+            // },
 
             routePageBuilder:
                 (context, animation, secondaryAnimation, controllerProvider) {
