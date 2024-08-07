@@ -131,6 +131,7 @@ class ThemeProvider {
     return ThemeData.light().copyWith(
         colorScheme: selfColor,
         primaryColor: sourceColor,
+        primaryColorDark: selfColor.background,
         pageTransitionsTheme: pageTransitionsTheme,
         appBarTheme: appBarTheme(selfColor),
         cardTheme: cardTheme(selfColor),
@@ -158,6 +159,7 @@ class ThemeProvider {
     return ThemeData.dark().copyWith(
       colorScheme: selfColor,
       primaryColor: sourceColor,
+
       pageTransitionsTheme: pageTransitionsTheme,
       appBarTheme: appBarTheme(selfColor),
       cardTheme: cardTheme(selfColor),
