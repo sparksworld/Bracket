@@ -1,8 +1,8 @@
+import '/plugins.dart';
 import "package:chewie/chewie.dart";
 import "package:video_player/video_player.dart";
 import 'package:wakelock_plus/wakelock_plus.dart';
 import '/model/film_play_info/play_list.dart';
-import '/plugins.dart';
 import 'video_builder.dart';
 import 'player_control.dart';
 
@@ -68,22 +68,21 @@ class _PlayerState extends State<Player> {
             looping: false,
             showControlsOnInitialize: false,
             aspectRatio: aspectRatio ?? _aspectRatio,
-            playbackSpeeds: [
-              0.5,
-              1,
-              1.5,
-              2,
-              2.5,
-              3,
-            ],
+            playbackSpeeds: Platform.isIOS
+                ? [
+                    0.5,
+                    1,
+                    1.5,
+                    2,
+                  ]
+                : [0.5, 1, 1.5, 2, 2.5, 3],
             // showOptions: false,
             customControls: PlayerControl(title: widget.title),
-            // errorBuilder: (context, errorMessage) {
-
-            //   return Center(
-            //     child: Text('Error: $errorMessage'),
-            //   );
-            // },
+            errorBuilder: (context, errorMessage) {
+              return Center(
+                child: Text('Error: $errorMessage'),
+              );
+            },
 
             routePageBuilder:
                 (context, animation, secondaryAnimation, controllerProvider) {

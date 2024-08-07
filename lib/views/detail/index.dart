@@ -89,7 +89,7 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return SafeArea(
+          return Container(
             child: Flex(
               direction: orientation == Orientation.portrait
                   ? Axis.vertical
@@ -100,29 +100,31 @@ class _DetailPageState extends State<DetailPage> {
                   flex: orientation == Orientation.portrait ? 0 : 1,
                   child: Container(
                     color: Colors.black,
-                    child: Player(
-                      key: Key(
-                          '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                      playItem: _playItem,
-                      originIndex: _originIndex,
-                      teleplayIndex: _teleplayIndex,
-                      title: [
-                        BackButton(
-                          color: Colors.white,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        Text(
-                          _data?.detail?.name ?? '',
-                          style: const TextStyle(
+                    child: SafeArea(
+                      child: Player(
+                        key: Key(
+                            '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                        playItem: _playItem,
+                        originIndex: _originIndex,
+                        teleplayIndex: _teleplayIndex,
+                        title: [
+                          BackButton(
                             color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
-                        )
-                      ],
+                          Text(
+                            _data?.detail?.name ?? '',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
