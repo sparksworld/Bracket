@@ -38,6 +38,7 @@ class _DetailPageState extends State<DetailPage> {
     int id = widget.arguments?['id'];
     var historyContext = context.read<HistoryStore>();
     var res = await Api.filmDetail(
+      context: context,
       queryParameters: {
         'id': id,
       },
@@ -59,7 +60,9 @@ class _DetailPageState extends State<DetailPage> {
       // print(_data.detail.name);
     } else {
       await Future.delayed(const Duration(seconds: 2));
-      return _fetchData();
+      if (mounted) {
+        return _fetchData();
+      }
     }
   }
 

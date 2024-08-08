@@ -119,7 +119,9 @@ class _SearchListState extends State<SearchList> {
       _loading = true;
     });
     var res = await Api.searchFilm(
-        queryParameters: {'keyword': widget.query, 'current': _current});
+      context: context,
+      queryParameters: {'keyword': widget.query, 'current': _current},
+    );
 
     if (widget.query.isNotEmpty) {
       searchStore.addSearchRecord(widget.query);
@@ -142,7 +144,9 @@ class _SearchListState extends State<SearchList> {
       setState(() {
         _loading = false;
       });
-      await _fetchData();
+      if (mounted) {
+        return await _fetchData();
+      }
     }
   }
 

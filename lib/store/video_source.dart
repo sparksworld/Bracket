@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import '/plugins.dart';
 
-class UserStore with ChangeNotifier, DiagnosticableTreeMixin {
-  final preferenceKey = 'userStore';
+class VideoSourceStore with ChangeNotifier, DiagnosticableTreeMixin {
+  final preferenceKey = 'videoSourceStore';
 
-  User? get data {
+  VideoSource? get data {
     return PreferenceUtil.getMap(preferenceKey) != null
-        ? User.fromJson(PreferenceUtil.getMap(preferenceKey))
+        ? VideoSource.fromJson(PreferenceUtil.getMap(preferenceKey))
         : null;
   }
 
@@ -15,8 +15,8 @@ class UserStore with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void setStore(Map<String, dynamic> data) async {
-    await PreferenceUtil.setMap(preferenceKey, data);
+  void setStore(VideoSource data) async {
+    await PreferenceUtil.setMap(preferenceKey, data.toJson());
     notifyListeners();
   }
 

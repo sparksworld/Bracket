@@ -7,8 +7,8 @@ part of 'child.dart';
 // **************************************************************************
 
 Child _$ChildFromJson(Map<String, dynamic> json) => Child(
-      id: json['id'] as int?,
-      pid: json['pid'] as int?,
+      id: (json['id'] as num?)?.toInt(),
+      pid: (json['pid'] as num?)?.toInt(),
       name: json['name'] as String?,
       children: (json['children'] as List<dynamic>?)
           ?.map((e) => Child.fromJson(e as Map<String, dynamic>))

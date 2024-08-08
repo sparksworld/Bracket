@@ -28,7 +28,9 @@ class _ClassifyTabState extends State<ClassifyTab>
       _loading = true;
       // _error = false;
     });
-    var res = await Api.index();
+    var res = await Api.index(
+      context: context,
+    );
 
     if (res != null && res.runtimeType != String) {
       Recommend jsonData = Recommend.fromJson(res);
@@ -42,7 +44,10 @@ class _ClassifyTabState extends State<ClassifyTab>
       setState(() {
         _loading = false;
       });
-      await _fetchData();
+
+      if (mounted) {
+        await _fetchData();
+      }
     }
     // return true;
   }

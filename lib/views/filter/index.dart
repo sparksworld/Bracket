@@ -93,7 +93,7 @@ class _FilterPageState extends State<FilterPage>
       _loading = true;
     });
 
-    var res = await Api.filmClassifySearch(queryParameters: {
+    var res = await Api.filmClassifySearch(context: context, queryParameters: {
       'Pid': pid,
       'Category': category,
       'current': _current,
@@ -127,7 +127,9 @@ class _FilterPageState extends State<FilterPage>
       setState(() {
         _loading = false;
       });
-      return await _fetchData(init);
+      if (mounted) {
+        return await _fetchData(init);
+      }
     }
   }
 

@@ -88,20 +88,15 @@ class MYRouter {
     MaterialPageRoute route = MaterialPageRoute(
       builder: (_) {
         Map? arguments = settings.arguments as Map?;
-        final userStore = _.watch<UserStore>();
+        final videoSourceStore = _.watch<VideoSourceStore>();
 
         String? name = settings.name;
         SparkRoute? routeData = routeTables[name];
         Widget Function(BuildContext, {Map? arguments})? builder =
             routeData?.builder;
 
-        // Map<String, dynamic>? profile =
-        //     PreferenceUtils.getMap<Map<String, dynamic>>('profile');
-
         if (routeData?.noAuth != true) {
-          if (userStore.data?.userToken == null) {
-            // MYRouter.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-            //     MYRouter.loginPagePath, (route) => false);
+          if (videoSourceStore.data?.actived == null) {
             builder = routeTables[loginPagePath]?.builder;
           }
         }

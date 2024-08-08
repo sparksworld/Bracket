@@ -9,8 +9,11 @@ class HttpUtil {
   late Dio _dio;
 
   HttpUtil._internal() {
+    // BuildContext? context = MYRouter.navigatorKey.currentState?.context;
+    // final videoSourceStore = context?.watch<VideoSourceStore>();
+
     BaseOptions options = BaseOptions();
-    options.baseUrl = "https://film.fe-spark.cn/api/";
+    // options.baseUrl = "https://film.fe-spark.cn/api/";
     options.connectTimeout = const Duration(seconds: 10);
     options.receiveTimeout = const Duration(seconds: 10);
     options.contentType = 'application/json; charset=utf-8';
@@ -38,14 +41,16 @@ class HttpUtil {
   Future _request(String url,
       {String method = "post", Map<String, dynamic>? params}) async {
     Options options = Options(method: method);
+    BuildContext? context = MYRouter.navigatorKey.currentState?.context;
+
+    // final data = Provider.of<VideoSourceStore>(context!, listen: false);
+    // print(data);
     try {
       final result =
           await _dio.request(url, queryParameters: params, options: options);
 
       return result;
     } on DioException {
-      BuildContext? context = MYRouter.navigatorKey.currentState?.context;
-
       if (context != null) {
         const snackBar = SnackBar(
           content: Text("网络错误🙅"),

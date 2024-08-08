@@ -23,7 +23,6 @@ class _RecommendTabState extends State<RecommendTab>
   final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   UniqueKey _imgKey = UniqueKey();
   Data? _data;
-  bool _loading = false;
   bool _error = false;
 
   List<Content> get _content {
@@ -37,29 +36,30 @@ class _RecommendTabState extends State<RecommendTab>
 
   Future _fetchData() async {
     setState(() {
-      _loading = true;
       _error = false;
     });
-    var res = await Api.index();
-    // var a = json.decode(res);
-    // print(res['data']['category']);
+    var res = await Api.index(
+      context: context,
+    );
 
     if (res != null && res.runtimeType != String) {
       Recommend jsonData = Recommend.fromJson(res);
       setState(() {
-        _loading = false;
         // _refreshKey = GlobalKey();
         _imgKey = UniqueKey();
         _data = jsonData.data;
       });
     } else {
       await Future.delayed(const Duration(seconds: 2));
-      setState(() {
-        _error = true;
-        _loading = false;
-        // _refreshKey = GlobalKey();
-      });
-      await _fetchData();
+      setState(
+        () {
+          _error = true;
+          // _refreshKey = GlobalKey();
+        },
+      );
+      if (mounted) {
+        await _fetchData();
+      }
     }
   }
 

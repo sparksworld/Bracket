@@ -53,6 +53,9 @@ void main() async {
           ChangeNotifierProvider<HistoryStore>(
             create: (_) => HistoryStore(),
           ),
+          ChangeNotifierProvider<VideoSourceStore>(
+            create: (_) => VideoSourceStore(),
+          ),
         ],
         child: const MyApp(),
       ),

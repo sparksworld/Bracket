@@ -7,8 +7,8 @@ part of 'history.dart';
 // **************************************************************************
 
 History _$HistoryFromJson(Map<String, dynamic> json) => History(
-      id: json['id'] as int?,
-      timeStamp: json['timeStamp'] as int?,
+      id: (json['id'] as num?)?.toInt(),
+      timeStamp: (json['timeStamp'] as num?)?.toInt(),
       name: json['name'] as String?,
       picture: json['picture'] as String?,
     );

@@ -9,9 +9,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _uNameController = TextEditingController();
-  final TextEditingController _pwdController = TextEditingController();
+  final TextEditingController _source = TextEditingController();
+  // final TextEditingController _pwdController = TextEditingController();
   // final FocusNode _focusNode = FocusNode();
+
+  static bool hasMatch(String? value, String pattern) {
+    return (value == null) ? false : RegExp(pattern).hasMatch(value);
+  }
+
+  static bool isURL(String s) => hasMatch(s,
+      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9-.]+.[a-zA-Z]{2,6}(:[0-9]{1,5})*(/($|[a-zA-Z0-9.,;?'\+&amp;%$#=~_-]+))*$");
 
   @override
   void dispose() {
@@ -54,30 +61,15 @@ class _LoginPageState extends State<LoginPage> {
                   TextFormField(
                     autofocus: true,
                     // focusNode: _focusNode,
-                    controller: _uNameController,
+                    controller: _source,
                     decoration: const InputDecoration(
-                      labelText: '用户名',
-                      hintText: '请输入用户名',
+                      labelText: '影视源',
+                      hintText: '请输入影视源',
                       icon: Icon(Icons.person),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '请输入用户名';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _pwdController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      hintText: '密码',
-                      labelText: '密码',
-                      icon: Icon(Icons.lock),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '请输入密码';
+                        return '请输入影视源';
                       }
                       return null;
                     },
@@ -94,25 +86,21 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       onPressed: () async {
-                        final uName = _uNameController.text;
-                        final pword = _pwdController.text;
+                        final source = _source.text;
 
                         if (_formKey.currentState?.validate() ?? false) {
-                          if (uName == 'spark' && pword == "88888888") {
-                            context.read<UserStore>().setStore({
-                              "user_id": 1121,
-                              "user_token":
-                                  base64Encode(utf8.encode('$uName-$pword')),
-                              "user_name": Random().nextInt(10).toString(),
-                              "user_avator": 'dawdaw',
-                              "user_phone": 12212,
-                            });
+                          final videoStore = context.read<VideoSourceStore>();
 
+                          if (isURL(source)) {
+                            videoStore.setStore(VideoSource(
+                              source: [source],
+                              actived: source,
+                            ));
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 MYRouter.homePagePath, (route) => false);
                           } else {
                             const snackBar = SnackBar(
-                              content: Text("账号密码错误🙅"),
+                              content: Text("格式错误🙅"),
                             );
                             ScaffoldMessenger.of(context).removeCurrentSnackBar(
                               reason: SnackBarClosedReason.remove,
@@ -121,12 +109,9 @@ class _LoginPageState extends State<LoginPage> {
                                 .showSnackBar(snackBar);
                           }
                         }
-                        // print(_formKey.currentState?.validate());
-                        // print(_uNameController.text);
-                        // print(_pwdController.text);
                       },
                       child: Text(
-                        '登陆',
+                        '立刻观影',
                         style: TextStyle(
                             fontSize: 18,
                             color: Theme.of(context).colorScheme.surface),

@@ -50,8 +50,8 @@ class _UserCenterTabState extends State<UserCenterTab>
   Widget build(BuildContext context) {
     super.build(context);
     // Global global = context.watch<Global>();
-    final UserStore profileStore = context.read<UserStore>();
-    final String? token = profileStore.data?.userToken;
+    final VideoSourceStore videoSourceStore = context.read<VideoSourceStore>();
+    // final String? token = profileStore.data?.userToken;
 
     return Scaffold(
       body: SafeArea(
@@ -108,7 +108,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                                   children: [
                                     FittedBox(
                                       child: Text(
-                                        "$token",
+                                        videoSourceStore.data?.actived ?? '',
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium
@@ -121,7 +121,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                                       ),
                                     ),
                                     Text(
-                                      '签名写在这里',
+                                      '当前影视源',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
@@ -213,7 +213,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                 padding: const EdgeInsets.all(8),
                 child: Card(
                   child: ListTile(
-                    title: const Text('退出登录'),
+                    title: const Text('退出当前影视源'),
                     leading: const Icon(Icons.exit_to_app),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {
@@ -222,9 +222,9 @@ class _UserCenterTabState extends State<UserCenterTab>
                         builder: (BuildContext context) {
                           return MyDialog(
                             title: '提示',
-                            content: '是否确认退出登录？',
+                            content: '是否确认退出当前影视源？',
                             onConfirm: () async {
-                              profileStore.clearStore();
+                              videoSourceStore.clearStore();
                             },
                           );
                         },
