@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('登陆'),
+        title: const Text('Bracket'),
       ),
       body: SafeArea(
         child: SizedBox(

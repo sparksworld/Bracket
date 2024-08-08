@@ -1,6 +1,6 @@
 import '/plugins.dart';
 import '/views/home/index.dart';
-import '/views/login.dart';
+import 'views/source.dart';
 import '/views/splash.dart';
 import '/views/unknown.dart';
 import 'views/theme/index.dart';
@@ -22,7 +22,7 @@ class MYRouter {
   static String homePagePath = '/';
   static String splashPagePath = '/splash_page';
   static String detailPagePath = '/detail_page';
-  static String loginPagePath = '/login_page';
+  static String sourcePagePath = '/source_page';
   static String aboutPagePath = '/about_page';
   static String feedbackPagePath = '/feedback_page';
   static String unknownPagePath = '/unknown_page';
@@ -30,7 +30,6 @@ class MYRouter {
   static String themePagePath = '/theme_page';
   static String historyPagePath = '/history_page';
   static String filterPagePath = '/filter_page';
-  static String testPagePath = '/test_page';
 
   static String get initialRoute => homePagePath;
 
@@ -44,7 +43,7 @@ class MYRouter {
       builder: (_, {arguments}) => const SplashPage(),
     ),
     //登录
-    loginPagePath: SparkRoute(
+    sourcePagePath: SparkRoute(
       noAuth: false,
       builder: (_, {arguments}) => const LoginPage(),
     ),
@@ -97,7 +96,7 @@ class MYRouter {
 
         if (routeData?.noAuth != true) {
           if (videoSourceStore.data?.actived == null) {
-            builder = routeTables[loginPagePath]?.builder;
+            builder = routeTables[sourcePagePath]?.builder;
           }
         }
 

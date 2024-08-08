@@ -106,6 +106,14 @@ class _UserCenterTabState extends State<UserCenterTab>
                                   // mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Text(
+                                      '当前影视源',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(color: Colors.grey[200]),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                     FittedBox(
                                       child: Text(
                                         videoSourceStore.data?.actived ?? '',
@@ -119,14 +127,6 @@ class _UserCenterTabState extends State<UserCenterTab>
                                         overflow: TextOverflow.ellipsis,
                                         softWrap: false,
                                       ),
-                                    ),
-                                    Text(
-                                      '当前影视源',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(color: Colors.grey[200]),
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
