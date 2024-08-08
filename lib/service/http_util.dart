@@ -9,11 +9,7 @@ class HttpUtil {
   late Dio _dio;
 
   HttpUtil._internal() {
-    // BuildContext? context = MYRouter.navigatorKey.currentState?.context;
-    // final videoSourceStore = context?.watch<VideoSourceStore>();
-
     BaseOptions options = BaseOptions();
-    // options.baseUrl = "https://film.fe-spark.cn/api/";
     options.connectTimeout = const Duration(seconds: 10);
     options.receiveTimeout = const Duration(seconds: 10);
     options.contentType = 'application/json; charset=utf-8';
