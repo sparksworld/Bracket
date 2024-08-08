@@ -1,5 +1,5 @@
 ## Bracket
-
+一款基于Flutter的观影App
 > A video App based on Flutter
 
 <img style="margin-right: 10px" src="https://img.shields.io/badge/dart-v3.2.6%20(stable)-blue"> <img style="margin-right: 10px"  src="https://img.shields.io/badge/flutter-v3.16.9-red"> <img 
@@ -39,8 +39,9 @@ flutter build apk
 
 ## Matters needing attention
 
-> 关于影视源问题
-> 提供官方源`https://film.fe-spark.cn/api/`(末尾一定要带`/`),如部署好[GoFilm](https://github.com/ProudMuBai/GoFilm)可以自行修改成自己的源
+关于影视源问题
+
+> 提供官方免费源`https://film.fe-spark.cn/api/`(末尾一定要带`/`),因为服务器带宽较低，经常访问失败，还请谅解，如有条件，请自行部署好自己的[GoFilm](https://github.com/ProudMuBai/GoFilm)。
 
 ## Write at the end
 
