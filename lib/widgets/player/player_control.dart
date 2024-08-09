@@ -55,6 +55,7 @@ class _PlayerControlState extends State<PlayerControl>
   double _tempPlaybackSpeed = 1.0;
   double _nowPlaybackSpeed = 1.0;
 
+  bool _accelerating = false;
   bool _dragging = false;
   bool _displayTapped = false;
   bool _displayBufferingIndicator = false;
@@ -100,6 +101,7 @@ class _PlayerControlState extends State<PlayerControl>
           {chewieController.enterFullScreen()}
       },
       onLongPressStart: (detail) {
+        _accelerating = true;
         _tempPlaybackSpeed = controller.value.playbackSpeed;
         _nowPlaybackSpeed = Platform.isIOS ? 2.0 : 3.0;
         // print(controller.value.playbackSpeed);
@@ -107,6 +109,7 @@ class _PlayerControlState extends State<PlayerControl>
         _percentageWidget.percentageCallback(Platform.isIOS ? '2.0x' : '3.0x');
       },
       onLongPressEnd: (detail) {
+        _accelerating = false;
         _nowPlaybackSpeed = _tempPlaybackSpeed;
         controller.setPlaybackSpeed(_nowPlaybackSpeed);
         _percentageWidget.offstageCallback(true);
@@ -619,14 +622,13 @@ class _PlayerControlState extends State<PlayerControl>
       _displayBufferingIndicator = controller.value.isBuffering;
     }
 
-    if (_nowPlaybackSpeed != controller.value.playbackSpeed) {
-      controller.setPlaybackSpeed(_nowPlaybackSpeed);
-    }
-
     setState(() {
       _latestValue = controller.value;
       // _subtitlesPosition = controller.value.position;
     });
+    if (controller.value.playbackSpeed != _nowPlaybackSpeed && !_accelerating) {
+      controller.setPlaybackSpeed(_nowPlaybackSpeed);
+    }
   }
 
   Widget _buildPosition(Color? iconColor) {
