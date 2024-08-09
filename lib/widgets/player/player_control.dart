@@ -619,6 +619,10 @@ class _PlayerControlState extends State<PlayerControl>
       _displayBufferingIndicator = controller.value.isBuffering;
     }
 
+    if (_nowPlaybackSpeed != controller.value.playbackSpeed) {
+      controller.setPlaybackSpeed(_nowPlaybackSpeed);
+    }
+
     setState(() {
       _latestValue = controller.value;
       // _subtitlesPosition = controller.value.position;
