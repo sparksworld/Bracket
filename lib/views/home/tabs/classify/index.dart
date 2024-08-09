@@ -84,16 +84,16 @@ class _ClassifyTabState extends State<ClassifyTab>
             return [
               SliverAppBar(
                 backgroundColor: Theme.of(context).primaryColor,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
+                shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(36),
                     bottomRight: Radius.circular(36),
                   ),
-                  // side: BorderSide(
-                  //   color: Theme.of(context).primaryColor.withOpacity(0.5),
-                  //   width: 4,
-                  //   strokeAlign: BorderSide.strokeAlignOutside,
-                  // ),
+                  side: BorderSide(
+                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+                    width: 4,
+                    strokeAlign: BorderSide.strokeAlignOutside,
+                  ),
                 ),
                 // foregroundColor: Colors.red,
                 pinned: true,

@@ -53,6 +53,7 @@ class _PlayerControlState extends State<PlayerControl>
   Timer? _showAfterExpandCollapseTimer;
   Timer? _bufferingDisplayTimer;
   double _tempPlaybackSpeed = 1.0;
+  double _nowPlaybackSpeed = 1.0;
 
   bool _dragging = false;
   bool _displayTapped = false;
@@ -100,12 +101,14 @@ class _PlayerControlState extends State<PlayerControl>
       },
       onLongPressStart: (detail) {
         _tempPlaybackSpeed = controller.value.playbackSpeed;
-        print(controller.value.playbackSpeed);
-        controller.setPlaybackSpeed(Platform.isIOS ? 2.0 : 3.0);
+        _nowPlaybackSpeed = Platform.isIOS ? 2.0 : 3.0;
+        // print(controller.value.playbackSpeed);
+        controller.setPlaybackSpeed(_nowPlaybackSpeed);
         _percentageWidget.percentageCallback(Platform.isIOS ? '2.0x' : '3.0x');
       },
       onLongPressEnd: (detail) {
-        controller.setPlaybackSpeed(_tempPlaybackSpeed);
+        _nowPlaybackSpeed = _tempPlaybackSpeed;
+        controller.setPlaybackSpeed(_nowPlaybackSpeed);
         _percentageWidget.offstageCallback(true);
         print('onLongPressEnd');
       },
@@ -502,7 +505,8 @@ class _PlayerControlState extends State<PlayerControl>
     );
 
     if (chosenSpeed != null) {
-      controller.setPlaybackSpeed(chosenSpeed);
+      _nowPlaybackSpeed = chosenSpeed;
+      controller.setPlaybackSpeed(_nowPlaybackSpeed);
     }
 
     if (_latestValue.isPlaying) {
@@ -599,7 +603,6 @@ class _PlayerControlState extends State<PlayerControl>
     if (!mounted) return;
 
     // display the progress bar indicator only after the buffering delay if it has been set
-    controller.setPlaybackSpeed(_tempPlaybackSpeed);
 
     if (chewieController.progressIndicatorDelay != null) {
       if (controller.value.isBuffering) {

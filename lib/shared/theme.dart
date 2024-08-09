@@ -45,41 +45,42 @@ class ThemeProvider {
   }
 
   CardTheme cardTheme(ColorScheme colors) {
-    return CardTheme(
-      elevation: 0,
-      color: colors.onInverseSurface,
+    return CardTheme.of(context).copyWith(
+      elevation: 10,
+      color: colors.surface,
+      shadowColor: Theme.of(context).primaryColor.withOpacity(0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        // side: BorderSide(
-        //   color: Theme.of(context).primaryColor.withOpacity(0.2),
-        //   width: 1,
-        //   strokeAlign: BorderSide.strokeAlignOutside,
-        // ),
+        side: BorderSide(
+          color: Theme.of(context).primaryColor.withOpacity(0.5),
+          width: 4,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
       ),
       clipBehavior: Clip.none,
-      // shadowColor: Colors.transparent,
     );
   }
 
   ListTileThemeData listTileTheme(ColorScheme colors) {
-    return ListTileThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-        // side: BorderSide(
-        //   color: Theme.of(context).primaryColor.withOpacity(0.5),
-        //   width: 2,
-        //   strokeAlign: BorderSide.strokeAlignOutside,
+    return ListTileTheme.of(context).copyWith(
+        // textColor: colors.inverseSurface,
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(8),
+        //   side: BorderSide(
+        //     color: Theme.of(context).primaryColor.withOpacity(0.5),
+        //     width: 4,
+        //     // strokeAlign: BorderSide.strokeAlignOutside,
+        //   ),
         // ),
-      ),
-      selectedColor: colors.secondary,
-    );
+        // selectedColor: colors.surface,
+        );
   }
 
   AppBarTheme appBarTheme(ColorScheme colors) {
     return AppBarTheme(
       elevation: 0,
-      backgroundColor: colors.surface,
-      foregroundColor: colors.onSurface,
+      // backgroundColor: colors.inversePrimary,
+      // foregroundColor: colors.surfaceTint,
     );
   }
 
@@ -129,11 +130,15 @@ class ThemeProvider {
   ThemeData light() {
     final selfColor = colors(Brightness.light);
     return ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Colors.grey[100],
         colorScheme: selfColor,
         primaryColor: sourceColor,
         primaryColorDark: selfColor.background,
         pageTransitionsTheme: pageTransitionsTheme,
-        appBarTheme: appBarTheme(selfColor),
+        appBarTheme: AppBarTheme.of(context).copyWith(
+          elevation: 10,
+          backgroundColor: Colors.grey[200],
+        ),
         cardTheme: cardTheme(selfColor),
         listTileTheme: listTileTheme(selfColor),
         bottomAppBarTheme: bottomAppBarTheme(selfColor),
@@ -141,6 +146,19 @@ class ThemeProvider {
         navigationRailTheme: navigationRailTheme(selfColor),
         tabBarTheme: tabBarTheme(selfColor),
         drawerTheme: drawerTheme(selfColor),
+        dividerTheme: DividerTheme.of(context).copyWith(
+          space: 8,
+          color: Theme.of(context).primaryColor.withOpacity(0.5),
+        ),
+        chipTheme: ChipTheme.of(context).copyWith(
+          shape: StadiumBorder(
+            side: const BorderSide().copyWith(
+              width: 2,
+              color: Theme.of(context).primaryColor.withOpacity(0.5),
+            ),
+          ),
+          elevation: 2,
+        ),
         // scaffoldBackgroundColor: selfColor.background,
         snackBarTheme: const SnackBarThemeData().copyWith(
           behavior: SnackBarBehavior.floating,
@@ -148,9 +166,10 @@ class ThemeProvider {
         // ElevatedButton
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              backgroundColor: sourceColor,
-              foregroundColor: Colors.white,
-              textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+            backgroundColor: sourceColor,
+            foregroundColor: Colors.white,
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ));
   }
 
@@ -159,10 +178,24 @@ class ThemeProvider {
     return ThemeData.dark().copyWith(
       colorScheme: selfColor,
       primaryColor: sourceColor,
-
       pageTransitionsTheme: pageTransitionsTheme,
-      appBarTheme: appBarTheme(selfColor),
+      appBarTheme: AppBarTheme.of(context).copyWith(
+        elevation: 10,
+        backgroundColor: Colors.black,
+      ),
       cardTheme: cardTheme(selfColor),
+      dividerTheme: DividerTheme.of(context).copyWith(
+        color: Theme.of(context).primaryColor.withOpacity(0.5),
+      ),
+      chipTheme: ChipTheme.of(context).copyWith(
+        shape: StadiumBorder(
+          side: const BorderSide().copyWith(
+            width: 2,
+            color: Theme.of(context).primaryColor.withOpacity(0.5),
+          ),
+        ),
+        elevation: 2,
+      ),
       listTileTheme: listTileTheme(selfColor),
       bottomAppBarTheme: bottomAppBarTheme(selfColor),
       bottomNavigationBarTheme: bottomNavigationBarTheme(selfColor),

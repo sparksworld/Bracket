@@ -64,11 +64,11 @@ class _UserCenterTabState extends State<UserCenterTab>
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    // border: Border.all(
-                    //   color: Theme.of(context).primaryColor.withOpacity(0.5),
-                    //   width: 4,
-                    //   strokeAlign: BorderSide.strokeAlignOutside,
-                    // ),
+                    border: Border.all(
+                      color: Theme.of(context).primaryColor.withOpacity(0.5),
+                      width: 4,
+                      strokeAlign: BorderSide.strokeAlignOutside,
+                    ),
                     // shape: BoxShape.circle,
                     borderRadius: BorderRadius.circular(30),
                     // color: Theme.of(context).primaryColor,
@@ -103,17 +103,8 @@ class _UserCenterTabState extends State<UserCenterTab>
                               Expanded(
                                 flex: 1,
                                 child: Column(
-                                  // mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '当前影视源',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(color: Colors.grey[200]),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
                                     FittedBox(
                                       child: Text(
                                         videoSourceStore.data?.actived ?? '',
@@ -128,6 +119,32 @@ class _UserCenterTabState extends State<UserCenterTab>
                                         softWrap: false,
                                       ),
                                     ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      '当前视频源',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Colors.grey[200],
+                                          ),
+                                    )
+                                    // ElevatedButton.icon(
+                                    //   style: ButtonStyle(
+                                    //     backgroundColor:
+                                    //         MaterialStatePropertyAll(
+                                    //       Colors.black87.withOpacity(.1),
+                                    //     ),
+                                    //   ),
+                                    //   onPressed: () {},
+                                    //   icon: const Icon(
+                                    //     Icons.edit_outlined,
+                                    //     color: Colors.blueAccent,
+                                    //   ),
+                                    //   label: const Text('修改'),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -142,67 +159,64 @@ class _UserCenterTabState extends State<UserCenterTab>
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Card(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: const Text('观看历史'),
-                        leading: const Icon(Icons.clear_all),
-                        trailing:
-                            const Icon(Icons.keyboard_arrow_right_outlined),
-                        onTap: () {
-                          // const snackBar = SnackBar(
-                          //   content: Text("还未开发"),
-                          // );
-                          // ScaffoldMessenger.of(context).removeCurrentSnackBar(
-                          //   reason: SnackBarClosedReason.remove,
-                          // );
-                          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          Navigator.of(context)
-                              .pushNamed(MYRouter.historyPagePath);
-                        },
-                      ),
-                      const Divider(
-                        indent: 12,
-                        endIndent: 12,
-                      ),
-                      ListTile(
-                        title: const Text('系统主题'),
-                        leading: const Icon(Icons.border_color),
-                        trailing:
-                            const Icon(Icons.keyboard_arrow_right_outlined),
-                        onTap: () {
-                          Navigator.pushNamed(context, MYRouter.themePagePath);
-                        },
-                      ),
-                      const Divider(
-                        indent: 12,
-                        endIndent: 12,
-                      ),
-                      ListTile(
-                        title: const Text('意见反馈'),
-                        leading: const Icon(Icons.send),
-                        trailing:
-                            const Icon(Icons.keyboard_arrow_right_outlined),
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(MYRouter.feedbackPagePath);
-                        },
-                      ),
-                      const Divider(
-                        indent: 12,
-                        endIndent: 12,
-                      ),
-                      ListTile(
-                        title: const Text('关于'),
-                        leading: const Icon(Icons.sentiment_satisfied_alt),
-                        trailing:
-                            const Icon(Icons.keyboard_arrow_right_outlined),
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(MYRouter.aboutPagePath);
-                        },
-                      ),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: const Text('观看历史'),
+                          leading: const Icon(Icons.clear_all),
+                          trailing:
+                              const Icon(Icons.keyboard_arrow_right_outlined),
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(MYRouter.historyPagePath);
+                          },
+                        ),
+                        const Divider(
+                          indent: 12,
+                          endIndent: 12,
+                        ),
+                        ListTile(
+                          title: const Text('系统主题'),
+                          leading: const Icon(Icons.border_color),
+                          trailing:
+                              const Icon(Icons.keyboard_arrow_right_outlined),
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, MYRouter.themePagePath);
+                          },
+                        ),
+                        const Divider(
+                          indent: 12,
+                          endIndent: 12,
+                        ),
+                        ListTile(
+                          title: const Text('意见反馈'),
+                          leading: const Icon(Icons.send),
+                          trailing:
+                              const Icon(Icons.keyboard_arrow_right_outlined),
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(MYRouter.feedbackPagePath);
+                          },
+                        ),
+                        const Divider(
+                          indent: 12,
+                          endIndent: 12,
+                        ),
+                        ListTile(
+                          title: const Text('关于'),
+                          leading: const Icon(Icons.sentiment_satisfied_alt),
+                          trailing:
+                              const Icon(Icons.keyboard_arrow_right_outlined),
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(MYRouter.aboutPagePath);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

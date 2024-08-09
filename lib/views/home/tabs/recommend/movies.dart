@@ -9,92 +9,99 @@ class MovieGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      // mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        getMovieGridHeader(context, content),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12),
-            child: Wrap(
-              spacing: 12,
-              children: (content?.movies ?? []).map(
-                (e) {
-                  return SizedBox(
-                    width: 120,
-                    height: 240,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          MYRouter.detailPagePath,
-                          arguments: {
-                            'id': e.id,
-                          },
-                        );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          getMovieGridContent(context, e, imgKey),
-                          getMovieGridFooter(context, e)
-                        ],
+    return Card(
+      margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+      // color: Theme.of(context).primaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          getMovieGridHeader(context, content),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12),
+              child: Wrap(
+                spacing: 12,
+                children: (content?.movies ?? []).map(
+                  (e) {
+                    return SizedBox(
+                      width: 120,
+                      height: 240,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            MYRouter.detailPagePath,
+                            arguments: {
+                              'id': e.id,
+                            },
+                          );
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            getMovieGridContent(context, e, imgKey),
+                            getMovieGridFooter(context, e)
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ).toList(),
+                    );
+                  },
+                ).toList(),
+              ),
             ),
-          ),
 
-          // GridView.builder(
-          //   shrinkWrap: true,
-          //   physics: const NeverScrollableScrollPhysics(),
-          //   padding: const EdgeInsets.all(10.0),
-          //   itemCount: content?.movies?.length,
-          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //     crossAxisCount: 4,
-          //     mainAxisSpacing: 12.0,
-          //     crossAxisSpacing: 12.0,
-          //     childAspectRatio: .65,
-          //   ),
-          //   itemBuilder: (BuildContext context, int index) {
-          //     // print(content?.movies?.length);
-          //     var movie = content?.movies?[index];
-          //     return GestureDetector(
-          //       onTap: () {
-          //         Navigator.pushNamed(
-          //           context,
-          //           MYRouter.detailPagePath,
-          //           arguments: {
-          //             'id': movie?.id,
-          //           },
-          //         );
-          //       },
-          //       child: Column(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           getMovieGridContent(context, movie),
-          //           getMovieGridFooter(context, movie)
-          //         ],
-          //       ),
-          //     );
-          //   },
-          // ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-      ],
+            // GridView.builder(
+            //   shrinkWrap: true,
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   padding: const EdgeInsets.all(10.0),
+            //   itemCount: content?.movies?.length,
+            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount: 4,
+            //     mainAxisSpacing: 12.0,
+            //     crossAxisSpacing: 12.0,
+            //     childAspectRatio: .65,
+            //   ),
+            //   itemBuilder: (BuildContext context, int index) {
+            //     // print(content?.movies?.length);
+            //     var movie = content?.movies?[index];
+            //     return GestureDetector(
+            //       onTap: () {
+            //         Navigator.pushNamed(
+            //           context,
+            //           MYRouter.detailPagePath,
+            //           arguments: {
+            //             'id': movie?.id,
+            //           },
+            //         );
+            //       },
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           getMovieGridContent(context, movie),
+            //           getMovieGridFooter(context, movie)
+            //         ],
+            //       ),
+            //     );
+            //   },
+            // ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
     );
   }
 }
 
 Widget getMovieGridHeader(BuildContext context, Content? content) {
-  return Padding(
-    padding: const EdgeInsets.all(10),
+  return Container(
+    padding: const EdgeInsets.all(12),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -102,6 +109,7 @@ Widget getMovieGridHeader(BuildContext context, Content? content) {
           content?.nav?.name ?? '',
           // style: Theme.of(context).textTheme.titleLarge,
           style: TextStyle(
+            // color: Theme.of(context).primaryColorLight,
             fontWeight: FontWeight.bold,
             fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
           ),
