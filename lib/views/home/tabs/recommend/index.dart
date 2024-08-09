@@ -29,11 +29,6 @@ class _RecommendTabState extends State<RecommendTab>
     return _data?.content ?? [];
   }
 
-  // List<Child>? get _tags {
-  //   List<Child>? children = _data?.category?.children;
-  //   return children;
-  // }
-
   Future _fetchData() async {
     setState(() {
       _error = false;
@@ -45,21 +40,15 @@ class _RecommendTabState extends State<RecommendTab>
     if (res != null && res.runtimeType != String) {
       Recommend jsonData = Recommend.fromJson(res);
       setState(() {
-        // _refreshKey = GlobalKey();
         _imgKey = UniqueKey();
         _data = jsonData.data;
       });
     } else {
-      await Future.delayed(const Duration(seconds: 2));
       setState(
         () {
           _error = true;
-          // _refreshKey = GlobalKey();
         },
       );
-      if (mounted) {
-        await _fetchData();
-      }
     }
   }
 
@@ -97,81 +86,44 @@ class _RecommendTabState extends State<RecommendTab>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverPersistentHeader(
-              delegate: SearchHeader(
-                title: '推荐',
-                search: const SearchAppBar(
-                  height: 44,
+      body: SafeArea(
+        top: false,
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverPersistentHeader(
+                delegate: SearchHeader(
+                  title: '推荐',
+                  search: const SearchAppBar(
+                    height: 44,
+                  ),
                 ),
+                pinned: true,
               ),
-              pinned: true,
-            ),
-          ];
-        },
-        body: RefreshIndicator(
-          key: _refreshKey,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom,
-            ),
+            ];
+          },
+          body: RefreshIndicator(
+            key: _refreshKey,
             child: Consumer2<UserStore, ThemeStore>(
               builder: (_, profile, global, child) {
                 // String? token = profile.user?.userToken;
                 if (_error) {
-                  return Container(
-                    margin: const EdgeInsets.only(top: 50),
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const NoDataView(),
-                        Text(
-                          '网络出错了～，请刷新重试',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        SizedBox(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              _fetchData();
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                              child: Text('刷新'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  return Error(
+                    onRefresh: () {
+                      _refreshKey.currentState?.show();
+                    },
                   );
                 }
-                // if (_loading) {
-                //   return Center(
-                //     child: CircularProgressIndicator(
-                //       strokeWidth: 2,
-                //       valueColor: AlwaysStoppedAnimation<Color>(
-                //         Theme.of(context).colorScheme.primary,
-                //       ),
-                //     ),
-                //   );
-                // }
 
-                return getHomeGrid(_content);
+                return SingleChildScrollView(
+                  child: getHomeGrid(_content),
+                );
               },
             ),
+            onRefresh: () async {
+              return await _fetchData();
+            },
           ),
-          onRefresh: () async {
-            return await _fetchData();
-          },
         ),
       ),
     );

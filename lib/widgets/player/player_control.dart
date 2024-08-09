@@ -510,11 +510,6 @@ class _PlayerControlState extends State<PlayerControl>
     }
   }
 
-  // Future<void> _setInit() async {
-  //   _brightnessValue = await VideoPlayerUtils.getBrightness();
-  //   _volumeValue = await VideoPlayerUtils.getVolume();
-  // }
-
   void _cancelAndRestartTimer() {
     _hideTimer?.cancel();
     _startHideTimer();
@@ -604,6 +599,8 @@ class _PlayerControlState extends State<PlayerControl>
     if (!mounted) return;
 
     // display the progress bar indicator only after the buffering delay if it has been set
+    controller.setPlaybackSpeed(_tempPlaybackSpeed);
+
     if (chewieController.progressIndicatorDelay != null) {
       if (controller.value.isBuffering) {
         _bufferingDisplayTimer ??= Timer(

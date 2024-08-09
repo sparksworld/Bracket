@@ -34,22 +34,33 @@ class HttpUtil {
     ));
   }
   // 请求(默认post)
-  Future _request(String url,
+  Future _request(BuildContext? context, String url,
       {String method = "post", Map<String, dynamic>? params}) async {
     Options options = Options(method: method);
-    BuildContext? context = MYRouter.navigatorKey.currentState?.context;
 
-    // final data = Provider.of<VideoSourceStore>(context!, listen: false);
-    // print(data);
     try {
       final result =
           await _dio.request(url, queryParameters: params, options: options);
 
       return result;
     } on DioException {
-      if (context != null) {
-        const snackBar = SnackBar(
-          content: Text("网络错误🙅"),
+      if (context != null && context.mounted) {
+        final snackBar = SnackBar(
+          content: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              width: double.maxFinite,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              child: const Text(
+                '数据解析异常, 请稍后重试',
+              ),
+            ),
+          ),
         );
         ScaffoldMessenger.of(context).removeCurrentSnackBar(
           reason: SnackBarClosedReason.remove,
@@ -60,21 +71,25 @@ class HttpUtil {
   }
 
   Future<T> get<T>(
+    BuildContext? context,
     String url, {
     Map<String, dynamic>? queryParameters,
     Options? requestOptions,
   }) async {
-    var response = await _request(url, method: "get", params: queryParameters);
+    var response =
+        await _request(context, url, method: "get", params: queryParameters);
     // print(response);
     return response?.data;
   }
 
   Future<T> post<T>(
+    BuildContext? context,
     String url, {
     Map<String, dynamic>? queryParameters,
     Options? requestOptions,
   }) async {
-    var response = await _request(url, method: "post", params: queryParameters);
+    var response =
+        await _request(context, url, method: "post", params: queryParameters);
     // print(response);
     return response?.data;
   }

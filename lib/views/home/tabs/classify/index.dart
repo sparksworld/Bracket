@@ -17,7 +17,7 @@ class _ClassifyTabState extends State<ClassifyTab>
   late ScrollController _scrollViewController;
   Data? _data;
   bool _loading = false;
-  // bool _error = false;
+  bool _error = false;
 
   // List<Content> get _content {
   //   return _data?.content ?? [];
@@ -26,7 +26,7 @@ class _ClassifyTabState extends State<ClassifyTab>
   Future _fetchData() async {
     setState(() {
       _loading = true;
-      // _error = false;
+      _error = false;
     });
     var res = await Api.index(
       context: context,
@@ -36,20 +36,17 @@ class _ClassifyTabState extends State<ClassifyTab>
       Recommend jsonData = Recommend.fromJson(res);
       setState(() {
         _loading = false;
+        _error = false;
         _data = jsonData.data;
       });
     } else {
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
 
       setState(() {
+        _error = true;
         _loading = false;
       });
-
-      if (mounted) {
-        await _fetchData();
-      }
     }
-    // return true;
   }
 
   @override
@@ -78,153 +75,161 @@ class _ClassifyTabState extends State<ClassifyTab>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(36),
-                  bottomRight: Radius.circular(36),
-                ),
-                // side: BorderSide(
-                //   color: Theme.of(context).primaryColor.withOpacity(0.5),
-                //   width: 4,
-                //   strokeAlign: BorderSide.strokeAlignOutside,
-                // ),
-              ),
-              // foregroundColor: Colors.red,
-              pinned: true,
-              floating: true,
-              expandedHeight: 100.0,
-              flexibleSpace: FlexibleSpaceBar(
-                  collapseMode: CollapseMode.pin,
-                  centerTitle: false,
-                  title: const Text(
-                    '影片分类',
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                backgroundColor: Theme.of(context).primaryColor,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(36),
+                    bottomRight: Radius.circular(36),
                   ),
-                  background: Stack(
-                    children: [
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                            image: const DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                'assets/images/header.jpeg',
+                  // side: BorderSide(
+                  //   color: Theme.of(context).primaryColor.withOpacity(0.5),
+                  //   width: 4,
+                  //   strokeAlign: BorderSide.strokeAlignOutside,
+                  // ),
+                ),
+                // foregroundColor: Colors.red,
+                pinned: true,
+                floating: true,
+                expandedHeight: 100.0,
+                flexibleSpace: FlexibleSpaceBar(
+                    collapseMode: CollapseMode.pin,
+                    centerTitle: false,
+                    title: const Text(
+                      '影片分类',
+                    ),
+                    background: Stack(
+                      children: [
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                              image: const DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(
+                                  'assets/images/header.jpeg',
+                                ),
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(36),
+                                bottomRight: Radius.circular(36),
                               ),
                             ),
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(36),
-                              bottomRight: Radius.circular(36),
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
+            ];
+          },
+          body: LoadingViewBuilder(
+            loading: _loading,
+            builder: (_) {
+              return _error
+                  ? Error(
+                      onRefresh: _fetchData,
+                    )
+                  : _listContent(context);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _listContent(_) {
+    return ListView(
+      padding: EdgeInsets.only(
+        top: 24,
+        bottom: MediaQuery.of(_).padding.bottom,
+        left: 8,
+        right: 8,
+      ),
+      children: [
+        Column(
+          children: [
+            ...?_data?.category?.children!.map(
+              (e) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          MYRouter.filterPagePath,
+                          arguments: {
+                            "pid": e.id,
+                          },
+                        );
+                      },
+                      child: Text(
+                        e.name ?? '',
+                        // style: Theme.of(context).textTheme.titleLarge,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize:
+                              Theme.of(context).textTheme.titleLarge?.fontSize,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: SingleChildScrollView(
+                            child: Wrap(
+                              spacing: 8,
+                              alignment: WrapAlignment.start,
+                              crossAxisAlignment: WrapCrossAlignment.start,
+                              children: e.children!
+                                  .map(
+                                    (item) => ChoiceChip(
+                                      label: Text(item.name ?? ''),
+                                      selected: false,
+                                      onSelected: (newValue) {
+                                        Navigator.of(context).pushNamed(
+                                          MYRouter.filterPagePath,
+                                          arguments: {
+                                            "pid": e.id,
+                                            "category": item.id
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  )),
-            ),
-          ];
-        },
-        body: LoadingViewBuilder(
-          loading: _loading,
-          builder: (_) => MediaQuery.removePadding(
-            removeTop: true,
-            context: context,
-            child: ListView(
-              padding: EdgeInsets.only(
-                top: 24,
-                bottom: MediaQuery.of(_).padding.bottom,
-                left: 8,
-                right: 8,
-              ),
-              children: [
-                Column(
-                  children: [
-                    ...?_data?.category?.children!.map(
-                      (e) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const SizedBox(
-                              height: 12,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                  MYRouter.filterPagePath,
-                                  arguments: {
-                                    "pid": e.id,
-                                  },
-                                );
-                              },
-                              child: Text(
-                                e.name ?? '',
-                                // style: Theme.of(context).textTheme.titleLarge,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.fontSize,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: SingleChildScrollView(
-                                    child: Wrap(
-                                      spacing: 8,
-                                      alignment: WrapAlignment.start,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.start,
-                                      children: e.children!
-                                          .map(
-                                            (item) => ChoiceChip(
-                                              label: Text(item.name ?? ''),
-                                              selected: false,
-                                              onSelected: (newValue) {
-                                                Navigator.of(context).pushNamed(
-                                                  MYRouter.filterPagePath,
-                                                  arguments: {
-                                                    "pid": e.id,
-                                                    "category": item.id
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        );
-                      },
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
+                    )
                   ],
-                )
-              ],
+                );
+              },
             ),
-          ),
-        ),
-      ),
+            const SizedBox(
+              height: 12,
+            ),
+          ],
+        )
+      ],
     );
   }
 

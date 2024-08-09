@@ -32,6 +32,7 @@ class _PlayerState extends State<Player> {
   ChewieController? _chewieController;
   final double _aspectRatio = 16 / 9;
   bool _loading = true;
+  bool _netWarning = false;
 
   Future<void> _listener() async {
     if (_videoPlayerController!.value.isPlaying) {
@@ -46,6 +47,15 @@ class _PlayerState extends State<Player> {
   void initState() {
     super.initState();
 
+    initPlayer();
+    watchConnectivity(ConnectivityResult.mobile, () {
+      setState(() {
+        _netWarning = true;
+      });
+    });
+  }
+
+  void initPlayer() async {
     setState(() {
       _loading = true;
     });
@@ -64,7 +74,7 @@ class _PlayerState extends State<Player> {
           _chewieController = ChewieController(
             videoPlayerController: _videoPlayerController!,
             allowFullScreen: true,
-            autoPlay: true,
+            autoPlay: !_netWarning,
             looping: false,
             showControlsOnInitialize: false,
             aspectRatio: aspectRatio ?? _aspectRatio,
@@ -83,7 +93,17 @@ class _PlayerState extends State<Player> {
                 child: Text('Error: $errorMessage'),
               );
             },
+            deviceOrientationsOnEnterFullScreen: [
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ],
 
+            deviceOrientationsAfterFullScreen: [
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown,
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ],
             routePageBuilder:
                 (context, animation, secondaryAnimation, controllerProvider) {
               return AnimatedBuilder(
@@ -119,24 +139,41 @@ class _PlayerState extends State<Player> {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: _aspectRatio,
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          platform: TargetPlatform.android,
-        ),
-        child: Stack(
-          children: [
-            !_loading
-                ? Chewie(
-                    controller: _chewieController!,
-                  )
-                : const RiveLoading(),
-            Positioned(
-              child: Row(
-                children: widget.title ?? [],
-              ),
-            )
-          ],
-        ),
+      child: Stack(
+        children: [
+          _netWarning
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text('未检测到wifi,是否继续播放?'),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _netWarning = false;
+                          });
+                          _chewieController?.play();
+                        },
+                        child: const Text('播放'),
+                      ),
+                    ],
+                  ),
+                )
+              : _loading
+                  ? const RiveLoading()
+                  : Chewie(
+                      controller: _chewieController!,
+                    ),
+          Positioned(
+            child: Row(
+              children: widget.title ?? [],
+            ),
+          )
+        ],
       ),
     );
   }

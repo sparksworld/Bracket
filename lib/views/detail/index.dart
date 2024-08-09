@@ -77,6 +77,7 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
+
     _fetchData();
   }
 

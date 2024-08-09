@@ -5,6 +5,8 @@ export 'package:flutter/material.dart';
 export 'package:provider/provider.dart';
 export 'package:google_fonts/google_fonts.dart';
 export 'package:flutter/services.dart';
+export "package:connectivity_plus/connectivity_plus.dart";
+export 'package:another_flushbar/flushbar.dart';
 
 export 'dart:async';
 export 'dart:math';
