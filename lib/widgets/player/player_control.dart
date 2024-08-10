@@ -53,9 +53,9 @@ class _PlayerControlState extends State<PlayerControl>
   Timer? _showAfterExpandCollapseTimer;
   Timer? _bufferingDisplayTimer;
   double _tempPlaybackSpeed = 1.0;
-  double _nowPlaybackSpeed = 1.0;
+  // double _nowPlaybackSpeed = 1.0;
 
-  bool _accelerating = false;
+  // bool _accelerating = false;
   bool _dragging = false;
   bool _displayTapped = false;
   bool _displayBufferingIndicator = false;
@@ -101,17 +101,17 @@ class _PlayerControlState extends State<PlayerControl>
           {chewieController.enterFullScreen()}
       },
       onLongPressStart: (detail) {
-        _accelerating = true;
+        // _accelerating = true;
         _tempPlaybackSpeed = controller.value.playbackSpeed;
-        _nowPlaybackSpeed = Platform.isIOS ? 2.0 : 3.0;
+        // _nowPlaybackSpeed = Platform.isIOS ? 2.0 : 3.0;
         // print(controller.value.playbackSpeed);
-        controller.setPlaybackSpeed(_nowPlaybackSpeed);
+        controller.setPlaybackSpeed(Platform.isIOS ? 2.0 : 3.0);
         _percentageWidget.percentageCallback(Platform.isIOS ? '2.0x' : '3.0x');
       },
       onLongPressEnd: (detail) {
-        _accelerating = false;
-        _nowPlaybackSpeed = _tempPlaybackSpeed;
-        controller.setPlaybackSpeed(_nowPlaybackSpeed);
+        // _accelerating = false;
+        // _nowPlaybackSpeed = _tempPlaybackSpeed;
+        controller.setPlaybackSpeed(_tempPlaybackSpeed);
         _percentageWidget.offstageCallback(true);
         print('onLongPressEnd');
       },
@@ -508,8 +508,7 @@ class _PlayerControlState extends State<PlayerControl>
     );
 
     if (chosenSpeed != null) {
-      _nowPlaybackSpeed = chosenSpeed;
-      controller.setPlaybackSpeed(_nowPlaybackSpeed);
+      controller.setPlaybackSpeed(chosenSpeed);
     }
 
     if (_latestValue.isPlaying) {
@@ -626,9 +625,6 @@ class _PlayerControlState extends State<PlayerControl>
       _latestValue = controller.value;
       // _subtitlesPosition = controller.value.position;
     });
-    if (controller.value.playbackSpeed != _nowPlaybackSpeed && !_accelerating) {
-      controller.setPlaybackSpeed(_nowPlaybackSpeed);
-    }
   }
 
   Widget _buildPosition(Color? iconColor) {

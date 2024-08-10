@@ -93,6 +93,7 @@ class _PlayerState extends State<Player> {
                 child: Text('Error: $errorMessage'),
               );
             },
+
             deviceOrientationsOnEnterFullScreen: [
               DeviceOrientation.landscapeLeft,
               DeviceOrientation.landscapeRight,
