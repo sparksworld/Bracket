@@ -155,8 +155,6 @@ class _ClassifyTabState extends State<ClassifyTab>
       padding: EdgeInsets.only(
         top: 24,
         bottom: MediaQuery.of(_).padding.bottom,
-        left: 8,
-        right: 8,
       ),
       children: [
         Column(
@@ -169,57 +167,67 @@ class _ClassifyTabState extends State<ClassifyTab>
                     const SizedBox(
                       height: 12,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          MYRouter.filterPagePath,
-                          arguments: {
-                            "pid": e.id,
-                          },
-                        );
-                      },
-                      child: Text(
-                        e.name ?? '',
-                        // style: Theme.of(context).textTheme.titleLarge,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize:
-                              Theme.of(context).textTheme.titleLarge?.fontSize,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                MYRouter.filterPagePath,
+                                arguments: {
+                                  "pid": e.id,
+                                },
+                              );
+                            },
+                            child: Text(
+                              e.name ?? '',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.fontSize,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Wrap(
+                          spacing: 8,
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          children: e.children!
+                              .map(
+                                (item) => ChoiceChip(
+                                  label: Text(item.name ?? ''),
+                                  selected: false,
+                                  onSelected: (newValue) {
+                                    Navigator.of(context).pushNamed(
+                                      MYRouter.filterPagePath,
+                                      arguments: {
+                                        "pid": e.id,
+                                        "category": item.id
+                                      },
+                                    );
+                                  },
+                                ),
+                              )
+                              .toList(),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: SingleChildScrollView(
-                            child: Wrap(
-                              spacing: 8,
-                              alignment: WrapAlignment.start,
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              children: e.children!
-                                  .map(
-                                    (item) => ChoiceChip(
-                                      label: Text(item.name ?? ''),
-                                      selected: false,
-                                      onSelected: (newValue) {
-                                        Navigator.of(context).pushNamed(
-                                          MYRouter.filterPagePath,
-                                          arguments: {
-                                            "pid": e.id,
-                                            "category": item.id
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 );
               },

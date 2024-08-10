@@ -53,8 +53,8 @@ class ThemeProvider {
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
           color: Theme.of(context).primaryColor.withOpacity(0.5),
-          width: 4,
-          strokeAlign: BorderSide.strokeAlignInside,
+          // width: 0,
+          // strokeAlign: BorderSide.strokeAlignInside,
         ),
       ),
       clipBehavior: Clip.none,
@@ -153,7 +153,6 @@ class ThemeProvider {
         chipTheme: ChipTheme.of(context).copyWith(
           shape: StadiumBorder(
             side: const BorderSide().copyWith(
-              width: 2,
               color: Theme.of(context).primaryColor.withOpacity(0.5),
             ),
           ),

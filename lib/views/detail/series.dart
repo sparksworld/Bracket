@@ -107,8 +107,12 @@ class _SeriesState extends State<Series> {
               SizedBox(
                 width: double.infinity,
                 child: Card(
+                  margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
