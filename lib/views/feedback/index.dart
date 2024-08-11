@@ -49,6 +49,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 child: ElevatedButton(
                   onPressed: (text != '')
                       ? () {
+                          setState(() {
+                            text = "";
+                          });
+                          _inputController.clear();
                           const snackBar = SnackBar(
                             content: Text("提交成功"),
                           );

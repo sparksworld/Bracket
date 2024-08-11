@@ -227,7 +227,7 @@ class _UserCenterTabState extends State<UserCenterTab>
                 padding: const EdgeInsets.all(8),
                 child: Card(
                   child: ListTile(
-                    title: const Text('退出当前影视源'),
+                    title: const Text('退出影视源'),
                     leading: const Icon(Icons.exit_to_app),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {

@@ -198,7 +198,7 @@ class _ClassifyTabState extends State<ClassifyTab>
                       ),
                     ),
                     Card(
-                      margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                      margin: const EdgeInsets.fromLTRB(8, 12, 8, 24),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
