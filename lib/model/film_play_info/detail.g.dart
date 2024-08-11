@@ -18,7 +18,7 @@ Detail _$DetailFromJson(Map<String, dynamic> json) => Detail(
       downFrom: json['DownFrom'] as String?,
       playList: (json['playList'] as List<dynamic>?)
           ?.map((e) => (e as List<dynamic>)
-              .map((e) => PlayList.fromJson(e as Map<String, dynamic>))
+              .map((e) => PlayItem.fromJson(e as Map<String, dynamic>))
               .toList())
           .toList(),
       downloadList: (json['downloadList'] as List<dynamic>?)

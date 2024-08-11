@@ -10,7 +10,7 @@ ListData _$ListDataFromJson(Map<String, dynamic> json) => ListData(
       id: json['id'] as String?,
       name: json['name'] as String?,
       linkList: (json['linkList'] as List<dynamic>?)
-          ?.map((e) => PlayList.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => PlayItem.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

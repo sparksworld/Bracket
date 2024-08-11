@@ -3,13 +3,13 @@ import 'package:json_annotation/json_annotation.dart';
 part 'play_list.g.dart';
 
 @JsonSerializable()
-class PlayList {
+class PlayItem {
   String? episode;
   String? link;
 
-  PlayList({this.episode, this.link});
+  PlayItem({this.episode, this.link});
 
-  factory PlayList.fromJson(Map<String, dynamic> json) {
+  factory PlayItem.fromJson(Map<String, dynamic> json) {
     return _$PlayListFromJson(json);
   }
 

@@ -2,7 +2,7 @@ import '/plugins.dart';
 import "/model/film_play_info/data.dart" show Data;
 import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
 import "/model/film_play_info/list.dart" show ListData;
-import "/model/film_play_info/play_list.dart" show PlayList;
+import "/model/film_play_info/play_list.dart" show PlayItem;
 import "/views/detail/describe.dart" show Describe;
 import "/widgets/player/player.dart" show Player;
 
@@ -33,10 +33,11 @@ class _DetailPageState extends State<DetailPage> {
   Data? _data;
   int _originIndex = 0;
   int _teleplayIndex = 0;
+  int _startAt = 0;
 
-  Future _fetchData() async {
-    int id = widget.arguments?['id'];
-    var historyContext = context.read<HistoryStore>();
+  Future _fetchData(id) async {
+    // int id = widget.arguments?['id'];
+
     var res = await Api.filmDetail(
       context: context,
       queryParameters: {
@@ -50,35 +51,52 @@ class _DetailPageState extends State<DetailPage> {
         _data = jsonData.data;
       });
 
-      historyContext.addHistory({
-        'id': _data?.detail?.id,
-        "name": _data?.detail?.name,
-        "timeStamp": DateTime.now().microsecondsSinceEpoch,
-        "picture": _data?.detail?.picture
-      });
+      var item = getHistory(id);
+      if (item != null) {
+        setState(() {
+          var originId = item['originId'];
+          var originIndex = _data?.detail?.list
+              ?.indexWhere((element) => originId == element.id);
+
+          if (originIndex != null && originIndex >= 0) {
+            setState(() {
+              _originIndex = originIndex;
+              _teleplayIndex = item['teleplayIndex'];
+              _startAt = item['startAt'];
+            });
+          }
+        });
+      }
 
       // print(_data.detail.name);
     } else {
       await Future.delayed(const Duration(seconds: 2));
       if (mounted) {
-        return _fetchData();
+        return _fetchData(id);
       }
     }
   }
 
-  List<ListData?>? get _playList {
+  Map<String, dynamic>? getHistory(id) {
+    var data = context.read<HistoryStore>().data;
+    var item = data.firstWhereOrNull((element) => element['id'] == id);
+    return item;
+  }
+
+  List<ListData?>? get _list {
     return _data?.detail?.list;
   }
 
-  PlayList? get _playItem {
-    return _playList?[_originIndex]?.linkList?[_teleplayIndex];
+  PlayItem? get _playItem {
+    return _list?[_originIndex]?.linkList?[_teleplayIndex];
   }
 
   @override
   void initState() {
+    int id = widget.arguments?['id'];
     super.initState();
 
-    _fetchData();
+    _fetchData(id);
   }
 
   @override
@@ -106,9 +124,12 @@ class _DetailPageState extends State<DetailPage> {
                     child: Player(
                       key: Key(
                           '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                      playItem: _playItem,
+                      list: _list,
+                      detail: _data?.detail,
                       originIndex: _originIndex,
                       teleplayIndex: _teleplayIndex,
+                      startAt: _startAt,
+                      // seekTo: _playItem?.link,
                       title: [
                         BackButton(
                           color: Colors.white,

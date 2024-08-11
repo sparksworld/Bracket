@@ -1,5 +1,15 @@
 ///检测时间距离当前是今天 昨天 前天还是某个日期 跨年显示 年-月-日 不跨年显示 月-日
 class DateScope {
+  static String formatDuration(int seconds) {
+    int hours = seconds ~/ 3600; // 每小时3600秒
+    int minutes = (seconds % 3600) ~/ 60; // 计算剩余秒数中的分钟部分
+    int secs = seconds % 60; // 计算剩余秒数中的秒部分
+
+    return '${hours.toString().padLeft(2, '0')}:'
+        '${minutes.toString().padLeft(2, '0')}:'
+        '${secs.toString().padLeft(2, '0')}';
+  }
+
   static DateTime timestampToDate(int timestamp) {
     DateTime dateTime = DateTime.now();
 

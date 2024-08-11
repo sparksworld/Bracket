@@ -17,15 +17,11 @@ class Series extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<Series> createState() =>
-      _SeriesState(initOriginIndex, initTeleplayIndex);
+  State<Series> createState() => _SeriesState();
 }
 
 class _SeriesState extends State<Series> {
-  int _originIndex;
-  int _teleplayIndex;
-
-  _SeriesState(this._originIndex, this._teleplayIndex);
+  _SeriesState();
 
   List<ListData>? get _playList {
     return widget.data?.detail?.list;
@@ -46,6 +42,8 @@ class _SeriesState extends State<Series> {
 
   @override
   Widget build(BuildContext context) {
+    int originIndex = widget.initOriginIndex;
+    int teleplayIndex = widget.initTeleplayIndex;
     return LoadingViewBuilder(
       loading: widget.data == null,
       builder: (_) => SingleChildScrollView(
@@ -90,12 +88,12 @@ class _SeriesState extends State<Series> {
                     children: _playList!.mapIndexed((i, e) {
                       return ChoiceChip(
                           label: Text(e.name ?? '未知源'),
-                          selected: _originIndex == i,
+                          selected: originIndex == i,
                           onSelected: (_) {
                             setState(() {
-                              _originIndex = i;
-                              _teleplayIndex = 0;
-                              widget.callback(_originIndex, _teleplayIndex);
+                              originIndex = i;
+                              teleplayIndex = 0;
+                              widget.callback(originIndex, teleplayIndex);
                             });
                           });
                     }).toList(),
@@ -116,19 +114,19 @@ class _SeriesState extends State<Series> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _playListItem(_originIndex) != null
+                        _playListItem(originIndex) != null
                             ? Wrap(
                                 spacing: 6,
-                                children: _playListItem(_originIndex)!
+                                children: _playListItem(originIndex)!
                                     .linkList!
                                     .mapIndexed((i, e) => ChoiceChip(
                                           label: Text(e.episode ?? ''),
-                                          selected: i == _teleplayIndex,
+                                          selected: i == teleplayIndex,
                                           onSelected: (value) {
-                                            _teleplayIndex = i;
+                                            teleplayIndex = i;
                                             widget.callback(
-                                              _originIndex,
-                                              _teleplayIndex,
+                                              originIndex,
+                                              teleplayIndex,
                                             );
                                           },
                                         ))

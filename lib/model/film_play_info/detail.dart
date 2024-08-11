@@ -17,7 +17,7 @@ class Detail {
   List<String>? playFrom;
   @JsonKey(name: 'DownFrom')
   String? downFrom;
-  List<List<PlayList>>? playList;
+  List<List<PlayItem>>? playList;
   List<List<DownloadList>>? downloadList;
   Descriptor? descriptor;
   List<ListData>? list;

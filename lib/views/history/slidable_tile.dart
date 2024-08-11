@@ -103,7 +103,7 @@ class SlidableTile extends StatelessWidget {
             data['name'] ?? '',
           ),
           subtitle: Text(
-            "观看时间：${DateScope.getDateScope(checkDate: data['timeStamp'])}",
+            "上次观看至：${DateScope.formatDuration(data['startAt'])}",
             style: TextStyle(
               color: Theme.of(context).disabledColor,
               fontSize: 14,

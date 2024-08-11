@@ -6,12 +6,12 @@ part of 'play_list.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PlayList _$PlayListFromJson(Map<String, dynamic> json) => PlayList(
+PlayItem _$PlayListFromJson(Map<String, dynamic> json) => PlayItem(
       episode: json['episode'] as String?,
       link: json['link'] as String?,
     );
 
-Map<String, dynamic> _$PlayListToJson(PlayList instance) => <String, dynamic>{
+Map<String, dynamic> _$PlayListToJson(PlayItem instance) => <String, dynamic>{
       'episode': instance.episode,
       'link': instance.link,
     };

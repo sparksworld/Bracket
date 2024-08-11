@@ -7,7 +7,7 @@ part 'list.g.dart';
 class ListData {
   String? id;
   String? name;
-  List<PlayList>? linkList;
+  List<PlayItem>? linkList;
 
   ListData({this.id, this.name, this.linkList});
 

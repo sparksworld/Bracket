@@ -1,28 +1,34 @@
+import 'package:bracket/model/film_play_info/detail.dart';
+import 'package:bracket/model/film_play_info/list.dart';
+import 'package:bracket/model/film_play_info/play_list.dart';
+
 import '/plugins.dart';
 import "package:chewie/chewie.dart";
 import "package:video_player/video_player.dart";
 import 'package:wakelock_plus/wakelock_plus.dart';
-import '/model/film_play_info/play_list.dart';
 import 'video_builder.dart';
 import 'player_control.dart';
 
 class Player extends StatefulWidget {
   const Player({
     super.key,
-    this.title,
-    this.playItem,
     this.onNext,
     this.onPrev,
+    required this.title,
+    required this.list,
+    required this.detail,
     required this.originIndex,
     required this.teleplayIndex,
+    required this.startAt,
   });
+  final Detail? detail;
   final List<Widget>? title;
-  final PlayList? playItem;
   final int originIndex;
   final int teleplayIndex;
   final Function? onNext;
   final Function? onPrev;
-
+  final List<ListData?>? list;
+  final int? startAt;
   @override
   State<Player> createState() => _PlayerState();
 }
@@ -34,8 +40,31 @@ class _PlayerState extends State<Player> {
   bool _loading = true;
   bool _netWarning = false;
 
+  // List<ListData> _list
+
+  PlayItem? get _playItem {
+    var list = widget.list;
+    var originIndex = widget.originIndex;
+    var teleplayIndex = widget.teleplayIndex;
+    return list?[originIndex]?.linkList?[teleplayIndex];
+  }
+
   Future<void> _listener() async {
+    var detail = widget.detail;
+
     if (_videoPlayerController!.value.isPlaying) {
+      var list = widget.list;
+      var originIndex = widget.originIndex;
+      context.read<HistoryStore>().addHistory({
+        'id': detail?.id,
+        "name": detail?.name,
+        "timeStamp": DateTime.now().microsecondsSinceEpoch,
+        "picture": detail?.picture,
+        "originId": list?[originIndex]?.id,
+        "teleplayIndex": widget.teleplayIndex,
+        'startAt': _videoPlayerController!.value.position.inSeconds,
+      });
+
       bool isWakelockUp = await WakelockPlus.enabled;
       if (!isWakelockUp) WakelockPlus.enable();
     } else {
@@ -61,7 +90,7 @@ class _PlayerState extends State<Player> {
     });
 
     _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse(widget.playItem?.link ?? ''),
+      Uri.parse(_playItem?.link ?? ''),
     )
       ..addListener(_listener)
       ..initialize().then(
@@ -76,6 +105,7 @@ class _PlayerState extends State<Player> {
             allowFullScreen: true,
             autoPlay: !_netWarning,
             looping: false,
+            startAt: Duration(seconds: widget.startAt ?? 0),
             showControlsOnInitialize: false,
             aspectRatio: aspectRatio ?? _aspectRatio,
             playbackSpeeds: Platform.isIOS
@@ -117,6 +147,7 @@ class _PlayerState extends State<Player> {
               );
             },
           );
+          // _chewieController?.seekTo(Duration(seconds: widget.startAt));
         },
       );
   }
