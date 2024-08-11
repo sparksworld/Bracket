@@ -199,6 +199,7 @@ class _DetailPageState extends State<DetailPage> {
                                   setState(() {
                                     _originIndex = originIndex;
                                     _teleplayIndex = teleplayIndex;
+                                    _startAt = 0;
                                   });
                                 },
                               ),
