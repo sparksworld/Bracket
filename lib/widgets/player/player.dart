@@ -37,7 +37,9 @@ class _PlayerState extends State<Player> {
   ChewieController? _chewieController;
   final double _aspectRatio = 16 / 9;
   bool _loading = true;
+  bool _error = false;
   bool _netWarning = false;
+  String _errorMessage = '';
 
   List<PlayItem>? get _originPlayList {
     var list = widget.list;
@@ -54,7 +56,7 @@ class _PlayerState extends State<Player> {
     var detail = widget.detail;
     var teleplayIndex = widget.teleplayIndex;
     var originIndex = widget.originIndex;
-    var duration = _videoPlayerController?.value.duration.inSeconds;
+    // var duration = _videoPlayerController?.value.duration.inSeconds;
     var position = _videoPlayerController?.value.position.inSeconds;
 
     if (_videoPlayerController!.value.isPlaying) {
@@ -69,12 +71,12 @@ class _PlayerState extends State<Player> {
         'startAt': position,
       });
 
-      if (duration == position) {
-        if (teleplayIndex < _originPlayList!.length - 1) {
-          //  _videoPlayerController
-          widget.callback(originIndex, teleplayIndex + 1);
-        }
-      }
+      // if (duration == position) {
+      //   if (teleplayIndex < _originPlayList!.length - 1) {
+      //     //  _videoPlayerController
+      //     widget.callback(originIndex, teleplayIndex + 1);
+      //   }
+      // }
 
       bool isWakelockUp = await WakelockPlus.enabled;
       if (!isWakelockUp) WakelockPlus.enable();
@@ -97,6 +99,7 @@ class _PlayerState extends State<Player> {
 
   void initPlayer() async {
     setState(() {
+      _error = false;
       _loading = true;
     });
 
@@ -109,6 +112,7 @@ class _PlayerState extends State<Player> {
       ..initialize().then(
         (value) {
           setState(() {
+            _error = false;
             _loading = false;
           });
 
@@ -129,7 +133,6 @@ class _PlayerState extends State<Player> {
                     2,
                   ]
                 : [0.5, 1, 1.5, 2, 2.5, 3],
-            // showOptions: false,
             customControls: PlayerControl(
               title: widget.title,
               onPrev: () {
@@ -148,17 +151,27 @@ class _PlayerState extends State<Player> {
                 }
               },
             ),
-            errorBuilder: (context, errorMessage) {
-              return Center(
-                child: Text('Error: $errorMessage'),
+            errorBuilder: (_, errorMessage) {
+              return SnackBar(
+                content: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    width: double.maxFinite,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                    ),
+                    child: Text(errorMessage),
+                  ),
+                ),
               );
             },
-
             deviceOrientationsOnEnterFullScreen: [
               DeviceOrientation.landscapeLeft,
               DeviceOrientation.landscapeRight,
             ],
-
             deviceOrientationsAfterFullScreen: [
               DeviceOrientation.portraitUp,
               DeviceOrientation.portraitDown,
@@ -170,15 +183,22 @@ class _PlayerState extends State<Player> {
               return AnimatedBuilder(
                 animation: animation,
                 builder: (context, child) {
-                  return VideoBuilder(
-                    controllerProvider: controllerProvider,
-                  );
+                  return child!;
                 },
+                child: VideoBuilder(
+                  controllerProvider: controllerProvider,
+                ),
               );
             },
           );
         },
-      );
+      ).catchError((errorMessage) {
+        setState(() {
+          _errorMessage = errorMessage?.message ?? '';
+          _error = true;
+          _loading = false;
+        });
+      });
   }
 
   @override
@@ -224,11 +244,29 @@ class _PlayerState extends State<Player> {
                     ],
                   ),
                 )
-              : _loading
-                  ? const RiveLoading()
-                  : Chewie(
-                      controller: _chewieController!,
-                    ),
+              : _error
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error,
+                          size: 48,
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Text(
+                          _errorMessage,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    )
+                  : _loading
+                      ? const RiveLoading()
+                      : Chewie(
+                          controller: _chewieController!,
+                        ),
           Positioned(
             child: Row(
               children: widget.title ?? [],

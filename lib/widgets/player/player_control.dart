@@ -389,6 +389,8 @@ class _PlayerControlState extends State<PlayerControl>
                   child: Container(
                     padding: const EdgeInsets.only(right: 20),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildProgressBar(),
                       ],
@@ -487,38 +489,46 @@ class _PlayerControlState extends State<PlayerControl>
           });
         }
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          showPlayButton
-              ? ElevatedButton(
-                  onPressed: () {
-                    if (widget.onPrev != null) {
-                      widget.onPrev!();
-                    }
-                  },
-                  child: const Text('上集'),
-                )
-              : Container(),
-          CenterPlayButton(
-            backgroundColor: Colors.black54,
-            iconColor: Colors.white,
-            isFinished: isFinished,
-            isPlaying: controller.value.isPlaying,
-            show: showPlayButton,
-            onPressed: _playPause,
-          ),
-          showPlayButton
-              ? ElevatedButton(
-                  onPressed: () {
-                    widget.onNext!();
-                  },
-                  child: const Text('下集'),
-                )
-              : Container(),
-        ],
-      ),
+      child: ColoredBox(
+          color: Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // showPlayButton && chewieController.isFullScreen
+              //     ? IconButton(
+              //         onPressed: () {
+              //           if (widget.onPrev != null) {
+              //             widget.onPrev!();
+              //           }
+              //         },
+              //         icon: const Icon(
+              //           Icons.skip_previous,
+              //           size: 48,
+              //         ),
+              //       )
+              //     : Container(),
+              CenterPlayButton(
+                backgroundColor: Colors.black54,
+                iconColor: Colors.white,
+                isFinished: isFinished,
+                isPlaying: controller.value.isPlaying,
+                show: showPlayButton,
+                onPressed: _playPause,
+              ),
+              // showPlayButton && showPlayButton && chewieController.isFullScreen
+              //     ? IconButton(
+              //         onPressed: () {
+              //           widget.onNext!();
+              //         },
+              //         icon: const Icon(
+              //           Icons.skip_next,
+              //           size: 48,
+              //         ),
+              //       )
+              //     : Container(),
+            ],
+          )),
     );
   }
 
