@@ -107,7 +107,6 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorDark,
       body: SafeArea(
         child: OrientationBuilder(
           builder: (context, orientation) {
@@ -129,7 +128,13 @@ class _DetailPageState extends State<DetailPage> {
                       originIndex: _originIndex,
                       teleplayIndex: _teleplayIndex,
                       startAt: _startAt,
-                      // seekTo: _playItem?.link,
+                      callback: (originIndex, teleplayIndex) {
+                        setState(() {
+                          _originIndex = originIndex;
+                          _teleplayIndex = teleplayIndex;
+                          _startAt = 0;
+                        });
+                      },
                       title: [
                         BackButton(
                           color: Colors.white,

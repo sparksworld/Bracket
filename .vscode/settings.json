@@ -1,4 +1,5 @@
 {
   "commentTranslate.targetLanguage": "zh-CN",
-  "commentTranslate.source": "Bing"
+  "commentTranslate.source": "Bing",
+  "dart.flutterSdkPath": ".fvm/versions/3.16.9"
 }

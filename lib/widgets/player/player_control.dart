@@ -27,10 +27,14 @@ class PlayerControl extends StatefulWidget {
     super.key,
     this.showPlayButton = true,
     this.title,
+    this.onNext,
+    this.onPrev,
   });
 
   final bool showPlayButton;
   final List<Widget>? title;
+  final Function? onNext;
+  final Function? onPrev;
 
   @override
   State<StatefulWidget> createState() {
@@ -483,13 +487,37 @@ class _PlayerControlState extends State<PlayerControl>
           });
         }
       },
-      child: CenterPlayButton(
-        backgroundColor: Colors.black54,
-        iconColor: Colors.white,
-        isFinished: isFinished,
-        isPlaying: controller.value.isPlaying,
-        show: showPlayButton,
-        onPressed: _playPause,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          showPlayButton
+              ? ElevatedButton(
+                  onPressed: () {
+                    if (widget.onPrev != null) {
+                      widget.onPrev!();
+                    }
+                  },
+                  child: const Text('上集'),
+                )
+              : Container(),
+          CenterPlayButton(
+            backgroundColor: Colors.black54,
+            iconColor: Colors.white,
+            isFinished: isFinished,
+            isPlaying: controller.value.isPlaying,
+            show: showPlayButton,
+            onPressed: _playPause,
+          ),
+          showPlayButton
+              ? ElevatedButton(
+                  onPressed: () {
+                    widget.onNext!();
+                  },
+                  child: const Text('下集'),
+                )
+              : Container(),
+        ],
       ),
     );
   }

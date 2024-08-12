@@ -41,22 +41,22 @@ class FilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = context.watch<ThemeStore>();
+    // var theme = context.watch<ThemeStore>();
 
     if (_tags.keys.isEmpty) {
       return Container();
     }
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(
-            theme.data == ITheme.dark.value
-                ? "assets/images/sliver_dark.png"
-                : "assets/images/sliver_light.png",
-          ),
-          fit: BoxFit.cover,
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   image: DecorationImage(
+      //     image: AssetImage(
+      //       theme.data == ITheme.dark.value
+      //           ? "assets/images/sliver_dark.png"
+      //           : "assets/images/sliver_light.png",
+      //     ),
+      //     fit: BoxFit.cover,
+      //   ),
+      // ),
       padding: const EdgeInsets.only(
         top: 8,
         bottom: 8,

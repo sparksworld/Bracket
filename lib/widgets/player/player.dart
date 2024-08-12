@@ -12,23 +12,22 @@ import 'player_control.dart';
 class Player extends StatefulWidget {
   const Player({
     super.key,
-    this.onNext,
-    this.onPrev,
     required this.title,
     required this.list,
     required this.detail,
     required this.originIndex,
     required this.teleplayIndex,
     required this.startAt,
+    required this.callback,
   });
   final Detail? detail;
   final List<Widget>? title;
   final int originIndex;
   final int teleplayIndex;
-  final Function? onNext;
-  final Function? onPrev;
   final List<ListData?>? list;
   final int? startAt;
+  final Function(int, int) callback;
+
   @override
   State<Player> createState() => _PlayerState();
 }
@@ -40,30 +39,42 @@ class _PlayerState extends State<Player> {
   bool _loading = true;
   bool _netWarning = false;
 
-  // List<ListData> _list
-
-  PlayItem? get _playItem {
+  List<PlayItem>? get _originPlayList {
     var list = widget.list;
     var originIndex = widget.originIndex;
+    return list?[originIndex]?.linkList;
+  } // list
+
+  PlayItem? get _playItem {
     var teleplayIndex = widget.teleplayIndex;
-    return list?[originIndex]?.linkList?[teleplayIndex];
+    return _originPlayList?[teleplayIndex];
   }
 
   Future<void> _listener() async {
     var detail = widget.detail;
+    var teleplayIndex = widget.teleplayIndex;
+    var originIndex = widget.originIndex;
+    var duration = _videoPlayerController?.value.duration.inSeconds;
+    var position = _videoPlayerController?.value.position.inSeconds;
 
     if (_videoPlayerController!.value.isPlaying) {
       var list = widget.list;
-      var originIndex = widget.originIndex;
       context.read<HistoryStore>().addHistory({
         'id': detail?.id,
         "name": detail?.name,
         "timeStamp": DateTime.now().microsecondsSinceEpoch,
         "picture": detail?.picture,
         "originId": list?[originIndex]?.id,
-        "teleplayIndex": widget.teleplayIndex,
-        'startAt': _videoPlayerController!.value.position.inSeconds,
+        "teleplayIndex": teleplayIndex,
+        'startAt': position,
       });
+
+      if (duration == position) {
+        if (teleplayIndex < _originPlayList!.length - 1) {
+          //  _videoPlayerController
+          widget.callback(originIndex, teleplayIndex + 1);
+        }
+      }
 
       bool isWakelockUp = await WakelockPlus.enabled;
       if (!isWakelockUp) WakelockPlus.enable();
@@ -90,7 +101,9 @@ class _PlayerState extends State<Player> {
     });
 
     _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse(_playItem?.link ?? ''),
+      Uri.parse(
+        _playItem?.link ?? '',
+      ),
     )
       ..addListener(_listener)
       ..initialize().then(
@@ -117,7 +130,24 @@ class _PlayerState extends State<Player> {
                   ]
                 : [0.5, 1, 1.5, 2, 2.5, 3],
             // showOptions: false,
-            customControls: PlayerControl(title: widget.title),
+            customControls: PlayerControl(
+              title: widget.title,
+              onPrev: () {
+                var originIndex = widget.originIndex;
+                var teleplayIndex = widget.teleplayIndex;
+                if (teleplayIndex > 0) {
+                  widget.callback(originIndex, teleplayIndex - 1);
+                }
+              },
+              onNext: () {
+                var teleplayIndex = widget.teleplayIndex;
+                var originIndex = widget.originIndex;
+
+                if (teleplayIndex < _originPlayList!.length - 1) {
+                  widget.callback(originIndex, teleplayIndex + 1);
+                }
+              },
+            ),
             errorBuilder: (context, errorMessage) {
               return Center(
                 child: Text('Error: $errorMessage'),
@@ -147,7 +177,6 @@ class _PlayerState extends State<Player> {
               );
             },
           );
-          // _chewieController?.seekTo(Duration(seconds: widget.startAt));
         },
       );
   }

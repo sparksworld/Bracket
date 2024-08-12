@@ -39,16 +39,22 @@ class _PercentageWidgetState extends State<PercentageWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 30),
+      padding: const EdgeInsets.only(
+        top: 30,
+      ),
       alignment: Alignment.topCenter,
       child: Offstage(
         offstage: _offstage,
         child: Container(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(
+            12.0,
+          ),
           decoration: const BoxDecoration(
             color: Colors.black87,
             borderRadius: BorderRadius.all(
-              Radius.circular(5.0),
+              Radius.circular(
+                5.0,
+              ),
             ),
           ),
           child: Text(

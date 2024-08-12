@@ -93,8 +93,8 @@ class _SeriesState extends State<Series> {
                             setState(() {
                               originIndex = i;
                               teleplayIndex = 0;
-                              widget.callback(originIndex, teleplayIndex);
                             });
+                            widget.callback(originIndex, teleplayIndex);
                           });
                     }).toList(),
                   ),
