@@ -55,6 +55,7 @@ dependencies:
   brightness_volume: ^1.0.3
   chewie: ^1.7.5
   another_flushbar: ^1.12.30
+  fijkplayer: ^0.11.0
 
 dev_dependencies:
   flutter_test:

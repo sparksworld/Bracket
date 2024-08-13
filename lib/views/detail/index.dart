@@ -4,7 +4,7 @@ import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
 import "/model/film_play_info/list.dart" show ListData;
 import "/model/film_play_info/play_list.dart" show PlayItem;
 import "/views/detail/describe.dart" show Describe;
-import "/widgets/player/player.dart" show Player;
+import "/widgets/ijkplayer/player.dart" show Player;
 
 import "series.dart";
 
@@ -25,6 +25,7 @@ class MyTab {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  final double _playerAspectRatio = 16 / 9;
   final List<MyTab> _tabs = [
     MyTab(icon: const Icon(Icons.abc_outlined), label: '详情', key: UniqueKey()),
     MyTab(icon: const Icon(Icons.abc_outlined), label: '简介', key: UniqueKey()),
@@ -119,41 +120,46 @@ class _DetailPageState extends State<DetailPage> {
                 Expanded(
                   flex: orientation == Orientation.portrait ? 0 : 1,
                   child: Container(
-                    color: Colors.black,
-                    child: Player(
-                      key: Key(
-                          '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                      list: _list,
-                      detail: _data?.detail,
-                      originIndex: _originIndex,
-                      teleplayIndex: _teleplayIndex,
-                      startAt: _startAt,
-                      callback: (originIndex, teleplayIndex) {
-                        setState(() {
-                          _originIndex = originIndex;
-                          _teleplayIndex = teleplayIndex;
-                          _startAt = 0;
-                        });
-                      },
-                      title: [
-                        BackButton(
-                          color: Colors.white,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        Text(
-                          _data?.detail?.name ?? '',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                      color: Colors.black,
+                      child: AspectRatio(
+                        aspectRatio: _playerAspectRatio,
+                        child: _playItem?.link != null
+                            ? Player(
+                                // key: Key(
+                                //     '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                                list: _list,
+                                detail: _data?.detail,
+                                originIndex: _originIndex,
+                                teleplayIndex: _teleplayIndex,
+                                startAt: _startAt,
+                                // aspectRatio: _playerAspectRatio,
+                                callback: (originIndex, teleplayIndex) {
+                                  setState(() {
+                                    _originIndex = originIndex;
+                                    _teleplayIndex = teleplayIndex;
+                                    _startAt = 0;
+                                  });
+                                },
+                                title: [
+                                  BackButton(
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  Text(
+                                    _data?.detail?.name ?? '',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : null,
+                      )),
                 ),
                 if (orientation == Orientation.portrait)
                   Container()
