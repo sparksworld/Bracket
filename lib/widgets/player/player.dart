@@ -35,7 +35,7 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> {
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
-  final double _aspectRatio = 16 / 9;
+  double _aspectRatio = 16 / 9;
   bool _loading = true;
   bool _error = false;
   bool _netWarning = false;
@@ -56,7 +56,7 @@ class _PlayerState extends State<Player> {
     var detail = widget.detail;
     var teleplayIndex = widget.teleplayIndex;
     var originIndex = widget.originIndex;
-    // var duration = _videoPlayerController?.value.duration.inSeconds;
+    var duration = _videoPlayerController?.value.duration.inSeconds;
     var position = _videoPlayerController?.value.position.inSeconds;
 
     if (_videoPlayerController!.value.isPlaying) {
@@ -71,12 +71,13 @@ class _PlayerState extends State<Player> {
         'startAt': position,
       });
 
-      // if (duration == position) {
-      //   if (teleplayIndex < _originPlayList!.length - 1) {
-      //     //  _videoPlayerController
-      //     widget.callback(originIndex, teleplayIndex + 1);
-      //   }
-      // }
+      if (duration == position) {
+        if (teleplayIndex < _originPlayList!.length - 1) {
+          //  _videoPlayerController
+          _videoPlayerController?.removeListener(_listener);
+          widget.callback(originIndex, teleplayIndex + 1);
+        }
+      }
 
       bool isWakelockUp = await WakelockPlus.enabled;
       if (!isWakelockUp) WakelockPlus.enable();
@@ -89,7 +90,8 @@ class _PlayerState extends State<Player> {
   void initState() {
     super.initState();
 
-    initPlayer();
+    _initPlayer();
+
     watchConnectivity(ConnectivityResult.mobile, () {
       setState(() {
         _netWarning = true;
@@ -97,108 +99,100 @@ class _PlayerState extends State<Player> {
     });
   }
 
-  void initPlayer() async {
-    setState(() {
-      _error = false;
-      _loading = true;
-    });
-
+  Future<void> _initPlayer() async {
     _videoPlayerController = VideoPlayerController.networkUrl(
       Uri.parse(
         _playItem?.link ?? '',
       ),
-    )
-      ..addListener(_listener)
-      ..initialize().then(
-        (value) {
-          setState(() {
-            _error = false;
-            _loading = false;
-          });
+    )..addListener(_listener);
+    _initChewieController();
+  }
 
-          var aspectRatio = _videoPlayerController?.value.aspectRatio;
-          _chewieController = ChewieController(
-            videoPlayerController: _videoPlayerController!,
-            allowFullScreen: true,
-            autoPlay: !_netWarning,
-            looping: false,
-            startAt: Duration(seconds: widget.startAt ?? 0),
-            showControlsOnInitialize: false,
-            aspectRatio: aspectRatio ?? _aspectRatio,
-            playbackSpeeds: Platform.isIOS
-                ? [
-                    0.5,
-                    1,
-                    1.5,
-                    2,
-                  ]
-                : [0.5, 1, 1.5, 2, 2.5, 3],
-            customControls: PlayerControl(
-              title: widget.title,
-              onPrev: () {
-                var originIndex = widget.originIndex;
-                var teleplayIndex = widget.teleplayIndex;
-                if (teleplayIndex > 0) {
-                  widget.callback(originIndex, teleplayIndex - 1);
-                }
-              },
-              onNext: () {
-                var teleplayIndex = widget.teleplayIndex;
-                var originIndex = widget.originIndex;
-
-                if (teleplayIndex < _originPlayList!.length - 1) {
-                  widget.callback(originIndex, teleplayIndex + 1);
-                }
-              },
-            ),
-            errorBuilder: (_, errorMessage) {
-              return SnackBar(
-                content: Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    margin: const EdgeInsets.all(20),
-                    width: double.maxFinite,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                    ),
-                    child: Text(errorMessage),
-                  ),
-                ),
-              );
-            },
-            deviceOrientationsOnEnterFullScreen: [
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.landscapeRight,
-            ],
-            deviceOrientationsAfterFullScreen: [
-              DeviceOrientation.portraitUp,
-              DeviceOrientation.portraitDown,
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.landscapeRight,
-            ],
-            routePageBuilder:
-                (context, animation, secondaryAnimation, controllerProvider) {
-              return AnimatedBuilder(
-                animation: animation,
-                builder: (context, child) {
-                  return child!;
-                },
-                child: VideoBuilder(
-                  controllerProvider: controllerProvider,
-                ),
-              );
-            },
-          );
+  void _initChewieController() {
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController!,
+      allowFullScreen: true,
+      autoPlay: true,
+      looping: false,
+      autoInitialize: true,
+      startAt: Duration(seconds: widget.startAt ?? 0),
+      showControlsOnInitialize: true,
+      // aspectRatio: _aspectRatio,
+      // playbackSpeeds: Platform.isIOS
+      //     ? [
+      //         0.5,
+      //         1,
+      //         1.5,
+      //         2,
+      //       ]
+      //     : [0.5, 1, 1.5, 2, 2.5, 3],
+      customControls: PlayerControl(
+        // list: widget.list,
+        title: widget.title,
+        onPrev: () {
+          var originIndex = widget.originIndex;
+          var teleplayIndex = widget.teleplayIndex;
+          if (teleplayIndex > 0) {
+            widget.callback(originIndex, teleplayIndex - 1);
+          }
         },
-      ).catchError((errorMessage) {
-        setState(() {
-          _errorMessage = errorMessage?.message ?? '';
-          _error = true;
-          _loading = false;
-        });
-      });
+        onNext: _next,
+      ),
+      errorBuilder: (_, errorMessage) {
+        return SnackBar(
+          content: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              width: double.maxFinite,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              child: Text(errorMessage),
+            ),
+          ),
+        );
+      },
+      deviceOrientationsOnEnterFullScreen: [
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
+      deviceOrientationsAfterFullScreen: [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
+      // routePageBuilder:
+      //     (context, animation, secondaryAnimation, controllerProvider) {
+      //   return AnimatedBuilder(
+      //     animation: animation,
+      //     builder: (context, child) {
+      //       return child!;
+      //     },
+      //     child: VideoBuilder(
+      //       controllerProvider: controllerProvider,
+      //     ),
+      //   );
+      // },
+    );
+  }
+
+  Future<void> _next() async {
+    final videoPlayerController = _videoPlayerController;
+    if (videoPlayerController == null) return;
+    if (videoPlayerController.value.hasError) return;
+    if (!videoPlayerController.value.isInitialized) return;
+
+    var teleplayIndex = widget.teleplayIndex;
+    var originIndex = widget.originIndex;
+    if (teleplayIndex < _originPlayList!.length - 1) {
+      widget.callback(originIndex, teleplayIndex + 1);
+    }
+    videoPlayerController.dispose();
+    await _initPlayer();
   }
 
   @override
@@ -215,6 +209,25 @@ class _PlayerState extends State<Player> {
     _chewieController?.dispose();
     super.dispose();
   }
+
+  // @override
+  // void didUpdateWidget(covariant Player oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+
+  //   var teleplayIndex = oldWidget.teleplayIndex;
+  //   var originIndex = oldWidget.originIndex;
+  //   if (teleplayIndex < _originPlayList!.length - 1) {
+  //     oldWidget.callback(originIndex, teleplayIndex + 1);
+  //   }
+
+  //   if (widget.originIndex != originIndex ||
+  //       widget.teleplayIndex != teleplayIndex) {
+  //     // _videoPlayerController?.dispose();
+  //     // _initPlayer();
+  //     print(originIndex);
+  //     print(teleplayIndex);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -262,11 +275,9 @@ class _PlayerState extends State<Player> {
                         ),
                       ],
                     )
-                  : _loading
-                      ? const RiveLoading()
-                      : Chewie(
-                          controller: _chewieController!,
-                        ),
+                  : Chewie(
+                      controller: _chewieController!,
+                    ),
           Positioned(
             child: Row(
               children: widget.title ?? [],

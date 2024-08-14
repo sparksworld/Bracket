@@ -4,7 +4,8 @@ import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
 import "/model/film_play_info/list.dart" show ListData;
 import "/model/film_play_info/play_list.dart" show PlayItem;
 import "/views/detail/describe.dart" show Describe;
-import "/widgets/ijkplayer/player.dart" show Player;
+import "/widgets/player/player.dart" show Player;
+import 'notify.dart' show EpisodeNotify;
 
 import "series.dart";
 
@@ -60,11 +61,11 @@ class _DetailPageState extends State<DetailPage> {
               ?.indexWhere((element) => originId == element.id);
 
           if (originIndex != null && originIndex >= 0) {
-            setState(() {
-              _originIndex = originIndex;
-              _teleplayIndex = item['teleplayIndex'];
-              _startAt = item['startAt'];
-            });
+            // setState(() {
+            //   _originIndex = originIndex;
+            //   _teleplayIndex = item['teleplayIndex'];
+            //   _startAt = item['startAt'];
+            // });
           }
         });
       }

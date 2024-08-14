@@ -516,17 +516,17 @@ class _PlayerControlState extends State<PlayerControl>
                 show: showPlayButton,
                 onPressed: _playPause,
               ),
-              // showPlayButton && showPlayButton && chewieController.isFullScreen
-              //     ? IconButton(
-              //         onPressed: () {
-              //           widget.onNext!();
-              //         },
-              //         icon: const Icon(
-              //           Icons.skip_next,
-              //           size: 48,
-              //         ),
-              //       )
-              //     : Container(),
+              showPlayButton && showPlayButton && chewieController.isFullScreen
+                  ? IconButton(
+                      onPressed: () {
+                        widget.onNext!();
+                      },
+                      icon: const Icon(
+                        Icons.skip_next,
+                        size: 48,
+                      ),
+                    )
+                  : Container(),
             ],
           )),
     );
