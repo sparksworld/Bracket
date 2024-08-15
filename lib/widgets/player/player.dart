@@ -100,84 +100,90 @@ class _PlayerState extends State<Player> {
   }
 
   Future<void> _initPlayer() async {
+    // print(_playItem?.link);
+    _videoPlayerController?.removeListener(_listener);
+    _videoPlayerController?.dispose();
+
     _videoPlayerController = VideoPlayerController.networkUrl(
       Uri.parse(
         _playItem?.link ?? '',
       ),
-    )..addListener(_listener);
-    _initChewieController();
-  }
-
-  void _initChewieController() {
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController!,
-      allowFullScreen: true,
-      autoPlay: true,
-      looping: false,
-      autoInitialize: true,
-      startAt: Duration(seconds: widget.startAt ?? 0),
-      showControlsOnInitialize: true,
-      // aspectRatio: _aspectRatio,
-      // playbackSpeeds: Platform.isIOS
-      //     ? [
-      //         0.5,
-      //         1,
-      //         1.5,
-      //         2,
-      //       ]
-      //     : [0.5, 1, 1.5, 2, 2.5, 3],
-      customControls: PlayerControl(
-        // list: widget.list,
-        title: widget.title,
-        onPrev: () {
-          var originIndex = widget.originIndex;
-          var teleplayIndex = widget.teleplayIndex;
-          if (teleplayIndex > 0) {
-            widget.callback(originIndex, teleplayIndex - 1);
-          }
-        },
-        onNext: _next,
-      ),
-      errorBuilder: (_, errorMessage) {
-        return SnackBar(
-          content: Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              width: double.maxFinite,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              child: Text(errorMessage),
+    )
+      ..addListener(_listener)
+      ..initialize().then(
+        (value) {
+          _chewieController = ChewieController(
+            videoPlayerController: _videoPlayerController!,
+            allowFullScreen: true,
+            autoPlay: true,
+            looping: false,
+            autoInitialize: true,
+            startAt: Duration(seconds: widget.startAt ?? 0),
+            showControlsOnInitialize: true,
+            // aspectRatio: _aspectRatio,
+            // playbackSpeeds: Platform.isIOS
+            //     ? [
+            //         0.5,
+            //         1,
+            //         1.5,
+            //         2,
+            //       ]
+            //     : [0.5, 1, 1.5, 2, 2.5, 3],
+            customControls: PlayerControl(
+              // list: widget.list,
+              title: widget.title,
+              onPrev: () {
+                var originIndex = widget.originIndex;
+                var teleplayIndex = widget.teleplayIndex;
+                if (teleplayIndex > 0) {
+                  widget.callback(originIndex, teleplayIndex - 1);
+                }
+              },
+              onNext: _next,
             ),
-          ),
-        );
-      },
-      deviceOrientationsOnEnterFullScreen: [
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ],
-      deviceOrientationsAfterFullScreen: [
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ],
-      // routePageBuilder:
-      //     (context, animation, secondaryAnimation, controllerProvider) {
-      //   return AnimatedBuilder(
-      //     animation: animation,
-      //     builder: (context, child) {
-      //       return child!;
-      //     },
-      //     child: VideoBuilder(
-      //       controllerProvider: controllerProvider,
-      //     ),
-      //   );
-      // },
-    );
+            errorBuilder: (_, errorMessage) {
+              return SnackBar(
+                content: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    width: double.maxFinite,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                    ),
+                    child: Text(errorMessage),
+                  ),
+                ),
+              );
+            },
+            deviceOrientationsOnEnterFullScreen: [
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ],
+            deviceOrientationsAfterFullScreen: [
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown,
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ],
+            // routePageBuilder:
+            //     (context, animation, secondaryAnimation, controllerProvider) {
+            //   return AnimatedBuilder(
+            //     animation: animation,
+            //     builder: (context, child) {
+            //       return child!;
+            //     },
+            //     child: VideoBuilder(
+            //       controllerProvider: controllerProvider,
+            //     ),
+            //   );
+            // },
+          );
+          setState(() {});
+        },
+      );
   }
 
   Future<void> _next() async {
@@ -191,7 +197,6 @@ class _PlayerState extends State<Player> {
     if (teleplayIndex < _originPlayList!.length - 1) {
       widget.callback(originIndex, teleplayIndex + 1);
     }
-    videoPlayerController.dispose();
     await _initPlayer();
   }
 
@@ -210,24 +215,20 @@ class _PlayerState extends State<Player> {
     super.dispose();
   }
 
-  // @override
-  // void didUpdateWidget(covariant Player oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
+  @override
+  void didUpdateWidget(covariant Player oldWidget) {
+    var oldTeleplayIndex = oldWidget.teleplayIndex;
+    var oldOriginIndex = oldWidget.originIndex;
+    // if (teleplayIndex < _originPlayList!.length - 1) {
+    //   widget.callback(originIndex, teleplayIndex + 1);
+    // }
 
-  //   var teleplayIndex = oldWidget.teleplayIndex;
-  //   var originIndex = oldWidget.originIndex;
-  //   if (teleplayIndex < _originPlayList!.length - 1) {
-  //     oldWidget.callback(originIndex, teleplayIndex + 1);
-  //   }
-
-  //   if (widget.originIndex != originIndex ||
-  //       widget.teleplayIndex != teleplayIndex) {
-  //     // _videoPlayerController?.dispose();
-  //     // _initPlayer();
-  //     print(originIndex);
-  //     print(teleplayIndex);
-  //   }
-  // }
+    if (widget.originIndex != oldOriginIndex ||
+        widget.teleplayIndex != oldTeleplayIndex) {
+      _initPlayer();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
