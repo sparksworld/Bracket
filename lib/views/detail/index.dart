@@ -10,7 +10,7 @@ import "series.dart";
 
 class DetailPage extends StatefulWidget {
   final Map? arguments;
-  const DetailPage({Key? key, this.arguments}) : super(key: key);
+  const DetailPage({super.key, this.arguments});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -37,8 +37,6 @@ class _DetailPageState extends State<DetailPage> {
   int _startAt = 0;
 
   Future _fetchData(id) async {
-    // int id = widget.arguments?['id'];
-
     var res = await Api.filmDetail(
       context: context,
       queryParameters: {
@@ -123,14 +121,14 @@ class _DetailPageState extends State<DetailPage> {
                         aspectRatio: _playerAspectRatio,
                         child: _playItem?.link != null
                             ? Player(
-                                // key: Key(
-                                //     '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                                key: Key(
+                                    '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
                                 list: _list,
                                 detail: _data?.detail,
                                 originIndex: _originIndex,
                                 teleplayIndex: _teleplayIndex,
                                 startAt: _startAt,
-                                // aspectRatio: _playerAspectRatio,
+                                aspectRatio: _playerAspectRatio,
                                 callback: (originIndex, teleplayIndex) {
                                   setState(() {
                                     _originIndex = originIndex;

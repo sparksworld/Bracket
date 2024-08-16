@@ -1,6 +1,6 @@
-import 'package:bracket/model/film_play_info/detail.dart';
-import 'package:bracket/model/film_play_info/list.dart';
-import 'package:bracket/model/film_play_info/play_list.dart';
+import '/model/film_play_info/detail.dart';
+import '/model/film_play_info/list.dart';
+import '/model/film_play_info/play_list.dart';
 
 import '/plugins.dart';
 import "package:chewie/chewie.dart";
@@ -19,6 +19,7 @@ class Player extends StatefulWidget {
     required this.teleplayIndex,
     required this.startAt,
     required this.callback,
+    required double aspectRatio,
   });
   final Detail? detail;
   final List<Widget>? title;
@@ -33,9 +34,9 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> {
+  final double _aspectRatio = 16 / 9;
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
-  double _aspectRatio = 16 / 9;
   bool _loading = true;
   bool _error = false;
   bool _netWarning = false;
@@ -45,7 +46,7 @@ class _PlayerState extends State<Player> {
     var list = widget.list;
     var originIndex = widget.originIndex;
     return list?[originIndex]?.linkList;
-  } // list
+  }
 
   PlayItem? get _playItem {
     var teleplayIndex = widget.teleplayIndex;
@@ -56,7 +57,7 @@ class _PlayerState extends State<Player> {
     var detail = widget.detail;
     var teleplayIndex = widget.teleplayIndex;
     var originIndex = widget.originIndex;
-    var duration = _videoPlayerController?.value.duration.inSeconds;
+    // var duration = _videoPlayerController?.value.duration.inSeconds;
     var position = _videoPlayerController?.value.position.inSeconds;
 
     if (_videoPlayerController!.value.isPlaying) {
@@ -71,13 +72,13 @@ class _PlayerState extends State<Player> {
         'startAt': position,
       });
 
-      if (duration == position) {
-        if (teleplayIndex < _originPlayList!.length - 1) {
-          //  _videoPlayerController
-          _videoPlayerController?.removeListener(_listener);
-          widget.callback(originIndex, teleplayIndex + 1);
-        }
-      }
+      // if (duration == position) {
+      //   if (teleplayIndex < _originPlayList!.length - 1) {
+      //     //  _videoPlayerController
+      //     _videoPlayerController?.removeListener(_listener);
+      //     widget.callback(originIndex, teleplayIndex + 1);
+      //   }
+      // }
 
       bool isWakelockUp = await WakelockPlus.enabled;
       if (!isWakelockUp) WakelockPlus.enable();
@@ -100,10 +101,10 @@ class _PlayerState extends State<Player> {
   }
 
   Future<void> _initPlayer() async {
-    // print(_playItem?.link);
-    _videoPlayerController?.removeListener(_listener);
-    _videoPlayerController?.dispose();
-
+    setState(() {
+      _loading = true;
+      _error = false;
+    });
     _videoPlayerController = VideoPlayerController.networkUrl(
       Uri.parse(
         _playItem?.link ?? '',
@@ -112,6 +113,11 @@ class _PlayerState extends State<Player> {
       ..addListener(_listener)
       ..initialize().then(
         (value) {
+          setState(() {
+            _loading = false;
+            _error = false;
+          });
+          var videoAspectRatio = _videoPlayerController?.value.aspectRatio;
           _chewieController = ChewieController(
             videoPlayerController: _videoPlayerController!,
             allowFullScreen: true,
@@ -120,15 +126,15 @@ class _PlayerState extends State<Player> {
             autoInitialize: true,
             startAt: Duration(seconds: widget.startAt ?? 0),
             showControlsOnInitialize: true,
-            // aspectRatio: _aspectRatio,
-            // playbackSpeeds: Platform.isIOS
-            //     ? [
-            //         0.5,
-            //         1,
-            //         1.5,
-            //         2,
-            //       ]
-            //     : [0.5, 1, 1.5, 2, 2.5, 3],
+            aspectRatio: videoAspectRatio ?? _aspectRatio,
+            playbackSpeeds: Platform.isIOS
+                ? [
+                    0.5,
+                    1,
+                    1.5,
+                    2,
+                  ]
+                : [0.5, 1, 1.5, 2, 2.5, 3],
             customControls: PlayerControl(
               // list: widget.list,
               title: widget.title,
@@ -139,7 +145,6 @@ class _PlayerState extends State<Player> {
                   widget.callback(originIndex, teleplayIndex - 1);
                 }
               },
-              onNext: _next,
             ),
             errorBuilder: (_, errorMessage) {
               return SnackBar(
@@ -168,36 +173,29 @@ class _PlayerState extends State<Player> {
               DeviceOrientation.landscapeLeft,
               DeviceOrientation.landscapeRight,
             ],
-            // routePageBuilder:
-            //     (context, animation, secondaryAnimation, controllerProvider) {
-            //   return AnimatedBuilder(
-            //     animation: animation,
-            //     builder: (context, child) {
-            //       return child!;
-            //     },
-            //     child: VideoBuilder(
-            //       controllerProvider: controllerProvider,
-            //     ),
-            //   );
-            // },
+            routePageBuilder:
+                (context, animation, secondaryAnimation, controllerProvider) {
+              return AnimatedBuilder(
+                animation: animation,
+                builder: (context, child) {
+                  return child!;
+                },
+                child: VideoBuilder(
+                  controllerProvider: controllerProvider,
+                ),
+              );
+            },
           );
           setState(() {});
         },
-      );
-  }
-
-  Future<void> _next() async {
-    final videoPlayerController = _videoPlayerController;
-    if (videoPlayerController == null) return;
-    if (videoPlayerController.value.hasError) return;
-    if (!videoPlayerController.value.isInitialized) return;
-
-    var teleplayIndex = widget.teleplayIndex;
-    var originIndex = widget.originIndex;
-    if (teleplayIndex < _originPlayList!.length - 1) {
-      widget.callback(originIndex, teleplayIndex + 1);
-    }
-    await _initPlayer();
+      ).catchError((error) {
+        print(error);
+        setState(() {
+          _loading = false;
+          _error = true;
+          _errorMessage = error.message;
+        });
+      });
   }
 
   @override
@@ -213,21 +211,6 @@ class _PlayerState extends State<Player> {
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
     super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant Player oldWidget) {
-    var oldTeleplayIndex = oldWidget.teleplayIndex;
-    var oldOriginIndex = oldWidget.originIndex;
-    // if (teleplayIndex < _originPlayList!.length - 1) {
-    //   widget.callback(originIndex, teleplayIndex + 1);
-    // }
-
-    if (widget.originIndex != oldOriginIndex ||
-        widget.teleplayIndex != oldTeleplayIndex) {
-      _initPlayer();
-    }
-    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -276,9 +259,11 @@ class _PlayerState extends State<Player> {
                         ),
                       ],
                     )
-                  : Chewie(
-                      controller: _chewieController!,
-                    ),
+                  : _loading
+                      ? const RiveLoading()
+                      : Chewie(
+                          controller: _chewieController!,
+                        ),
           Positioned(
             child: Row(
               children: widget.title ?? [],

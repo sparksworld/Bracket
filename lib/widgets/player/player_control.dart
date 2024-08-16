@@ -492,7 +492,7 @@ class _PlayerControlState extends State<PlayerControl>
       child: ColoredBox(
           color: Colors.transparent,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // showPlayButton && chewieController.isFullScreen
@@ -516,17 +516,17 @@ class _PlayerControlState extends State<PlayerControl>
                 show: showPlayButton,
                 onPressed: _playPause,
               ),
-              showPlayButton && showPlayButton && chewieController.isFullScreen
-                  ? IconButton(
-                      onPressed: () {
-                        widget.onNext!();
-                      },
-                      icon: const Icon(
-                        Icons.skip_next,
-                        size: 48,
-                      ),
-                    )
-                  : Container(),
+              // showPlayButton && showPlayButton && chewieController.isFullScreen
+              //     ? IconButton(
+              //         onPressed: () {
+              //           widget.onNext!();
+              //         },
+              //         icon: const Icon(
+              //           Icons.skip_next,
+              //           size: 48,
+              //         ),
+              //       )
+              //     : Container(),
             ],
           )),
     );
