@@ -4,7 +4,7 @@ import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
 import "/model/film_play_info/list.dart" show ListData;
 import "/model/film_play_info/play_list.dart" show PlayItem;
 import "/views/detail/describe.dart" show Describe;
-import "/widgets/player/player.dart" show Player;
+import "/widgets/fijkplayer/player.dart" show Player;
 
 import "series.dart";
 
@@ -128,7 +128,7 @@ class _DetailPageState extends State<DetailPage> {
                                 originIndex: _originIndex,
                                 teleplayIndex: _teleplayIndex,
                                 startAt: _startAt,
-                                aspectRatio: _playerAspectRatio,
+                                // aspectRatio: _playerAspectRatio,
                                 callback: (originIndex, teleplayIndex) {
                                   setState(() {
                                     _originIndex = originIndex;

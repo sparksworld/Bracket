@@ -5,12 +5,16 @@ PODS:
     - GCDWebServer
     - HLSCachingReverseProxyServer
     - PINCache
+  - BIJKPlayer (0.7.16)
   - brightness_volume (0.0.1):
     - Flutter
   - Cache (6.0.0)
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
+  - fijkplayer (0.11.0):
+    - BIJKPlayer (~> 0.7.16)
+    - Flutter
   - Flutter (1.0.0)
   - flutter_native_splash (0.0.1):
     - Flutter
@@ -51,6 +55,7 @@ DEPENDENCIES:
   - better_player (from `.symlinks/plugins/better_player/ios`)
   - brightness_volume (from `.symlinks/plugins/brightness_volume/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
+  - fijkplayer (from `.symlinks/plugins/fijkplayer/ios`)
   - Flutter (from `Flutter`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -63,6 +68,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - BIJKPlayer
     - Cache
     - GCDWebServer
     - HLSCachingReverseProxyServer
@@ -77,6 +83,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/brightness_volume/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
+  fijkplayer:
+    :path: ".symlinks/plugins/fijkplayer/ios"
   Flutter:
     :path: Flutter
   flutter_native_splash:
@@ -98,9 +106,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   better_player: 2406bfe8175203c7a46fa15f9d778d73b12e1646
+  BIJKPlayer: 4c5d66e5cb99ae5bade6f22a4fcc031722a81c64
   brightness_volume: e63139ebe38e642937d5cd286b58c9a9890f1725
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
   connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
+  fijkplayer: 8b6d864948dc28e6e07248ed4fce61a7467db4df
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
