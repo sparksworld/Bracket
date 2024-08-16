@@ -242,22 +242,24 @@ class _PlayerState extends State<Player> {
                   ),
                 )
               : _error
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.error,
-                          size: 48,
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Text(
-                          _errorMessage,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                  ? Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error,
+                            size: 48,
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Text(
+                            _errorMessage,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     )
                   : _loading
                       ? const RiveLoading()
