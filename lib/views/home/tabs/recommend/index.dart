@@ -88,6 +88,7 @@ class _RecommendTabState extends State<RecommendTab>
     return Scaffold(
       body: SafeArea(
         top: false,
+        bottom: false,
         child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [

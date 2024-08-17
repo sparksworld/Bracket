@@ -55,6 +55,7 @@ class _UserCenterTabState extends State<UserCenterTab>
 
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(

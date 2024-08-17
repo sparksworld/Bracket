@@ -122,13 +122,9 @@ class __FijkPanel3State extends State<_FijkPanel3> {
     _bufferPos = player.bufferPos;
 
     _currentPosSubs = player.onCurrentPosUpdate.listen((v) {
-      if (_hideStuff == false) {
-        setState(() {
-          _currentPos = v;
-        });
-      } else {
+      setState(() {
         _currentPos = v;
-      }
+      });
       if (_needClearSeekData) {
         widget.data.clearValue(Fijk3Data.fijkViewPanelSeekto);
       }
@@ -141,13 +137,9 @@ class __FijkPanel3State extends State<_FijkPanel3> {
     }
 
     _bufferPosSubs = player.onBufferPosUpdate.listen((v) {
-      if (_hideStuff == false) {
-        setState(() {
-          _bufferPos = v;
-        });
-      } else {
+      setState(() {
         _bufferPos = v;
-      }
+      });
     });
 
     player.addListener(_playerValueChanged);
@@ -173,13 +165,9 @@ class __FijkPanel3State extends State<_FijkPanel3> {
     FijkValue value = player.value;
 
     if (value.duration != _duration) {
-      if (_hideStuff == false) {
-        setState(() {
-          _duration = value.duration;
-        });
-      } else {
+      setState(() {
         _duration = value.duration;
-      }
+      });
     }
     bool playing = (value.state == FijkState.started);
     bool prepared = value.prepared;
@@ -313,17 +301,15 @@ class __FijkPanel3State extends State<_FijkPanel3> {
         ? const Icon(Icons.fullscreen_exit)
         : const Icon(Icons.fullscreen);
 
-    return GestureDetector(
-      onTap: () {
+    return IconButton(
+      iconSize: height * 0.8,
+      color: const Color(0xFFFFFFFF),
+      icon: icon,
+      onPressed: () {
         player.value.fullScreen
             ? player.exitFullScreen()
             : player.enterFullScreen();
       },
-      child: Icon(
-        icon.icon,
-        size: height * 0.8,
-        color: const Color(0xFFFFFFFF),
-      ),
     );
   }
 
@@ -408,9 +394,31 @@ class __FijkPanel3State extends State<_FijkPanel3> {
     } else {
       return Row(
         children: <Widget>[
-          buildPlayButton(context, height * 0.8),
+          Container(
+            child: widget.onPrev != null
+                ? IconButton(
+                    iconSize: height * 0.8,
+                    color: Colors.white,
+                    icon: const Icon(Icons.skip_previous),
+                    onPressed: () {
+                      widget.onPrev!();
+                    },
+                  )
+                : null,
+          ),
           Expanded(child: Container()),
-          buildFullScreenButton(context, height * 0.8),
+          Container(
+            child: widget.onNext != null
+                ? IconButton(
+                    iconSize: height * 0.8,
+                    color: Colors.white,
+                    icon: const Icon(Icons.skip_next),
+                    onPressed: () {
+                      widget.onNext!();
+                    },
+                  )
+                : null,
+          ),
         ],
       );
     }
@@ -510,8 +518,8 @@ class __FijkPanel3State extends State<_FijkPanel3> {
       onVerticalDragEnd: onVerticalDragEndFun,
       onHorizontalDragUpdate: (d) {},
       onLongPressStart: (detail) async {
-        await player.setSpeed(3.0);
-        _percentageWidget.percentageCallback('3.0x');
+        await player.setSpeed(2.0);
+        _percentageWidget.percentageCallback('2.0x');
       },
       onLongPressEnd: (detail) async {
         await player.setSpeed(_speed);
@@ -583,7 +591,7 @@ class __FijkPanel3State extends State<_FijkPanel3> {
           child: toast,
         ),
       );
-    } else if (player.state == FijkState.asyncPreparing) {
+    } else if (player.state == FijkState.asyncPreparing || player.isBuffering) {
       return Container(
         alignment: Alignment.center,
         child: const RiveLoading(),
@@ -617,7 +625,7 @@ class __FijkPanel3State extends State<_FijkPanel3> {
         ),
       );
     } else {
-      return const RiveLoading();
+      return Container();
     }
   }
 
@@ -629,7 +637,7 @@ class __FijkPanel3State extends State<_FijkPanel3> {
 
     if (_statelessTimer != null && _statelessTimer!.isActive) {
       ws.add(buildStateless());
-    } else if (player.state == FijkState.asyncPreparing) {
+    } else if (player.state == FijkState.asyncPreparing || player.isBuffering) {
       ws.add(buildStateless());
     } else if (player.state == FijkState.error) {
       ws.add(buildStateless());

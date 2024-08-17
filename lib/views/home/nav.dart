@@ -72,6 +72,7 @@ class _BottonNavWithAnimatedIconsState
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 8,

@@ -37,6 +37,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
 
   bool _loading = true;
   bool _error = false;
+  bool _changing = false;
   bool _netWarning = false;
 
   String _errorMessage = '';
@@ -55,8 +56,9 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     super.initState();
 
     changeSource(link);
-    player.addListener(_fijkValueListener);
+    // player.addListener(_fijkValueListener);
     player.onCurrentPosUpdate.listen(_currentPosUpdate);
+    // player.onBufferPosUpdate.listen(_currentPosUpdate);
     WidgetsBinding.instance.addObserver(this);
     watchConnectivity(ConnectivityResult.mobile, () {
       setState(() {
@@ -75,6 +77,9 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     )
         .then(
       (value) {
+        // await player.setOption(
+        //     FijkOption.playerCategory, "seek-at-start", widget.startAt ?? 0);
+        _changing = false;
         setState(() {
           _loading = false;
           _error = false;
@@ -89,7 +94,20 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     });
   }
 
-  void _currentPosUpdate(event) async {
+  void _currentPosUpdate(Duration event) async {
+    if (event.toString() == player.value.duration.toString() &&
+        event.inSeconds > 0) {
+      var originIndex = widget.originIndex;
+      var teleplayIndex = widget.teleplayIndex;
+      var linkList = widget.list?[originIndex]?.linkList!;
+
+      if (linkList != null &&
+          teleplayIndex < linkList.length - 1 &&
+          !_changing) {
+        widget.callback(originIndex, teleplayIndex + 1);
+        _changing = true;
+      }
+    }
     throttle.run(() {
       if (mounted) {
         var list = widget.list;
@@ -113,19 +131,19 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     if (!isWakelockUp) WakelockPlus.enable();
   }
 
-  void _fijkValueListener() {
-    FijkValue value = player.value;
+  // void _fijkValueListener() {
+  //   FijkValue value = player.value;
 
-    if (value.prepared) {
-      player.seekTo(widget.startAt ?? 0);
-    }
-  }
+  //   if (value.prepared) {
+  //     player.seekTo(widget.startAt ?? 0);
+  //   }
+  // }
 
   @override
   void dispose() {
     super.dispose();
     WakelockPlus.disable();
-    player.removeListener(_fijkValueListener);
+    // player.removeListener(_fijkValueListener);
     player.release();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -217,7 +235,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
             child: Row(
               children: widget.title ?? [],
             ),
-          )
+          ),
         ],
       ),
     );
