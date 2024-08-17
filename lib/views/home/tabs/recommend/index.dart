@@ -117,7 +117,10 @@ class _RecommendTabState extends State<RecommendTab>
                 }
 
                 return SingleChildScrollView(
-                  child: getHomeGrid(_content),
+                  child: SafeArea(
+                    top: false,
+                    child: getHomeGrid(_content),
+                  ),
                 );
               },
             ),
