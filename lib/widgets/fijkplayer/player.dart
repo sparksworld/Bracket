@@ -1,7 +1,9 @@
 import 'package:fijkplayer/fijkplayer.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '/model/film_play_info/list.dart';
 import '/model/film_play_info/detail.dart';
 import '/plugins.dart';
+import 'skin.dart';
 
 class Player extends StatefulWidget {
   const Player({
@@ -28,13 +30,16 @@ class Player extends StatefulWidget {
   State createState() => _PlayerState();
 }
 
-class _PlayerState extends State<Player> {
+class _PlayerState extends State<Player> with WidgetsBindingObserver {
   final FijkPlayer player = FijkPlayer();
+  final throttle = Throttle(milliseconds: 1000);
   final double _aspectRatio = 16 / 9;
 
   bool _loading = true;
   bool _error = false;
   bool _netWarning = false;
+
+  String _errorMessage = '';
 
   get link {
     var list = widget.list;
@@ -50,7 +55,9 @@ class _PlayerState extends State<Player> {
     super.initState();
 
     changeSource(link);
-
+    player.addListener(_fijkValueListener);
+    player.onCurrentPosUpdate.listen(_currentPosUpdate);
+    WidgetsBinding.instance.addObserver(this);
     watchConnectivity(ConnectivityResult.mobile, () {
       setState(() {
         _netWarning = true;
@@ -58,12 +65,13 @@ class _PlayerState extends State<Player> {
     });
   }
 
-  void changeSource(String link) {
-    player.reset();
+  void changeSource(String link) async {
+    await player.reset();
     player
         .setDataSource(
       link,
       autoPlay: true,
+      showCover: true,
     )
         .then(
       (value) {
@@ -76,18 +84,84 @@ class _PlayerState extends State<Player> {
       setState(() {
         _loading = false;
         _error = true;
+        _errorMessage = err.message;
       });
     });
+  }
+
+  void _currentPosUpdate(event) async {
+    throttle.run(() {
+      if (mounted) {
+        var list = widget.list;
+        var detail = widget.detail;
+        var teleplayIndex = widget.teleplayIndex;
+        var originIndex = widget.originIndex;
+
+        context.read<HistoryStore>().addHistory({
+          'id': detail?.id,
+          "name": detail?.name,
+          "timeStamp": DateTime.now().microsecondsSinceEpoch,
+          "picture": detail?.picture,
+          "originId": list?[originIndex]?.id,
+          "teleplayIndex": teleplayIndex,
+          'startAt': event.inMilliseconds,
+        });
+      }
+    });
+
+    bool isWakelockUp = await WakelockPlus.enabled;
+    if (!isWakelockUp) WakelockPlus.enable();
+  }
+
+  void _fijkValueListener() {
+    FijkValue value = player.value;
+
+    if (value.prepared) {
+      player.seekTo(widget.startAt ?? 0);
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
+    WakelockPlus.disable();
+    player.removeListener(_fijkValueListener);
     player.release();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      // 应用进入后台
+      await player.pause();
+    } else if (state == AppLifecycleState.resumed) {
+      // 应用从后台恢复
+      await player.start();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant Player oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    var list = oldWidget.list;
+    var originIndex = oldWidget.originIndex;
+    var teleplayIndex = oldWidget.teleplayIndex;
+    var originPlayList = list?[originIndex]?.linkList;
+    var playItem = originPlayList?[teleplayIndex];
+
+    if (playItem?.link != link) {
+      changeSource(link ?? '');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var originIndex = widget.originIndex;
+    var teleplayIndex = widget.teleplayIndex;
+    var linkList = widget.list?[originIndex]?.linkList!;
     return AspectRatio(
       aspectRatio: _aspectRatio,
       child: Stack(
@@ -115,7 +189,30 @@ class _PlayerState extends State<Player> {
                 )
               : _loading
                   ? const RiveLoading()
-                  : FijkView(player: player),
+                  : FijkView(
+                      color: Colors.black,
+                      player: player,
+                      cover: NetworkImage(
+                        widget.detail?.picture ?? '',
+                      ),
+                      panelBuilder: fijkPanel3Builder(
+                        fullScreenTitle: Row(
+                          children: widget.title ?? [],
+                        ),
+                        fill: true,
+                        onPrev: teleplayIndex > 0
+                            ? () {
+                                widget.callback(originIndex, teleplayIndex - 1);
+                              }
+                            : null,
+                        onNext: linkList != null &&
+                                teleplayIndex < linkList.length - 1
+                            ? () {
+                                widget.callback(originIndex, teleplayIndex + 1);
+                              }
+                            : null,
+                      ),
+                    ),
           Positioned(
             child: Row(
               children: widget.title ?? [],

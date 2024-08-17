@@ -121,8 +121,8 @@ class _DetailPageState extends State<DetailPage> {
                         aspectRatio: _playerAspectRatio,
                         child: _playItem?.link != null
                             ? Player(
-                                key: Key(
-                                    '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                                // key: Key(
+                                //     '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
                                 list: _list,
                                 detail: _data?.detail,
                                 originIndex: _originIndex,
@@ -144,7 +144,7 @@ class _DetailPageState extends State<DetailPage> {
                                     },
                                   ),
                                   Text(
-                                    _data?.detail?.name ?? '',
+                                    '${_data?.detail?.name}${_playItem?.episode != null ? '-' : ''}${_playItem?.episode}',
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 17,
