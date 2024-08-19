@@ -93,7 +93,7 @@ class _PlayerState extends State<Player> {
 
     _initPlayer();
 
-    watchConnectivity(ConnectivityResult.mobile, () {
+    watchConnectivity(ConnectivityResult.mobile, (bool bool) {
       setState(() {
         _netWarning = true;
       });

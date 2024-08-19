@@ -22,7 +22,7 @@ void main() async {
   await Future.delayed(const Duration(seconds: 2));
   // PreferenceUtil.clear();
 
-  watchConnectivity(null, () {
+  watchConnectivity(null, (bool bool) {
     FlutterNativeSplash.remove();
     runApp(
       MultiProvider(

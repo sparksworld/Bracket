@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-void watchConnectivity(ConnectivityResult? result, Function cb) {
+void watchConnectivity(ConnectivityResult? result, Function(bool) cb) {
   StreamSubscription<ConnectivityResult>? subscription;
   Connectivity connectivity = Connectivity();
 
@@ -9,12 +9,10 @@ void watchConnectivity(ConnectivityResult? result, Function cb) {
       connectivity.onConnectivityChanged.listen((ConnectivityResult event) {
     if (result == null) {
       subscription?.cancel();
-      cb();
+      cb(true);
     } else {
-      if (event == result) {
-        subscription?.cancel();
-        cb();
-      }
+      cb(event == result);
+      subscription?.cancel();
     }
   });
 }

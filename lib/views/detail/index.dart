@@ -115,47 +115,42 @@ class _DetailPageState extends State<DetailPage> {
               children: [
                 Expanded(
                   flex: orientation == Orientation.portrait ? 0 : 1,
-                  child: Container(
-                      color: Colors.black,
-                      child: AspectRatio(
-                        aspectRatio: _playerAspectRatio,
-                        child: _playItem?.link != null
-                            ? Player(
-                                // key: Key(
-                                //     '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                                list: _list,
-                                detail: _data?.detail,
-                                originIndex: _originIndex,
-                                teleplayIndex: _teleplayIndex,
-                                startAt: _startAt,
-                                // aspectRatio: _playerAspectRatio,
-                                callback: (originIndex, teleplayIndex) {
-                                  setState(() {
-                                    _originIndex = originIndex;
-                                    _teleplayIndex = teleplayIndex;
-                                    _startAt = 0;
-                                  });
-                                },
-                                title: [
-                                  BackButton(
-                                    color: Colors.white,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  Text(
-                                    '${_data?.detail?.name}${_playItem?.episode != null ? '-' : ''}${_playItem?.episode}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  )
-                                ],
-                              )
-                            : null,
-                      )),
+                  child: Player(
+                    // key: Key(
+                    //     '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
+                    list: _list,
+                    detail: _data?.detail,
+                    originIndex: _originIndex,
+                    teleplayIndex: _teleplayIndex,
+                    startAt: _startAt,
+                    // aspectRatio: _playerAspectRatio,
+                    callback: (originIndex, teleplayIndex) {
+                      setState(() {
+                        _originIndex = originIndex;
+                        _teleplayIndex = teleplayIndex;
+                        _startAt = 0;
+                      });
+                    },
+                    title: [
+                      BackButton(
+                        color: Colors.white,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Text(
+                        _data != null
+                            ? '${_data?.detail?.name}${_playItem?.episode != null ? '-' : ''}${_playItem?.episode}'
+                            : '',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 if (orientation == Orientation.portrait)
                   Container()

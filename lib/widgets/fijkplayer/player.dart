@@ -56,40 +56,45 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     super.initState();
 
     changeSource(link);
+
     // player.addListener(_fijkValueListener);
-    player.onCurrentPosUpdate.listen(_currentPosUpdate);
+
     // player.onBufferPosUpdate.listen(_currentPosUpdate);
     WidgetsBinding.instance.addObserver(this);
-    watchConnectivity(ConnectivityResult.mobile, () {
-      setState(() {
-        _netWarning = true;
-      });
-    });
   }
 
-  void changeSource(String link) async {
+  void changeSource(String? link) async {
+    if (link == null) return;
+    setState(() {
+      _loading = true;
+      _error = false;
+    });
     await player.reset();
-    player
-        .setDataSource(
-      link,
-      autoPlay: true,
-      showCover: true,
-    )
-        .then(
-      (value) {
-        // await player.setOption(
-        //     FijkOption.playerCategory, "seek-at-start", widget.startAt ?? 0);
-        _changing = false;
+    watchConnectivity(ConnectivityResult.mobile, (bool bool) {
+      setState(() {
+        _netWarning = bool;
+      });
+      player.onCurrentPosUpdate.listen(_currentPosUpdate);
+      player
+          .setDataSource(
+        link,
+        autoPlay: !bool,
+        showCover: true,
+      )
+          .then(
+        (value) {
+          _changing = false;
+          setState(() {
+            _loading = false;
+            _error = false;
+          });
+        },
+      ).catchError((err) {
         setState(() {
           _loading = false;
-          _error = false;
+          _error = true;
+          _errorMessage = err.message;
         });
-      },
-    ).catchError((err) {
-      setState(() {
-        _loading = false;
-        _error = true;
-        _errorMessage = err.message;
       });
     });
   }
@@ -199,6 +204,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                           setState(() {
                             _netWarning = false;
                           });
+                          player.start();
                         },
                         child: const Text('播放'),
                       ),
