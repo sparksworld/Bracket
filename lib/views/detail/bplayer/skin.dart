@@ -708,7 +708,9 @@ class _BetterPlayerMaterialControlsState
         : Duration.zero;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22),
+      padding: const EdgeInsets.only(
+        left: 22,
+      ),
       child: RichText(
         text: TextSpan(
             text: BetterPlayerUtils.formatDuration(position),
