@@ -1,10 +1,13 @@
+import "package:bracket/model/film_play_info/detail.dart";
+import "package:flutter/material.dart";
+
 import '/plugins.dart';
 import "/model/film_play_info/data.dart" show Data;
 import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
 import "/model/film_play_info/list.dart" show ListData;
 import "/model/film_play_info/play_list.dart" show PlayItem;
 import "/views/detail/describe.dart" show Describe;
-import "/widgets/player/player.dart" show Player;
+import "bplayer/player.dart" show Player;
 
 import "series.dart";
 
@@ -32,9 +35,9 @@ class _DetailPageState extends State<DetailPage> {
   ];
 
   Data? _data;
-  int _originIndex = 0;
-  int _teleplayIndex = 0;
-  int _startAt = 0;
+  // int _originIndex = 0;
+  // int _teleplayIndex = 0;
+  // int _startAt = 0;
 
   Future _fetchData(id) async {
     var res = await Api.filmDetail(
@@ -44,55 +47,59 @@ class _DetailPageState extends State<DetailPage> {
       },
     );
     if (res != null && res.runtimeType != String) {
+      // print(111111);
       FilmPlayInfo jsonData = FilmPlayInfo.fromJson(res);
-
       setState(() {
         _data = jsonData.data;
       });
 
-      var item = getHistory(id);
-      if (item != null) {
-        setState(() {
-          var originId = item['originId'];
-          var originIndex = _data?.detail?.list
-              ?.indexWhere((element) => originId == element.id);
+      context.read<PlayVideoIdsStore>().setVideoInfoOriginIndex(0);
 
-          if (originIndex != null && originIndex >= 0) {
-            setState(() {
-              _originIndex = originIndex;
-              _teleplayIndex = item['teleplayIndex'];
-              _startAt = item['startAt'];
-            });
-          }
-        });
-      }
-    } else {
-      await Future.delayed(const Duration(seconds: 2));
-      if (mounted) {
-        return _fetchData(id);
-      }
+      // print(context.read<VideoInfoStore>().info.toString());
+      // getHistory(id);
     }
   }
 
-  Map<String, dynamic>? getHistory(id) {
+  void getHistory(id) {
     var data = context.read<HistoryStore>().data;
     var item = data.firstWhereOrNull((element) => element['id'] == id);
-    return item;
+    if (item != null) {
+      // setState(() {
+      //   var originId = item['originId'];
+      //   var originIndex = _data?.detail?.list
+      //       ?.indexWhere((element) => originId == element.id);
+
+      //   if (originIndex != null && originIndex >= 0) {
+      //     setState(() {
+      //       _originIndex = originIndex;
+      //       _teleplayIndex = item['teleplayIndex'];
+      //       _startAt = item['startAt'];
+      //     });
+      //   }
+      // });
+    }
   }
 
-  List<ListData?>? get _list {
-    return _data?.detail?.list;
-  }
+  // Detail? get detail {
+  //   Data? info = context.watch<VideoInfoStore>().info;
+  //   return info?.detail;
+  // }
 
-  PlayItem? get _playItem {
-    return _list?[_originIndex]?.linkList?[_teleplayIndex];
-  }
+  // List<ListData?>? get list {
+  //   return detail?.list;
+  // }
+
+  // PlayItem? get playItem {
+  //   var data = context.read<VideoInfoStore>();
+  //   var originIndex = data.originIndex;
+  //   var teleplayIndex = data.teleplayIndex;
+  //   return list?[originIndex]?.linkList?[teleplayIndex];
+  // }
 
   @override
   void initState() {
     int id = widget.arguments?['id'];
     super.initState();
-
     _fetchData(id);
   }
 
@@ -103,6 +110,13 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    Detail? detail = _data?.detail;
+    List<ListData?>? list = detail?.list;
+    // PlayVideoIdsStore playVideoIdsStore = context.watch<PlayVideoIdsStore>();
+    // int? originIndex = playVideoIdsStore.originIndex;
+    // int? teleplayIndex = playVideoIdsStore.teleplayIndex;
+    // PlayItem? playItem = list?[originIndex]?.linkList?[teleplayIndex];
+
     return Scaffold(
       body: SafeArea(
         child: OrientationBuilder(
@@ -116,46 +130,25 @@ class _DetailPageState extends State<DetailPage> {
                 Expanded(
                   flex: orientation == Orientation.portrait ? 0 : 1,
                   child: Container(
-                      color: Colors.black,
-                      child: AspectRatio(
-                        aspectRatio: _playerAspectRatio,
-                        child: _playItem?.link != null
-                            ? Player(
-                                key: Key(
-                                    '${_playItem?.link}-$_originIndex-$_teleplayIndex'),
-                                list: _list,
-                                detail: _data?.detail,
-                                originIndex: _originIndex,
-                                teleplayIndex: _teleplayIndex,
-                                startAt: _startAt,
-                                aspectRatio: _playerAspectRatio,
-                                callback: (originIndex, teleplayIndex) {
-                                  setState(() {
-                                    _originIndex = originIndex;
-                                    _teleplayIndex = teleplayIndex;
-                                    _startAt = 0;
-                                  });
-                                },
-                                title: [
-                                  BackButton(
-                                    color: Colors.white,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  Text(
-                                    _data?.detail?.name ?? '',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  )
-                                ],
-                              )
-                            : null,
-                      )),
+                    color: Colors.black,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        double width = constraints.maxWidth;
+                        double height = constraints.maxHeight;
+                        double aspectRatio = width / height;
+
+                        if (detail != null) {
+                          return Player(
+                            aspectRatio: orientation == Orientation.portrait
+                                ? _playerAspectRatio
+                                : aspectRatio,
+                            detail: detail,
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                  ),
                 ),
                 if (orientation == Orientation.portrait)
                   Container()
@@ -198,19 +191,8 @@ class _DetailPageState extends State<DetailPage> {
                           flex: 1,
                           child: TabBarView(
                             children: [
-                              Series(
-                                initOriginIndex: _originIndex,
-                                initTeleplayIndex: _teleplayIndex,
-                                data: _data,
-                                callback: (originIndex, teleplayIndex) {
-                                  setState(() {
-                                    _originIndex = originIndex;
-                                    _teleplayIndex = teleplayIndex;
-                                    _startAt = 0;
-                                  });
-                                },
-                              ),
-                              Describe(data: _data)
+                              Series(data: _data),
+                              Describe(data: _data),
                             ],
                           ),
                         )

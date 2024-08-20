@@ -3,12 +3,13 @@ import '/views/home/index.dart';
 import 'views/source.dart';
 import '/views/splash.dart';
 import '/views/unknown.dart';
+import 'views/test.dart';
 import 'views/theme/index.dart';
 import 'views/detail/index.dart';
 import 'views/history/index.dart';
 import 'views/filter/index.dart';
-import '/views/about/index.dart';
-import '/views/feedback/index.dart';
+import 'views/about/index.dart';
+import 'views/feedback/index.dart';
 // import 'views/test/index.dart';
 
 class SparkRoute {
@@ -30,6 +31,7 @@ class MYRouter {
   static String themePagePath = '/theme_page';
   static String historyPagePath = '/history_page';
   static String filterPagePath = '/filter_page';
+  static String testPagePath = '/test_page';
 
   static String get initialRoute => homePagePath;
 
@@ -73,9 +75,9 @@ class MYRouter {
     feedbackPagePath: SparkRoute(
       builder: (_, {arguments}) => const FeedbackPage(),
     ),
-    // testPagePath: SparkRoute(
-    //   builder: (_, {arguments}) => TestPage(),
-    // ),
+    testPagePath: SparkRoute(
+      builder: (_, {arguments}) => AutoFullscreenOrientationPage(),
+    ),
     // 未知
     unknownPagePath:
         SparkRoute(builder: (_, {arguments}) => const UnknownPage()),

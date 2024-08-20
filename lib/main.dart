@@ -1,5 +1,5 @@
-import '/shared/theme.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import '/shared/theme.dart';
 import '/plugins.dart';
 
 void main() async {
@@ -41,6 +41,9 @@ void main() async {
           ),
           ChangeNotifierProvider<VideoSourceStore>(
             create: (_) => VideoSourceStore(),
+          ),
+          ChangeNotifierProvider<PlayVideoIdsStore>(
+            create: (_) => PlayVideoIdsStore(),
           ),
         ],
         child: const MyApp(),

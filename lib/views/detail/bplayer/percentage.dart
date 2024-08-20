@@ -1,7 +1,7 @@
 import '/plugins.dart';
 
 class PercentageWidget extends StatefulWidget {
-  PercentageWidget({Key? key}) : super(key: key);
+  PercentageWidget({super.key});
 
   late Function(String) percentageCallback; // 百分比
   late Function(bool) offstageCallback;
@@ -34,6 +34,11 @@ class _PercentageWidgetState extends State<PercentageWidget> {
     if (mounted) {
       super.setState(fn);
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant PercentageWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

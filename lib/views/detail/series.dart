@@ -1,19 +1,22 @@
 import '/model/film_play_info/data.dart';
 import '/model/film_play_info/detail.dart';
 import '/model/film_play_info/list.dart';
+// import "/model/film_play_info/play_list.dart" show PlayItem;
 import '/plugins.dart';
 
 class Series extends StatefulWidget {
-  final Function(int, int) callback;
-  final int initOriginIndex;
-  final int initTeleplayIndex;
   final Data? data;
+
+  // final Function(int, int) callback;
+  // final int initOriginIndex;
+  // final int initTeleplayIndex;
   const Series({
     Key? key,
-    this.data,
-    required this.callback,
-    required this.initOriginIndex,
-    required this.initTeleplayIndex,
+    required this.data,
+
+    // required this.callback,
+    // required this.initOriginIndex,
+    // required this.initTeleplayIndex,
   }) : super(key: key);
 
   @override
@@ -23,17 +26,18 @@ class Series extends StatefulWidget {
 class _SeriesState extends State<Series> {
   _SeriesState();
 
-  List<ListData>? get _playList {
-    return widget.data?.detail?.list;
-  }
+  // Detail? get detail {
+  //   Data? info = context.watch<VideoInfoStore>().info;
+  //   return info?.detail;
+  // }
 
-  Detail? get _detail {
-    return widget.data?.detail;
-  }
+  // List<ListData>? get playList {
+  //   return detail?.list;
+  // }
 
-  ListData? _playListItem(i) {
-    return _playList?[i];
-  }
+  // ListData? playListItem(i) {
+  //   return playList?[i];
+  // }
 
   @override
   void initState() {
@@ -42,10 +46,14 @@ class _SeriesState extends State<Series> {
 
   @override
   Widget build(BuildContext context) {
-    int originIndex = widget.initOriginIndex;
-    int teleplayIndex = widget.initTeleplayIndex;
+    Detail? detail = widget.data?.detail;
+    List<ListData?>? list = detail?.list;
+    int? originIndex = context.watch<PlayVideoIdsStore>().originIndex;
+    int? teleplayIndex = context.watch<PlayVideoIdsStore>().teleplayIndex;
+    // PlayItem? playItem = list?[originIndex]?.linkList?[teleplayIndex];
+
     return LoadingViewBuilder(
-      loading: widget.data == null,
+      loading: list == null,
       builder: (_) => SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -56,17 +64,17 @@ class _SeriesState extends State<Series> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  _detail?.name ?? '',
+                  detail?.name ?? '',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  (_detail?.descriptor?.subTitle == "" ||
-                          _detail?.descriptor?.subTitle == null)
+                  (detail?.descriptor?.subTitle == "" ||
+                          detail?.descriptor?.subTitle == null)
                       ? '暂无数据'
-                      : (_detail?.descriptor?.subTitle ?? '暂无数据'),
+                      : (detail?.descriptor?.subTitle ?? '暂无数据'),
                   style: TextStyle(
                     color: Theme.of(context).disabledColor,
                   ),
@@ -79,22 +87,26 @@ class _SeriesState extends State<Series> {
               const SizedBox(
                 height: 12,
               ),
-              if (_playList != null)
+              if (list != null)
                 SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   scrollDirection: Axis.horizontal,
                   child: Wrap(
                     spacing: 8,
-                    children: _playList!.mapIndexed((i, e) {
+                    children: list.mapIndexed((i, e) {
                       return ChoiceChip(
-                          label: Text(e.name ?? '未知源'),
+                          label: Text(e?.name ?? '未知源'),
                           selected: originIndex == i,
                           onSelected: (_) {
-                            setState(() {
-                              originIndex = i;
-                              teleplayIndex = 0;
-                            });
-                            widget.callback(originIndex, teleplayIndex);
+                            context
+                                .read<PlayVideoIdsStore>()
+                                .setVideoInfoOriginIndex(i);
+
+                            // setState(() {
+                            //   originIndex = i;
+                            //   teleplayIndex = 0;
+                            // });
+                            // widget.callback(originIndex, teleplayIndex);
                           });
                     }).toList(),
                   ),
@@ -114,23 +126,23 @@ class _SeriesState extends State<Series> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _playListItem(originIndex) != null
+                        list?[originIndex] != null
                             ? Wrap(
                                 spacing: 6,
-                                children: _playListItem(originIndex)!
-                                    .linkList!
-                                    .mapIndexed((i, e) => ChoiceChip(
-                                          label: Text(e.episode ?? ''),
-                                          selected: i == teleplayIndex,
-                                          onSelected: (value) {
-                                            teleplayIndex = i;
-                                            widget.callback(
-                                              originIndex,
-                                              teleplayIndex,
-                                            );
-                                          },
-                                        ))
-                                    .toList(),
+                                children: list?[originIndex]
+                                        ?.linkList!
+                                        .mapIndexed((i, e) => ChoiceChip(
+                                              label: Text(e.episode ?? ''),
+                                              selected: i == teleplayIndex,
+                                              onSelected: (value) {
+                                                context
+                                                    .read<PlayVideoIdsStore>()
+                                                    .setVideoInfoTeleplayIndex(
+                                                        i);
+                                              },
+                                            ))
+                                        .toList() ??
+                                    [],
                               )
                             : const Center(
                                 child: Text('暂无数据'),
