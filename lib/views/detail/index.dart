@@ -1,11 +1,11 @@
 import "package:bracket/model/film_play_info/detail.dart";
-import "package:flutter/material.dart";
+// import "package:flutter/material.dart";
 
 import '/plugins.dart';
 import "/model/film_play_info/data.dart" show Data;
 import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
 import "/model/film_play_info/list.dart" show ListData;
-import "/model/film_play_info/play_list.dart" show PlayItem;
+// import "/model/film_play_info/play_list.dart" show PlayItem;
 import "/views/detail/describe.dart" show Describe;
 import "bplayer/player.dart" show Player;
 
@@ -111,7 +111,7 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     Detail? detail = _data?.detail;
-    List<ListData?>? list = detail?.list;
+    // List<ListData?>? list = detail?.list;
     // PlayVideoIdsStore playVideoIdsStore = context.watch<PlayVideoIdsStore>();
     // int? originIndex = playVideoIdsStore.originIndex;
     // int? teleplayIndex = playVideoIdsStore.teleplayIndex;
@@ -135,17 +135,17 @@ class _DetailPageState extends State<DetailPage> {
                       builder: (context, constraints) {
                         double width = constraints.maxWidth;
                         double height = constraints.maxHeight;
-                        double aspectRatio = width / height;
+                        double aspectRatio = orientation == Orientation.portrait
+                            ? _playerAspectRatio
+                            : width / height;
 
-                        if (detail != null) {
-                          return Player(
-                            aspectRatio: orientation == Orientation.portrait
-                                ? _playerAspectRatio
-                                : aspectRatio,
+                        return AspectRatio(
+                          aspectRatio: aspectRatio,
+                          child: Player(
+                            aspectRatio: aspectRatio,
                             detail: detail,
-                          );
-                        }
-                        return Container();
+                          ),
+                        );
                       },
                     ),
                   ),
