@@ -11,19 +11,11 @@ class PlayVideoIdsStore with ChangeNotifier {
 
   int get startAt => _startAt;
 
-  void setVideoInfoOriginIndex(int? num) {
+  void setVideoInfo(int? num,
+      {required int? teleplayIndex, required int? startAt}) {
     _originIndex = num ?? 0;
-    _teleplayIndex = 0;
-    notifyListeners();
-  }
-
-  void setVideoInfoTeleplayIndex(int? num) {
-    _teleplayIndex = num ?? 0;
-    notifyListeners();
-  }
-
-  void setVideoInfoStartAt(int? num) {
-    _startAt = num ?? 0;
+    _teleplayIndex = teleplayIndex ?? 0;
+    _startAt = startAt ?? 0;
     notifyListeners();
   }
 }

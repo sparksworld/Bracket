@@ -6,8 +6,13 @@ import 'skin.dart';
 
 class Player extends StatefulWidget {
   final double aspectRatio;
+  final double fullScreenAspectRatio;
   final Detail? detail;
-  const Player({super.key, required this.aspectRatio, this.detail});
+  const Player(
+      {super.key,
+      required this.aspectRatio,
+      this.detail,
+      required this.fullScreenAspectRatio});
 
   @override
   State createState() => _PlayerState();
@@ -16,8 +21,8 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> with TickerProviderStateMixin {
   int? _originIndex;
   int? _teleplayIndex;
-  bool _ischanging = false;
-  late BetterPlayerController _betterPlayerController;
+  // bool _ischanging = false;
+  BetterPlayerController? _betterPlayerController;
   PlayVideoIdsStore? _playVideoIdsStore;
 
   @override
@@ -26,8 +31,11 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
     BetterPlayerConfiguration betterPlayerConfiguration =
         BetterPlayerConfiguration(
       fit: BoxFit.contain,
+      allowedScreenSleep: false,
       aspectRatio: widget.aspectRatio,
+      fullScreenAspectRatio: widget.fullScreenAspectRatio,
       autoDetectFullscreenDeviceOrientation: true,
+      autoDetectFullscreenAspectRatio: true,
       deviceOrientationsOnFullScreen: [
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
@@ -63,9 +71,8 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
         },
       ),
     );
-
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
-    // _betterPlayerController.addEventsListener(_betterPlayerControllerListener);
+
     _playVideoIdsStore?.addListener(_changeDataSource);
 
     super.initState();
@@ -87,27 +94,46 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
         BetterPlayerDataSourceType.network,
         url,
       );
-      _betterPlayerController.setupDataSource(dataSource);
-      _ischanging = false;
+      _betterPlayerController?.setupDataSource(dataSource).then((value) {
+        _betterPlayerController
+            ?.addEventsListener(_betterPlayerControllerListener);
+        _betterPlayerController
+            ?.seekTo(Duration(seconds: _playVideoIdsStore?.startAt ?? 0));
+        // _ischanging = false;
+      });
     }
     // }
   }
 
   void _betterPlayerControllerListener(BetterPlayerEvent e) {
-    // isVideoFinished()
-    // var videoPlayerController = _betterPlayerController.videoPlayerController;
-    // var durationSeconds = videoPlayerController?.value.duration?.inSeconds;
+    var initialized = _betterPlayerController?.isVideoInitialized();
+    if (initialized == null) return;
+    if (initialized) {
+      var bool = _betterPlayerController?.isPlaying();
+      if (bool ?? false) {
+        _playVideoIdsStore = context.read<PlayVideoIdsStore>();
+        var videoPlayerController =
+            _betterPlayerController?.videoPlayerController;
+        var detail = widget.detail;
+        var list = detail?.list;
+        var teleplayIndex = _playVideoIdsStore?.teleplayIndex ?? 0;
+        var originIndex = _playVideoIdsStore?.originIndex ?? 0;
 
-    // var cposSeconds = videoPlayerController?.value.position.inSeconds;
+        var position = videoPlayerController?.value.position.inSeconds;
 
-    // if (cposSeconds == durationSeconds &&
-    //     durationSeconds != null &&
-    //     durationSeconds > 0) {
-    //   if (!_ischanging) {
-    //     _next();
-    //   }
-    // }
+        context.read<HistoryStore>().addHistory({
+          'id': detail?.id,
+          "name": detail?.name,
+          "timeStamp": DateTime.now().microsecondsSinceEpoch,
+          "picture": detail?.picture,
+          "originId": list?[originIndex].id,
+          "teleplayIndex": teleplayIndex,
+          'startAt': position,
+        });
+      }
+    }
   }
+
   void _prev() {
     _playVideoIdsStore = context.read<PlayVideoIdsStore>();
     var list = widget.detail?.list;
@@ -118,7 +144,11 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
 
     if (linkList != null) {
       if (prevIndex >= 0) {
-        _playVideoIdsStore?.setVideoInfoTeleplayIndex(prevIndex);
+        _playVideoIdsStore?.setVideoInfo(
+          originIndex,
+          teleplayIndex: prevIndex,
+          startAt: 0,
+        );
       }
     }
   }
@@ -133,7 +163,11 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
 
     if (linkList != null) {
       if (nextIndex < linkList.length) {
-        _playVideoIdsStore?.setVideoInfoTeleplayIndex(nextIndex);
+        _playVideoIdsStore?.setVideoInfo(
+          originIndex,
+          teleplayIndex: nextIndex,
+          startAt: 0,
+        );
       }
     }
   }
@@ -146,10 +180,10 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    // _betterPlayerController
-    //     .removeEventsListener(_betterPlayerControllerListener);
+    _betterPlayerController
+        ?.removeEventsListener(_betterPlayerControllerListener);
     _playVideoIdsStore?.removeListener(_changeDataSource);
-    _betterPlayerController.dispose();
+    _betterPlayerController?.dispose();
     super.dispose();
   }
 
@@ -162,7 +196,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
     }
 
     if (oldWidget.aspectRatio != widget.aspectRatio) {
-      _betterPlayerController.setOverriddenAspectRatio(widget.aspectRatio);
+      _betterPlayerController?.setOverriddenAspectRatio(widget.aspectRatio);
     }
   }
 
@@ -170,7 +204,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        BetterPlayer(controller: _betterPlayerController),
+        BetterPlayer(controller: _betterPlayerController!),
         BackButton(
           color: Colors.white,
           onPressed: () {

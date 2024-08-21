@@ -100,13 +100,7 @@ class _SeriesState extends State<Series> {
                           onSelected: (_) {
                             context
                                 .read<PlayVideoIdsStore>()
-                                .setVideoInfoOriginIndex(i);
-
-                            // setState(() {
-                            //   originIndex = i;
-                            //   teleplayIndex = 0;
-                            // });
-                            // widget.callback(originIndex, teleplayIndex);
+                                .setVideoInfo(i, teleplayIndex: 0, startAt: 0);
                           });
                     }).toList(),
                   ),
@@ -135,10 +129,13 @@ class _SeriesState extends State<Series> {
                                               label: Text(e.episode ?? ''),
                                               selected: i == teleplayIndex,
                                               onSelected: (value) {
-                                                context
-                                                    .read<PlayVideoIdsStore>()
-                                                    .setVideoInfoTeleplayIndex(
-                                                        i);
+                                                var info = context
+                                                    .read<PlayVideoIdsStore>();
+                                                info.setVideoInfo(
+                                                  info.originIndex,
+                                                  teleplayIndex: i,
+                                                  startAt: 0,
+                                                );
                                               },
                                             ))
                                         .toList() ??

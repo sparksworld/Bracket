@@ -4,7 +4,7 @@ import "package:bracket/model/film_play_info/detail.dart";
 import '/plugins.dart';
 import "/model/film_play_info/data.dart" show Data;
 import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
-import "/model/film_play_info/list.dart" show ListData;
+// import "/model/film_play_info/list.dart" show ListData;
 // import "/model/film_play_info/play_list.dart" show PlayItem;
 import "/views/detail/describe.dart" show Describe;
 import "bplayer/player.dart" show Player;
@@ -35,11 +35,9 @@ class _DetailPageState extends State<DetailPage> {
   ];
 
   Data? _data;
-  // int _originIndex = 0;
-  // int _teleplayIndex = 0;
-  // int _startAt = 0;
 
   Future _fetchData(id) async {
+    var playIdsInfo = context.read<PlayVideoIdsStore>();
     var res = await Api.filmDetail(
       context: context,
       queryParameters: {
@@ -47,54 +45,38 @@ class _DetailPageState extends State<DetailPage> {
       },
     );
     if (res != null && res.runtimeType != String) {
-      // print(111111);
       FilmPlayInfo jsonData = FilmPlayInfo.fromJson(res);
       setState(() {
         _data = jsonData.data;
       });
 
-      context.read<PlayVideoIdsStore>().setVideoInfoOriginIndex(0);
+      var item = getHistory(id);
+
+      var originId = item?['originId'];
+      var originIndex =
+          _data?.detail?.list?.indexWhere((element) => originId == element.id);
+
+      if (originIndex != null && originIndex >= 0) {
+        playIdsInfo.setVideoInfo(
+          originIndex,
+          teleplayIndex: item?['teleplayIndex'],
+          startAt: item?['startAt'],
+        );
+      } else {
+        playIdsInfo.setVideoInfo(0, teleplayIndex: 0, startAt: 0);
+      }
 
       // print(context.read<VideoInfoStore>().info.toString());
       // getHistory(id);
     }
   }
 
-  void getHistory(id) {
+  Map<String, dynamic>? getHistory(id) {
     var data = context.read<HistoryStore>().data;
     var item = data.firstWhereOrNull((element) => element['id'] == id);
-    if (item != null) {
-      // setState(() {
-      //   var originId = item['originId'];
-      //   var originIndex = _data?.detail?.list
-      //       ?.indexWhere((element) => originId == element.id);
 
-      //   if (originIndex != null && originIndex >= 0) {
-      //     setState(() {
-      //       _originIndex = originIndex;
-      //       _teleplayIndex = item['teleplayIndex'];
-      //       _startAt = item['startAt'];
-      //     });
-      //   }
-      // });
-    }
+    return item;
   }
-
-  // Detail? get detail {
-  //   Data? info = context.watch<VideoInfoStore>().info;
-  //   return info?.detail;
-  // }
-
-  // List<ListData?>? get list {
-  //   return detail?.list;
-  // }
-
-  // PlayItem? get playItem {
-  //   var data = context.read<VideoInfoStore>();
-  //   var originIndex = data.originIndex;
-  //   var teleplayIndex = data.teleplayIndex;
-  //   return list?[originIndex]?.linkList?[teleplayIndex];
-  // }
 
   @override
   void initState() {
@@ -133,16 +115,19 @@ class _DetailPageState extends State<DetailPage> {
                     color: Colors.black,
                     child: LayoutBuilder(
                       builder: (context, constraints) {
+                        Size size = MediaQuery.of(context).size;
                         double width = constraints.maxWidth;
                         double height = constraints.maxHeight;
                         double aspectRatio = orientation == Orientation.portrait
                             ? _playerAspectRatio
                             : width / height;
+                        double fullScreenAspectRatio = size.width / size.height;
 
                         return AspectRatio(
                           aspectRatio: aspectRatio,
                           child: Player(
                             aspectRatio: aspectRatio,
+                            fullScreenAspectRatio: fullScreenAspectRatio,
                             detail: detail,
                           ),
                         );
