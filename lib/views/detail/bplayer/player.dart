@@ -1,4 +1,5 @@
 import 'package:better_player/better_player.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '/model/film_play_info/detail.dart';
 
 import '/plugins.dart';
@@ -32,7 +33,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
     BetterPlayerConfiguration betterPlayerConfiguration =
         BetterPlayerConfiguration(
       fit: BoxFit.contain,
-      allowedScreenSleep: false,
+      allowedScreenSleep: true,
       aspectRatio: widget.aspectRatio,
       fullScreenAspectRatio: widget.fullScreenAspectRatio,
       autoDetectFullscreenDeviceOrientation: true,
@@ -104,9 +105,9 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
   }
 
   void _betterPlayerControllerListener(BetterPlayerEvent e) {
-    _throttler.run(() {
-      var bool = _betterPlayerController?.isPlaying();
-      if (bool ?? false) {
+    var bool = _betterPlayerController?.isPlaying();
+    if (bool ?? false) {
+      _throttler.run(() {
         _playVideoIdsStore = context.read<PlayVideoIdsStore>();
         var videoPlayerController =
             _betterPlayerController?.videoPlayerController;
@@ -126,8 +127,14 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
           "teleplayIndex": teleplayIndex,
           'startAt': position,
         });
-      }
-    });
+      });
+      WakelockPlus.enabled.then((value) {
+        if (!value) WakelockPlus.enable();
+      });
+    } else {
+      _throttler.cancel();
+      WakelockPlus.disable();
+    }
   }
 
   void _prev() {
@@ -181,6 +188,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
     _playVideoIdsStore?.removeListener(_changeDataSource);
     _betterPlayerController?.dispose();
     _throttler.cancel();
+    WakelockPlus.disable();
     super.dispose();
   }
 
