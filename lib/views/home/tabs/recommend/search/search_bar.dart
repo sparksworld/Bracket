@@ -5,8 +5,7 @@ import 'search_page.dart';
 class SearchAppBar extends StatefulWidget {
   final List<Child>? tags;
   final double height;
-  const SearchAppBar({Key? key, this.tags, required this.height})
-      : super(key: key);
+  const SearchAppBar({super.key, this.tags, required this.height});
 
   @override
   State<StatefulWidget> createState() => _SearchAppBarState();

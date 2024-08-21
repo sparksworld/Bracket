@@ -77,7 +77,7 @@ class ThemeProvider {
   }
 
   AppBarTheme appBarTheme(ColorScheme colors) {
-    return AppBarTheme(
+    return const AppBarTheme(
       elevation: 0,
       // backgroundColor: colors.inversePrimary,
       // foregroundColor: colors.surfaceTint,

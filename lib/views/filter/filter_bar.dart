@@ -8,12 +8,12 @@ class FilterBar extends StatelessWidget {
   final bool loading;
 
   const FilterBar({
-    Key? key,
+    super.key,
     required this.search,
     required this.onSearch,
     required this.activeMap,
     required this.loading,
-  }) : super(key: key);
+  });
 
   List<String>? get _sortList {
     return search?.sortList;

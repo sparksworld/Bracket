@@ -1,15 +1,18 @@
-import "package:bracket/model/film_play_info/detail.dart";
-// import "package:flutter/material.dart";
-
 import '/plugins.dart';
+import "package:bracket/model/film_play_info/detail.dart";
 import "/model/film_play_info/data.dart" show Data;
 import "/model/film_play_info/film_play_info.dart" show FilmPlayInfo;
-// import "/model/film_play_info/list.dart" show ListData;
-// import "/model/film_play_info/play_list.dart" show PlayItem;
 import "/views/detail/describe.dart" show Describe;
 import "bplayer/player.dart" show Player;
 
 import "series.dart";
+
+class Utils {
+  static Future<String> getFileUrl(String fileName) async {
+    final directory = await getApplicationDocumentsDirectory();
+    return "${directory.path}/$fileName";
+  }
+}
 
 class DetailPage extends StatefulWidget {
   final Map? arguments;
@@ -35,6 +38,13 @@ class _DetailPageState extends State<DetailPage> {
   ];
 
   Data? _data;
+
+  // Future _saveAssetVideoToFile() async {
+  //   var content = await rootBundle.load("assets/video/test.mp4");
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   var file = File("${directory.path}/test.mp4");
+  //   file.writeAsBytesSync(content.buffer.asUint8List());
+  // }
 
   Future _fetchData(id) async {
     var playIdsInfo = context.read<PlayVideoIdsStore>();
@@ -82,6 +92,7 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     int id = widget.arguments?['id'];
     super.initState();
+    // _saveAssetVideoToFile();
     _fetchData(id);
   }
 
@@ -121,6 +132,8 @@ class _DetailPageState extends State<DetailPage> {
                         double aspectRatio = orientation == Orientation.portrait
                             ? _playerAspectRatio
                             : width / height;
+                        // print(size.height);
+                        // print(size.width);
                         double fullScreenAspectRatio = size.width / size.height;
 
                         return AspectRatio(

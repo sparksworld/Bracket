@@ -99,7 +99,7 @@ class SearchPage extends SearchDelegate<String> {
 
 class SearchList extends StatefulWidget {
   final String query;
-  const SearchList({Key? key, required this.query}) : super(key: key);
+  const SearchList({super.key, required this.query});
 
   @override
   State<SearchList> createState() => _SearchListState();

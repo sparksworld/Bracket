@@ -7,6 +7,7 @@ export 'package:flutter/services.dart';
 export "package:connectivity_plus/connectivity_plus.dart";
 export 'package:another_flushbar/flushbar.dart';
 export 'package:collection/src/unmodifiable_wrappers.dart';
+export 'package:path_provider/path_provider.dart';
 
 export 'dart:async';
 export 'dart:math';

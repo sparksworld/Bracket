@@ -1,7 +1,7 @@
 import '/plugins.dart';
 
 class Related extends StatefulWidget {
-  const Related({Key? key}) : super(key: key);
+  const Related({super.key});
 
   @override
   _RelatedState createState() => _RelatedState();

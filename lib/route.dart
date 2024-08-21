@@ -76,7 +76,7 @@ class MYRouter {
       builder: (_, {arguments}) => const FeedbackPage(),
     ),
     testPagePath: SparkRoute(
-      builder: (_, {arguments}) => AutoFullscreenOrientationPage(),
+      builder: (_, {arguments}) => const AutoFullscreenOrientationPage(),
     ),
     // 未知
     unknownPagePath:

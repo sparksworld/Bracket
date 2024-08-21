@@ -3,7 +3,7 @@ import '/plugins.dart';
 class BackgroundWave extends StatelessWidget {
   final double height;
 
-  const BackgroundWave({Key? key, required this.height}) : super(key: key);
+  const BackgroundWave({super.key, required this.height});
 
   @override
   Widget build(BuildContext context) {

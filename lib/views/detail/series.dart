@@ -11,13 +11,13 @@ class Series extends StatefulWidget {
   // final int initOriginIndex;
   // final int initTeleplayIndex;
   const Series({
-    Key? key,
+    super.key,
     required this.data,
 
     // required this.callback,
     // required this.initOriginIndex,
     // required this.initTeleplayIndex,
-  }) : super(key: key);
+  });
 
   @override
   State<Series> createState() => _SeriesState();

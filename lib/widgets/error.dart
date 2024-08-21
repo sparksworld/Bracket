@@ -4,7 +4,7 @@ class Error extends StatefulWidget {
   final String? message;
   final Function? onRefresh;
 
-  const Error({Key? key, this.message, this.onRefresh}) : super(key: key);
+  const Error({super.key, this.message, this.onRefresh});
 
   @override
   State<Error> createState() => _ErrorState();

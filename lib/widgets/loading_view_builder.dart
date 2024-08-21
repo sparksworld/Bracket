@@ -5,8 +5,7 @@ class LoadingViewBuilder extends StatelessWidget {
   final bool loading;
 
   const LoadingViewBuilder(
-      {Key? key, required this.loading, required this.builder})
-      : super(key: key);
+      {super.key, required this.loading, required this.builder});
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,7 @@ import 'sticky_appbar.dart';
 class FilterPage extends StatefulWidget {
   final Map? arguments;
 
-  const FilterPage({Key? key, this.arguments}) : super(key: key);
+  const FilterPage({super.key, this.arguments});
 
   @override
   State<StatefulWidget> createState() {

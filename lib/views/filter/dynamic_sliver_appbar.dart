@@ -5,8 +5,8 @@ class DynamicSliverAppBar extends StatefulWidget {
     required this.maxHeight,
     this.child,
     this.onHeightListener,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Function(double)? onHeightListener;
   final Widget? child;

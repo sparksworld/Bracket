@@ -24,6 +24,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
   // bool _ischanging = false;
   BetterPlayerController? _betterPlayerController;
   PlayVideoIdsStore? _playVideoIdsStore;
+  final _throttler = Throttler(milliseconds: 1000);
 
   @override
   void initState() {
@@ -84,16 +85,14 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
     _originIndex = _playVideoIdsStore!.originIndex;
     _teleplayIndex = _playVideoIdsStore!.teleplayIndex;
 
-    // if (_originIndex != _playVideoIdsStore?.originIndex ||
-    //     _teleplayIndex != _playVideoIdsStore?.teleplayIndex) {
     String? url = list?[_originIndex!].linkList?[_teleplayIndex!].link;
 
-    // print(url);
     if (url != null) {
       BetterPlayerDataSource dataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.network,
         url,
       );
+
       _betterPlayerController?.setupDataSource(dataSource).then((value) {
         _betterPlayerController
             ?.addEventsListener(_betterPlayerControllerListener);
@@ -102,13 +101,10 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
         // _ischanging = false;
       });
     }
-    // }
   }
 
   void _betterPlayerControllerListener(BetterPlayerEvent e) {
-    var initialized = _betterPlayerController?.isVideoInitialized();
-    if (initialized == null) return;
-    if (initialized) {
+    _throttler.run(() {
       var bool = _betterPlayerController?.isPlaying();
       if (bool ?? false) {
         _playVideoIdsStore = context.read<PlayVideoIdsStore>();
@@ -131,7 +127,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
           'startAt': position,
         });
       }
-    }
+    });
   }
 
   void _prev() {
@@ -184,6 +180,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
         ?.removeEventsListener(_betterPlayerControllerListener);
     _playVideoIdsStore?.removeListener(_changeDataSource);
     _betterPlayerController?.dispose();
+    _throttler.cancel();
     super.dispose();
   }
 

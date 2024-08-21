@@ -1,7 +1,7 @@
 import '/plugins.dart';
 
 class FilmList extends StatelessWidget {
-  const FilmList({Key? key}) : super(key: key);
+  const FilmList({super.key});
 
   @override
   Widget build(BuildContext context) {

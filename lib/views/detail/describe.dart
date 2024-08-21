@@ -4,7 +4,7 @@ import '/plugins.dart';
 
 class Describe extends StatefulWidget {
   final Data? data;
-  const Describe({Key? key, this.data}) : super(key: key);
+  const Describe({super.key, this.data});
 
   @override
   State<Describe> createState() => _DescribeState();

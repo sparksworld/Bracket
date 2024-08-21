@@ -347,8 +347,15 @@ class _BetterPlayerMaterialControlsState
       return const SizedBox();
     }
 
+    var fullScreenAspectRatio = _betterPlayerController
+            ?.betterPlayerConfiguration.fullScreenAspectRatio ??
+        1.0;
+    var videoAspectRatio =
+        _betterPlayerController?.videoPlayerController?.value.aspectRatio ??
+            1.0;
+
     return SafeArea(
-      // top: ,
+      top: videoAspectRatio < fullScreenAspectRatio,
       bottom: false,
       child: (_controlsConfiguration.enableOverflowMenu)
           ? AnimatedOpacity(
@@ -401,8 +408,15 @@ class _BetterPlayerMaterialControlsState
     if (!betterPlayerController!.controlsEnabled) {
       return const SizedBox();
     }
+    var fullScreenAspectRatio = _betterPlayerController
+            ?.betterPlayerConfiguration.fullScreenAspectRatio ??
+        1.0;
+    var videoAspectRatio =
+        _betterPlayerController?.videoPlayerController?.value.aspectRatio ??
+            1.0;
     return SafeArea(
       top: false,
+      bottom: videoAspectRatio < fullScreenAspectRatio,
       child: AnimatedOpacity(
         opacity: controlsNotVisible ? 0.0 : 1.0,
         duration: _controlsConfiguration.controlsHideTime,
