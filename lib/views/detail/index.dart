@@ -136,13 +136,28 @@ class _DetailPageState extends State<DetailPage> {
                         // print(size.width);
                         double fullScreenAspectRatio = size.width / size.height;
 
-                        return AspectRatio(
-                          aspectRatio: aspectRatio,
-                          child: Player(
-                            aspectRatio: aspectRatio,
-                            fullScreenAspectRatio: fullScreenAspectRatio,
-                            detail: detail,
-                          ),
+                        return Stack(
+                          children: [
+                            AspectRatio(
+                              aspectRatio: aspectRatio,
+                              child: detail == null
+                                  ? const RiveLoading()
+                                  : Player(
+                                      aspectRatio: aspectRatio,
+                                      fullScreenAspectRatio:
+                                          fullScreenAspectRatio,
+                                      detail: detail,
+                                    ),
+                            ),
+                            Positioned(
+                              child: BackButton(
+                                color: Colors.white,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            )
+                          ],
                         );
                       },
                     ),

@@ -25,7 +25,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
   // bool _ischanging = false;
   BetterPlayerController? _betterPlayerController;
   PlayVideoIdsStore? _playVideoIdsStore;
-  final _throttler = Throttler(milliseconds: 1000);
+  // final _throttler = Throttler(milliseconds: 1000);
 
   @override
   void initState() {
@@ -36,8 +36,8 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
       allowedScreenSleep: true,
       aspectRatio: widget.aspectRatio,
       fullScreenAspectRatio: widget.fullScreenAspectRatio,
-      autoDetectFullscreenDeviceOrientation: true,
-      autoDetectFullscreenAspectRatio: true,
+      autoDetectFullscreenDeviceOrientation: false,
+      autoDetectFullscreenAspectRatio: false,
       deviceOrientationsOnFullScreen: [
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
@@ -75,12 +75,21 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
     );
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
 
-    _playVideoIdsStore?.addListener(_changeDataSource);
+    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      _changeDataSource() ?? '',
+    );
+
+    _betterPlayerController?.setupDataSource(dataSource).then((value) {
+      _betterPlayerController
+          ?.addEventsListener(_betterPlayerControllerListener);
+      _playVideoIdsStore?.addListener(_changeDataSource);
+    });
 
     super.initState();
   }
 
-  void _changeDataSource() {
+  String? _changeDataSource() {
     var list = widget.detail?.list;
     _playVideoIdsStore = context.read<PlayVideoIdsStore>();
     _originIndex = _playVideoIdsStore!.originIndex;
@@ -96,43 +105,21 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
 
       _betterPlayerController?.setupDataSource(dataSource).then((value) {
         _betterPlayerController
-            ?.addEventsListener(_betterPlayerControllerListener);
-        _betterPlayerController
             ?.seekTo(Duration(seconds: _playVideoIdsStore?.startAt ?? 0));
         // _ischanging = false;
       });
     }
+    return url;
   }
 
-  void _betterPlayerControllerListener(BetterPlayerEvent e) {
-    var bool = _betterPlayerController?.isPlaying();
-    if (bool ?? false) {
-      _throttler.run(() {
-        _playVideoIdsStore = context.read<PlayVideoIdsStore>();
-        var videoPlayerController =
-            _betterPlayerController?.videoPlayerController;
-        var detail = widget.detail;
-        var list = detail?.list;
-        var teleplayIndex = _playVideoIdsStore?.teleplayIndex ?? 0;
-        var originIndex = _playVideoIdsStore?.originIndex ?? 0;
+  void _betterPlayerControllerListener(BetterPlayerEvent e) async {
+    var isPlaying = _betterPlayerController?.isPlaying() == true;
 
-        var position = videoPlayerController?.value.position.inSeconds;
-
-        context.read<HistoryStore>().addHistory({
-          'id': detail?.id,
-          "name": detail?.name,
-          "timeStamp": DateTime.now().microsecondsSinceEpoch,
-          "picture": detail?.picture,
-          "originId": list?[originIndex].id,
-          "teleplayIndex": teleplayIndex,
-          'startAt': position,
-        });
-      });
-      WakelockPlus.enabled.then((value) {
-        if (!value) WakelockPlus.enable();
-      });
+    if (isPlaying) {
+      _setHistroy();
+      bool isEnabled = await WakelockPlus.enabled;
+      if (!isEnabled) WakelockPlus.enable();
     } else {
-      _throttler.cancel();
       WakelockPlus.disable();
     }
   }
@@ -175,6 +162,27 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
     }
   }
 
+  void _setHistroy() {
+    _playVideoIdsStore = context.read<PlayVideoIdsStore>();
+    var videoPlayerController = _betterPlayerController?.videoPlayerController;
+    var detail = widget.detail;
+    var list = detail?.list;
+    var teleplayIndex = _playVideoIdsStore?.teleplayIndex ?? 0;
+    var originIndex = _playVideoIdsStore?.originIndex ?? 0;
+
+    var position = videoPlayerController?.value.position.inSeconds;
+
+    context.read<HistoryStore>().addHistory({
+      'id': detail?.id,
+      "name": detail?.name,
+      "timeStamp": DateTime.now().microsecondsSinceEpoch,
+      "picture": detail?.picture,
+      "originId": list?[originIndex].id,
+      "teleplayIndex": teleplayIndex,
+      'startAt': position,
+    });
+  }
+
   @override
   void didChangeDependencies() {
     _playVideoIdsStore = context.read<PlayVideoIdsStore>();
@@ -187,7 +195,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
         ?.removeEventsListener(_betterPlayerControllerListener);
     _playVideoIdsStore?.removeListener(_changeDataSource);
     _betterPlayerController?.dispose();
-    _throttler.cancel();
+    // _throttler.cancel();
     WakelockPlus.disable();
     super.dispose();
   }
@@ -196,9 +204,9 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
   void didUpdateWidget(covariant Player oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.detail != widget.detail) {
-      _changeDataSource();
-    }
+    // if (oldWidget.detail != widget.detail) {
+    //   _changeDataSource();
+    // }
 
     if (oldWidget.aspectRatio != widget.aspectRatio) {
       _betterPlayerController?.setOverriddenAspectRatio(widget.aspectRatio);
@@ -207,16 +215,6 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        BetterPlayer(controller: _betterPlayerController!),
-        BackButton(
-          color: Colors.white,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
+    return BetterPlayer(controller: _betterPlayerController!);
   }
 }

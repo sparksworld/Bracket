@@ -423,7 +423,7 @@ class _BetterPlayerMaterialControlsState
         onEnd: _onPlayerHide,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          height: _controlsConfiguration.controlBarHeight + 30.0,
+          height: _controlsConfiguration.controlBarHeight + 20,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
