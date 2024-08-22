@@ -48,6 +48,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ],
+      startAt: Duration(seconds: _playVideoIdsStore?.startAt ?? 0),
       autoPlay: true,
       controlsConfiguration: BetterPlayerControlsConfiguration(
         playerTheme: BetterPlayerTheme.custom,
@@ -62,10 +63,10 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
 
           return BetterPlayerMaterialControls(
             title: Text(
-              widget.detail?.name ?? '',
+              '${widget.detail?.name ?? ''}-${linkList[teleplayIndex].episode ?? ''}',
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -74,7 +75,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
             onPrev: hasPrev ? _prev : null,
             onNext: hasNext ? _next : null,
             controlsConfiguration: const BetterPlayerControlsConfiguration(
-              loadingWidget: RiveLoading(),
+              // loadingWidget: RiveLoading(),
               showControlsOnInitialize: true,
             ),
           );
@@ -90,6 +91,9 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
       betterPlayerDataSource: dataSource,
     );
 
+    // _betterPlayerController
+    //     ?.seekTo(Duration(seconds: _playVideoIdsStore?.startAt ?? 0));
+
     _betterPlayerController?.addEventsListener(_betterPlayerControllerListener);
     _playVideoIdsStore?.addListener(_changeDataSource);
 
@@ -104,8 +108,6 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
 
     String? url = list?[_originIndex!].linkList?[_teleplayIndex!].link;
 
-    print(url);
-
     return url;
   }
 
@@ -119,9 +121,9 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
       );
 
       _betterPlayerController?.setupDataSource(dataSource).then((value) {
+        var playVideoIdsStore = context.read<PlayVideoIdsStore>();
         _betterPlayerController
-            ?.seekTo(Duration(seconds: _playVideoIdsStore?.startAt ?? 0));
-        // _ischanging = false;
+            ?.seekTo(Duration(seconds: playVideoIdsStore.startAt));
       });
     }
   }

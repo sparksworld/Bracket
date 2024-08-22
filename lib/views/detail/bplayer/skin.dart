@@ -1,4 +1,3 @@
-import 'dart:async';
 // ignore: implementation_imports
 import 'package:better_player/src/configuration/better_player_controls_configuration.dart';
 // ignore: implementation_imports
@@ -18,9 +17,7 @@ import 'package:better_player/src/core/better_player_utils.dart';
 // ignore: implementation_imports
 import 'package:better_player/src/video_player/video_player.dart';
 import 'package:brightness_volume/brightness_volume.dart';
-
-// Flutter imports:
-import 'package:flutter/material.dart';
+import '/plugins.dart';
 
 import 'percentage.dart';
 
@@ -134,19 +131,42 @@ class _BetterPlayerMaterialControlsState
     return await BVUtils.resetCustomBrightness();
   }
 
+  @override
+  bool isLoading(VideoPlayerValue? latestValue) {
+    if (latestValue != null) {
+      if (!latestValue.isPlaying && latestValue.duration == null) {
+        return true;
+      }
+
+      final Duration position = latestValue.position;
+
+      Duration? bufferedEndPosition;
+      if (latestValue.buffered.isNotEmpty == true) {
+        bufferedEndPosition = latestValue.buffered.last.end;
+      }
+
+      if (bufferedEndPosition != null) {
+        final difference = bufferedEndPosition - position;
+
+        if (latestValue.isPlaying &&
+            latestValue.isBuffering &&
+            difference.inSeconds <= 1) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   ///Builds main widget of the controls.
   Widget _buildMainWidget() {
     _wasLoading = isLoading(_latestValue);
 
-    // if (_latestValue?.hasError == true) {
-    //   return Container(
-    //     color: Colors.black,
-    //     child: _buildErrorWidget(),
-    //   );
-    // }
     return GestureDetector(
+      key: const Key("BetterPlayerSkin"),
       behavior: HitTestBehavior.opaque,
       onTap: () {
+        print(controlsNotVisible);
         if (BetterPlayerMultipleGestureDetector.of(context) != null) {
           BetterPlayerMultipleGestureDetector.of(context)!.onTap?.call();
         }
@@ -379,21 +399,23 @@ class _BetterPlayerMaterialControlsState
                             },
                           ),
                           Expanded(flex: 1, child: widget.title),
-                          Row(
-                            children: [
-                              widget.onPrev != null
-                                  ? _buildNextOrPrevButton(
-                                      const Icon(Icons.skip_previous),
-                                      widget.onPrev,
-                                    )
-                                  : const SizedBox(),
-                              widget.onNext != null
-                                  ? _buildNextOrPrevButton(
-                                      const Icon(Icons.skip_next),
-                                      widget.onNext,
-                                    )
-                                  : const SizedBox(),
-                            ],
+                          widget.onPrev != null
+                              ? _buildNextOrPrevButton(
+                                  const Icon(Icons.skip_previous),
+                                  widget.onPrev,
+                                )
+                              : const SizedBox(),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          widget.onNext != null
+                              ? _buildNextOrPrevButton(
+                                  const Icon(Icons.skip_next),
+                                  widget.onNext,
+                                )
+                              : const SizedBox(),
+                          SizedBox(
+                            width: 12,
                           ),
                           _buildMoreButton(),
                         ]
@@ -443,9 +465,18 @@ class _BetterPlayerMaterialControlsState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 0),
+                  child: _controlsConfiguration.enableProgressBar
+                      ? _buildProgressBar()
+                      : const SizedBox(),
+                ),
+              ),
+              Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 0),
+                  padding: EdgeInsets.only(bottom: 6),
                   child: Row(
                     children: [
                       if (_controlsConfiguration.enablePlayPause)
@@ -469,15 +500,6 @@ class _BetterPlayerMaterialControlsState
                         const SizedBox(),
                     ],
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: _controlsConfiguration.enableProgressBar
-                      ? _buildProgressBar()
-                      : const SizedBox(),
                 ),
               ),
             ],
