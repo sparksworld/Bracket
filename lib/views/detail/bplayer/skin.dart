@@ -379,6 +379,22 @@ class _BetterPlayerMaterialControlsState
                             },
                           ),
                           Expanded(flex: 1, child: widget.title),
+                          Row(
+                            children: [
+                              widget.onPrev != null
+                                  ? _buildNextOrPrevButton(
+                                      const Icon(Icons.skip_previous),
+                                      widget.onPrev,
+                                    )
+                                  : const SizedBox(),
+                              widget.onNext != null
+                                  ? _buildNextOrPrevButton(
+                                      const Icon(Icons.skip_next),
+                                      widget.onNext,
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
                           _buildMoreButton(),
                         ]
                       : [],
@@ -422,59 +438,46 @@ class _BetterPlayerMaterialControlsState
         duration: _controlsConfiguration.controlsHideTime,
         onEnd: _onPlayerHide,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          height: _controlsConfiguration.controlBarHeight + 20,
+          height: _controlsConfiguration.controlBarHeight + 16,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _controlsConfiguration.enableProgressBar
-                          ? _buildProgressBar()
-                          : const SizedBox(),
-                    ),
-                  ],
+                flex: 2,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 0),
+                  child: Row(
+                    children: [
+                      if (_controlsConfiguration.enablePlayPause)
+                        _buildPlayPause(_controller!)
+                      else
+                        const SizedBox(),
+                      if (_betterPlayerController!.isLiveStream())
+                        _buildLiveWidget()
+                      else
+                        _controlsConfiguration.enableProgressText
+                            ? _buildPosition()
+                            : const SizedBox(),
+                      const Spacer(),
+                      if (_controlsConfiguration.enableMute)
+                        _buildMuteButton(_controller)
+                      else
+                        const SizedBox(),
+                      if (_controlsConfiguration.enableFullscreen)
+                        _buildExpandButton()
+                      else
+                        const SizedBox(),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
-                flex: 2,
-                child: Row(
-                  children: [
-                    if (_controlsConfiguration.enablePlayPause)
-                      _buildPlayPause(_controller!)
-                    else
-                      const SizedBox(),
-                    if (_betterPlayerController!.isLiveStream())
-                      _buildLiveWidget()
-                    else
-                      _controlsConfiguration.enableProgressText
-                          ? _buildPosition()
-                          : const SizedBox(),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        _buildNextOrPrevButton(
-                          const Icon(Icons.skip_previous),
-                          widget.onPrev,
-                        ),
-                        _buildNextOrPrevButton(
-                          const Icon(Icons.skip_next),
-                          widget.onNext,
-                        ),
-                      ],
-                    ),
-                    if (_controlsConfiguration.enableMute)
-                      _buildMuteButton(_controller)
-                    else
-                      const SizedBox(),
-                    if (_controlsConfiguration.enableFullscreen)
-                      _buildExpandButton()
-                    else
-                      const SizedBox(),
-                  ],
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: _controlsConfiguration.enableProgressBar
+                      ? _buildProgressBar()
+                      : const SizedBox(),
                 ),
               ),
             ],
@@ -532,7 +535,7 @@ class _BetterPlayerMaterialControlsState
 
   Widget _buildMiddleRow() {
     return Container(
-      color: _controlsConfiguration.controlBarColor,
+      color: _controlsConfiguration.controlBarColor.withAlpha(155),
       width: double.infinity,
       height: double.infinity,
       child: _betterPlayerController?.isLiveStream() == true
@@ -730,13 +733,16 @@ class _BetterPlayerMaterialControlsState
     return BetterPlayerMaterialClickableWidget(
       key: const Key("better_player_material_controls_play_pause_button"),
       onTap: _onPlayPause,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: Icon(
-          controller.value.isPlaying
-              ? _controlsConfiguration.pauseIcon
-              : _controlsConfiguration.playIcon,
-          color: _controlsConfiguration.iconsColor,
+      child: ClipRect(
+        child: Container(
+          height: _controlsConfiguration.controlBarHeight,
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Icon(
+            controller.value.isPlaying
+                ? _controlsConfiguration.pauseIcon
+                : _controlsConfiguration.playIcon,
+            color: _controlsConfiguration.iconsColor,
+          ),
         ),
       ),
     );

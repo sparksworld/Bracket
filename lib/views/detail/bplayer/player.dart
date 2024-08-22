@@ -52,6 +52,14 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
       controlsConfiguration: BetterPlayerControlsConfiguration(
         playerTheme: BetterPlayerTheme.custom,
         customControlsBuilder: (BetterPlayerController controller, visibility) {
+          var list = widget.detail?.list;
+          var originIndex = _playVideoIdsStore?.originIndex ?? 0;
+          var teleplayIndex = _playVideoIdsStore?.teleplayIndex ?? 0;
+          var linkList = list?[originIndex].linkList;
+
+          bool hasNext = teleplayIndex < linkList!.length - 1;
+          bool hasPrev = teleplayIndex > 0;
+
           return BetterPlayerMaterialControls(
             title: Text(
               widget.detail?.name ?? '',
@@ -63,8 +71,8 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
               ),
             ),
             onControlsVisibilityChanged: visibility,
-            onPrev: _prev,
-            onNext: _next,
+            onPrev: hasPrev ? _prev : null,
+            onNext: hasNext ? _next : null,
             controlsConfiguration: const BetterPlayerControlsConfiguration(
               loadingWidget: RiveLoading(),
               showControlsOnInitialize: true,
@@ -73,29 +81,36 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
         },
       ),
     );
-    _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
-
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      _changeDataSource() ?? '',
+      getCurrentUrl() ?? '',
+    );
+    _betterPlayerController = BetterPlayerController(
+      betterPlayerConfiguration,
+      betterPlayerDataSource: dataSource,
     );
 
-    _betterPlayerController?.setupDataSource(dataSource).then((value) {
-      _betterPlayerController
-          ?.addEventsListener(_betterPlayerControllerListener);
-      _playVideoIdsStore?.addListener(_changeDataSource);
-    });
+    _betterPlayerController?.addEventsListener(_betterPlayerControllerListener);
+    _playVideoIdsStore?.addListener(_changeDataSource);
 
     super.initState();
   }
 
-  String? _changeDataSource() {
+  String? getCurrentUrl() {
     var list = widget.detail?.list;
     _playVideoIdsStore = context.read<PlayVideoIdsStore>();
     _originIndex = _playVideoIdsStore!.originIndex;
     _teleplayIndex = _playVideoIdsStore!.teleplayIndex;
 
     String? url = list?[_originIndex!].linkList?[_teleplayIndex!].link;
+
+    print(url);
+
+    return url;
+  }
+
+  void _changeDataSource() {
+    var url = getCurrentUrl();
 
     if (url != null) {
       BetterPlayerDataSource dataSource = BetterPlayerDataSource(
@@ -109,7 +124,6 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
         // _ischanging = false;
       });
     }
-    return url;
   }
 
   void _betterPlayerControllerListener(BetterPlayerEvent e) async {
@@ -126,40 +140,28 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
 
   void _prev() {
     _playVideoIdsStore = context.read<PlayVideoIdsStore>();
-    var list = widget.detail?.list;
     var originIndex = _playVideoIdsStore?.originIndex;
     var teleplayIndex = _playVideoIdsStore?.teleplayIndex;
-    var linkList = list?[originIndex!].linkList;
-    var prevIndex = teleplayIndex! - 1;
 
-    if (linkList != null) {
-      if (prevIndex >= 0) {
-        _playVideoIdsStore?.setVideoInfo(
-          originIndex,
-          teleplayIndex: prevIndex,
-          startAt: 0,
-        );
-      }
-    }
+    var prevIndex = teleplayIndex! - 1;
+    _playVideoIdsStore?.setVideoInfo(
+      originIndex,
+      teleplayIndex: prevIndex,
+      startAt: 0,
+    );
   }
 
   void _next() {
     _playVideoIdsStore = context.read<PlayVideoIdsStore>();
-    var list = widget.detail?.list;
     var originIndex = _playVideoIdsStore?.originIndex;
     var teleplayIndex = _playVideoIdsStore?.teleplayIndex;
-    var linkList = list?[originIndex!].linkList;
     var nextIndex = teleplayIndex! + 1;
 
-    if (linkList != null) {
-      if (nextIndex < linkList.length) {
-        _playVideoIdsStore?.setVideoInfo(
-          originIndex,
-          teleplayIndex: nextIndex,
-          startAt: 0,
-        );
-      }
-    }
+    _playVideoIdsStore?.setVideoInfo(
+      originIndex,
+      teleplayIndex: nextIndex,
+      startAt: 0,
+    );
   }
 
   void _setHistroy() {
@@ -187,6 +189,7 @@ class _PlayerState extends State<Player> with TickerProviderStateMixin {
   void didChangeDependencies() {
     _playVideoIdsStore = context.read<PlayVideoIdsStore>();
     super.didChangeDependencies();
+    // context.dependOnInheritedWidgetOfExactType();
   }
 
   @override
