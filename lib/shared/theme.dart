@@ -151,9 +151,12 @@ class ThemeProvider {
           color: Theme.of(context).primaryColor.withOpacity(0.5),
         ),
         chipTheme: ChipTheme.of(context).copyWith(
-          shape: StadiumBorder(
-            side: const BorderSide().copyWith(
-              color: Theme.of(context).primaryColor.withOpacity(0.5),
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(
+              color: Colors.transparent,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
             ),
           ),
           elevation: 2,
@@ -187,10 +190,12 @@ class ThemeProvider {
         color: Theme.of(context).primaryColor.withOpacity(0.5),
       ),
       chipTheme: ChipTheme.of(context).copyWith(
-        shape: StadiumBorder(
-          side: const BorderSide().copyWith(
-            width: 2,
-            color: Theme.of(context).primaryColor.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(
+            color: Colors.transparent,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
           ),
         ),
         elevation: 2,

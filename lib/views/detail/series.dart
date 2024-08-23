@@ -46,10 +46,12 @@ class _SeriesState extends State<Series> {
 
   @override
   Widget build(BuildContext context) {
+    var info = context.watch<PlayVideoIdsStore>();
     Detail? detail = widget.data?.detail;
     List<ListData?>? list = detail?.list;
-    int? originIndex = context.watch<PlayVideoIdsStore>().originIndex;
-    int? teleplayIndex = context.watch<PlayVideoIdsStore>().teleplayIndex;
+    int? originIndex = info.originIndex;
+    int? teleplayIndex = info.teleplayIndex;
+    var linkList = list?[originIndex]?.linkList ?? [];
     // PlayItem? playItem = list?[originIndex]?.linkList?[teleplayIndex];
 
     return LoadingViewBuilder(
@@ -57,7 +59,7 @@ class _SeriesState extends State<Series> {
       builder: (_) => SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -80,9 +82,9 @@ class _SeriesState extends State<Series> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 12,
-              ),
+              // const SizedBox(
+              //   height: 12,
+              // ),
               const Divider(),
               const SizedBox(
                 height: 12,
@@ -108,46 +110,64 @@ class _SeriesState extends State<Series> {
               const SizedBox(
                 height: 12,
               ),
-              SizedBox(
-                width: double.infinity,
-                child: Card(
-                  margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        list?[originIndex] != null
-                            ? Wrap(
-                                spacing: 6,
-                                children: list?[originIndex]
-                                        ?.linkList!
-                                        .mapIndexed((i, e) => ChoiceChip(
-                                              label: Text(e.episode ?? ''),
-                                              selected: i == teleplayIndex,
-                                              onSelected: (value) {
-                                                var info = context
-                                                    .read<PlayVideoIdsStore>();
-                                                info.setVideoInfo(
-                                                  info.originIndex,
-                                                  teleplayIndex: i,
-                                                  startAt: 0,
-                                                );
-                                              },
-                                            ))
-                                        .toList() ??
-                                    [],
-                              )
-                            : const Center(
-                                child: Text('暂无数据'),
-                              ),
-                      ],
+              Column(
+                children: [
+                  Card(
+                    margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          list?[originIndex] != null
+                              ? Wrap(
+                                  spacing: 6,
+                                  runSpacing: 6,
+                                  children: linkList
+                                      .mapIndexed((i, e) => FilterChip(
+                                            materialTapTargetSize:
+                                                MaterialTapTargetSize
+                                                    .shrinkWrap,
+                                            shape: const RoundedRectangleBorder(
+                                              side: BorderSide(
+                                                color: Colors.transparent,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                            ),
+                                            label: SizedBox(
+                                              width: double.infinity,
+                                              height: 36,
+                                              child: Center(
+                                                child: Text(
+                                                  linkList[i].episode ?? '无',
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                            onSelected: (bool value) {
+                                              info.setVideoInfo(
+                                                info.originIndex,
+                                                teleplayIndex: i,
+                                                startAt: 0,
+                                              );
+                                            },
+                                            selected: i == teleplayIndex,
+                                          ))
+                                      .toList(),
+                                )
+                              : const Center(
+                                  child: Text('暂无数据'),
+                                ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),

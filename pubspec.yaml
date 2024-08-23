@@ -55,6 +55,7 @@ dependencies:
   another_flushbar: ^1.12.30
   better_player: ^0.0.84
   path_provider: ^2.1.4
+  marquee: ^2.2.3
 
 dependency_overrides:
   meta: ">=1.11.0 <1.15.0"

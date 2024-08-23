@@ -39,13 +39,6 @@ class _DetailPageState extends State<DetailPage> {
 
   Data? _data;
 
-  // Future _saveAssetVideoToFile() async {
-  //   var content = await rootBundle.load("assets/video/test.mp4");
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   var file = File("${directory.path}/test.mp4");
-  //   file.writeAsBytesSync(content.buffer.asUint8List());
-  // }
-
   Future _fetchData(id) async {
     var playIdsInfo = context.read<PlayVideoIdsStore>();
     var res = await Api.filmDetail(
@@ -75,9 +68,6 @@ class _DetailPageState extends State<DetailPage> {
       } else {
         playIdsInfo.setVideoInfo(0, teleplayIndex: 0, startAt: 0);
       }
-
-      // print(context.read<VideoInfoStore>().info.toString());
-      // getHistory(id);
     }
   }
 
@@ -104,13 +94,12 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     Detail? detail = _data?.detail;
-    // List<ListData?>? list = detail?.list;
-    // PlayVideoIdsStore playVideoIdsStore = context.watch<PlayVideoIdsStore>();
-    // int? originIndex = playVideoIdsStore.originIndex;
-    // int? teleplayIndex = playVideoIdsStore.teleplayIndex;
-    // PlayItem? playItem = list?[originIndex]?.linkList?[teleplayIndex];
 
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: const Icon(Icons.expand),
+      // ),
       body: SafeArea(
         child: OrientationBuilder(
           builder: (context, orientation) {
@@ -132,8 +121,6 @@ class _DetailPageState extends State<DetailPage> {
                         double aspectRatio = orientation == Orientation.portrait
                             ? _playerAspectRatio
                             : width / height;
-                        // print(size.height);
-                        // print(size.width);
                         double fullScreenAspectRatio = size.width / size.height;
 
                         return Stack(
