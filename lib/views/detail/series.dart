@@ -98,7 +98,7 @@ class _SeriesState extends State<Series> {
                       child: list?[originIndex] != null
                           ? Wrap(
                               spacing: 8,
-                              runSpacing: 8,
+                              runSpacing: 4,
                               children: linkList
                                   .mapIndexed((i, e) => FilterChip(
                                         shape: const RoundedRectangleBorder(
@@ -111,7 +111,7 @@ class _SeriesState extends State<Series> {
                                         ),
                                         label: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 6),
+                                              horizontal: 6, vertical: 3),
                                           child: Text(
                                             '${linkList[i].episode}',
                                             textAlign: TextAlign.center,
