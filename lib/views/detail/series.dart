@@ -1,22 +1,14 @@
 import '/model/film_play_info/data.dart';
 import '/model/film_play_info/detail.dart';
 import '/model/film_play_info/list.dart';
-// import "/model/film_play_info/play_list.dart" show PlayItem;
 import '/plugins.dart';
 
 class Series extends StatefulWidget {
   final Data? data;
 
-  // final Function(int, int) callback;
-  // final int initOriginIndex;
-  // final int initTeleplayIndex;
   const Series({
     super.key,
     required this.data,
-
-    // required this.callback,
-    // required this.initOriginIndex,
-    // required this.initTeleplayIndex,
   });
 
   @override
@@ -25,19 +17,6 @@ class Series extends StatefulWidget {
 
 class _SeriesState extends State<Series> {
   _SeriesState();
-
-  // Detail? get detail {
-  //   Data? info = context.watch<VideoInfoStore>().info;
-  //   return info?.detail;
-  // }
-
-  // List<ListData>? get playList {
-  //   return detail?.list;
-  // }
-
-  // ListData? playListItem(i) {
-  //   return playList?[i];
-  // }
 
   @override
   void initState() {
@@ -52,7 +31,6 @@ class _SeriesState extends State<Series> {
     int? originIndex = info.originIndex;
     int? teleplayIndex = info.teleplayIndex;
     var linkList = list?[originIndex]?.linkList ?? [];
-    // PlayItem? playItem = list?[originIndex]?.linkList?[teleplayIndex];
 
     return LoadingViewBuilder(
       loading: list == null,
@@ -82,9 +60,6 @@ class _SeriesState extends State<Series> {
                   ),
                 ),
               ),
-              // const SizedBox(
-              //   height: 12,
-              // ),
               const Divider(),
               const SizedBox(
                 height: 12,
@@ -111,6 +86,7 @@ class _SeriesState extends State<Series> {
                 height: 12,
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Card(
                     margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -119,52 +95,45 @@ class _SeriesState extends State<Series> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          list?[originIndex] != null
-                              ? Wrap(
-                                  spacing: 6,
-                                  runSpacing: 6,
-                                  children: linkList
-                                      .mapIndexed((i, e) => FilterChip(
-                                            materialTapTargetSize:
-                                                MaterialTapTargetSize
-                                                    .shrinkWrap,
-                                            shape: const RoundedRectangleBorder(
-                                              side: BorderSide(
-                                                color: Colors.transparent,
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(8),
-                                              ),
-                                            ),
-                                            label: SizedBox(
-                                              width: double.infinity,
-                                              height: 36,
-                                              child: Center(
-                                                child: Text(
-                                                  linkList[i].episode ?? '无',
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                            ),
-                                            onSelected: (bool value) {
-                                              info.setVideoInfo(
-                                                info.originIndex,
-                                                teleplayIndex: i,
-                                                startAt: 0,
-                                              );
-                                            },
-                                            selected: i == teleplayIndex,
-                                          ))
-                                      .toList(),
-                                )
-                              : const Center(
-                                  child: Text('暂无数据'),
-                                ),
-                        ],
-                      ),
+                      child: list?[originIndex] != null
+                          ? Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: linkList
+                                  .mapIndexed((i, e) => FilterChip(
+                                        shape: const RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            color: Colors.transparent,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(8),
+                                          ),
+                                        ),
+                                        label: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 6),
+                                          child: Text(
+                                            '${linkList[i].episode}',
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: false,
+                                          ),
+                                        ),
+                                        onSelected: (bool value) {
+                                          info.setVideoInfo(
+                                            info.originIndex,
+                                            teleplayIndex: i,
+                                            startAt: 0,
+                                          );
+                                        },
+                                        showCheckmark: false,
+                                        selected: i == teleplayIndex,
+                                      ))
+                                  .toList(),
+                            )
+                          : const Center(
+                              child: Text('暂无数据'),
+                            ),
                     ),
                   ),
                 ],

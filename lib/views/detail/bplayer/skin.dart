@@ -401,16 +401,22 @@ class _BetterPlayerMaterialControlsState
                           Expanded(flex: 1, child: widget.title),
                           widget.onPrev != null
                               ? _buildNextOrPrevButton(
-                                  const Icon(Icons.skip_previous),
+                                  Icon(
+                                    Icons.skip_previous,
+                                    color: _controlsConfiguration.iconsColor,
+                                  ),
                                   widget.onPrev,
                                 )
                               : const SizedBox(),
-                          SizedBox(
+                          const SizedBox(
                             width: 12,
                           ),
                           widget.onNext != null
                               ? _buildNextOrPrevButton(
-                                  const Icon(Icons.skip_next),
+                                  Icon(
+                                    Icons.skip_next,
+                                    color: _controlsConfiguration.iconsColor,
+                                  ),
                                   widget.onNext,
                                 )
                               : const SizedBox(),

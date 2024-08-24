@@ -47,16 +47,7 @@ class FilterBar extends StatelessWidget {
       return Container();
     }
     return Container(
-      // decoration: BoxDecoration(
-      //   image: DecorationImage(
-      //     image: AssetImage(
-      //       theme.data == ITheme.dark.value
-      //           ? "assets/images/sliver_dark.png"
-      //           : "assets/images/sliver_light.png",
-      //     ),
-      //     fit: BoxFit.cover,
-      //   ),
-      // ),
+      color: Theme.of(context).cardColor,
       padding: const EdgeInsets.only(
         top: 8,
         bottom: 8,
